@@ -1,45 +1,14 @@
 package com.ladinc.core;
 
-import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Game;
+import com.ladinc.core.screen.MainMenuScreen;
 
-public class CarPartA implements ApplicationListener {
-	Texture texture;
-	SpriteBatch batch;
-	float elapsed;
+public class CarPartA extends Game {
 
 	@Override
 	public void create () {
-		texture = new Texture(Gdx.files.internal("libgdx-logo.png"));
-		batch = new SpriteBatch();
-	}
-
-	@Override
-	public void resize (int width, int height) {
-	}
-
-	@Override
-	public void render () {
-		elapsed += Gdx.graphics.getDeltaTime();
-		Gdx.gl.glClearColor(0, 0, 0, 0);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(texture, 100+100*(float)Math.cos(elapsed), 100+25*(float)Math.sin(elapsed));
-		batch.end();
-	}
-
-	@Override
-	public void pause () {
-	}
-
-	@Override
-	public void resume () {
-	}
-
-	@Override
-	public void dispose () {
+		//Assets - Static class that loads audio and graphics
+		//Settings - Static class that loads progress of game (high score) and other stuff
+		setScreen(new MainMenuScreen(this));
 	}
 }
