@@ -1,28 +1,26 @@
-package com.ladinc.core.controllers;
+package com.ladinc.core.controllers.controls;
 
 import com.badlogic.gdx.math.Vector2;
 import com.ladinc.core.controllers.listeners.GenericControllerListener;
 
-public class GamePadControls implements IControls
-{
-
-	private float TRIGGER_DEADZONE = 0.350f;
+public class GamePadControls implements IControls {
 	
-	private Vector2 leftMovement;
+	private final float TRIGGER_DEADZONE = 0.350f;
 	
-	private GenericControllerListener listener;
+	private final Vector2 leftMovement;
 	
-	private Vector2 rightMovement;
+	private final GenericControllerListener listener;
+	
+	private final Vector2 rightMovement;
 	
 	private boolean divePressed;
 	
 	public boolean active;
 	
-	public GamePadControls(GenericControllerListener listen)
-	{
+	public GamePadControls(GenericControllerListener listen) {
 		this.listener = listen;
-		this.leftMovement = new Vector2(0,0);
-		this.rightMovement = new Vector2(0,0);
+		this.leftMovement = new Vector2(0, 0);
+		this.rightMovement = new Vector2(0, 0);
 	}
 	
 	private void activateController()
@@ -30,11 +28,13 @@ public class GamePadControls implements IControls
 		active = true;
 	}
 	
-	public static enum AnalogStick{left, right};
+	public static enum AnalogStick {
+		left, right
+	};
 	
 	public void setAnalogMovementX(AnalogStick stick, float x)
 	{
-		switch(stick)
+		switch (stick)
 		{
 			case left:
 				leftMovement.x = processAndActivate(x, TRIGGER_DEADZONE);
@@ -48,15 +48,17 @@ public class GamePadControls implements IControls
 	
 	public void setAnalogMovementY(AnalogStick stick, float y)
 	{
-		//inverting direction so up is up
+		// inverting direction so up is up
 		
-		switch(stick)
+		switch (stick)
 		{
 			case left:
-				leftMovement.y = (-1)*(processAndActivate(y, TRIGGER_DEADZONE));
+				leftMovement.y = (-1)
+						* (processAndActivate(y, TRIGGER_DEADZONE));
 				break;
 			case right:
-				rightMovement.y = (-1)*(processAndActivate(y, TRIGGER_DEADZONE));
+				rightMovement.y = (-1)
+						* (processAndActivate(y, TRIGGER_DEADZONE));
 				break;
 		
 		}
@@ -76,35 +78,36 @@ public class GamePadControls implements IControls
 	
 	public float processMovment(float movement, float deadzone)
 	{
-		//Overall power ignoring direction
+		// Overall power ignoring direction
 		float power = movement;
 		
 		if (movement < 0)
-			power = movement*(-1);
-	
-		if(power <= deadzone)
+			power = movement * (-1);
+		
+		if (power <= deadzone)
 		{
-			//The direction being moved is not greater than the deadzone, ignoring movement
+			// The direction being moved is not greater than the deadzone,
+			// ignoring movement
 			return 0f;
 		}
 		else
 		{
-//			if(!active)
-//				activateController();
+			// if(!active)
+			// activateController();
 			
-			//have a meaningful value for X
+			// have a meaningful value for X
 			float movementAbovePower = power - deadzone;
 			float availablePower = 1f - deadzone;
-			movementAbovePower = movementAbovePower/availablePower;
+			movementAbovePower = movementAbovePower / availablePower;
 			
-			if(movement > 0)
+			if (movement > 0)
 			{
 				return movementAbovePower;
 			}
 			else
 			{
-				//convert result to take into account direction
-				return (-1)*movementAbovePower;
+				// convert result to take into account direction
+				return (-1) * movementAbovePower;
 			}
 		}
 		
@@ -120,13 +123,10 @@ public class GamePadControls implements IControls
 		this.divePressed = pressed;
 	}
 	
-
 	@Override
-	public boolean isActive() {
+	public boolean isActive()
+	{
 		return this.active;
 	}
-
-
-
-
+	
 }

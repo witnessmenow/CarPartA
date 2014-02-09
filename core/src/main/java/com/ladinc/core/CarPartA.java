@@ -1,14 +1,22 @@
 package com.ladinc.core;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.ladinc.core.assets.Assets;
+import com.ladinc.core.controllers.MyControllerManager;
 import com.ladinc.core.screen.MainMenuScreen;
 
 public class CarPartA extends Game {
-
+	
+	public MyControllerManager controllerManager;
+	
 	@Override
-	public void create () {
-		//Assets - Static class that loads audio and graphics
-		//Settings - Static class that loads progress of game (high score) and other stuff
+	public void create()
+	{
+		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		Assets.load();
+		controllerManager = new MyControllerManager();
 		setScreen(new MainMenuScreen(this));
 	}
 }
