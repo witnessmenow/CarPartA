@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-				 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.ladinc</groupId>
@@ -15,6 +15,14 @@
 	<properties>
 		<mainClass>com.ladinc.java.CarPartADesktop</mainClass>
 	</properties>
+
+	<repositories>
+		<repository>
+			<id>in-project</id>
+			<name>In Project Repo</name>
+			<url>file://${project.basedir}/localJars</url>
+		</repository>
+	</repositories>
 
 	<dependencies>
 		<dependency>
@@ -41,6 +49,22 @@
 			<version>${gdx.version}</version>
 			<classifier>natives-desktop</classifier>
 		</dependency>
+
+		<dependency>
+			<groupId>extensions</groupId>
+			<artifactId>gdx-controllers-desktop</artifactId>
+			<version>0.9.9</version>
+		</dependency>
+		<dependency>
+			<groupId>extensions</groupId>
+			<artifactId>gdx-controllers-desktop-natives</artifactId>
+			<version>0.9.9</version>
+		</dependency>
+		<dependency>
+			<groupId>extensions</groupId>
+			<artifactId>gdx-controllers</artifactId>
+			<version>0.9.9</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -60,7 +84,9 @@
 					<execution>
 						<id>unpacknatives</id>
 						<phase>pre-integration-test</phase>
-						<goals><goal>copy</goal></goals>
+						<goals>
+							<goal>copy</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>
@@ -73,7 +99,7 @@
 						<configuration>
 							<target>
 								<java fork="true" classname="${mainClass}" classpathref="maven.test.classpath">
-									<sysproperty key="java.library.path" value="target/natives"/>
+									<sysproperty key="java.library.path" value="target/natives" />
 								</java>
 							</target>
 						</configuration>
@@ -84,7 +110,8 @@
 				</executions>
 			</plugin>
 
-			<!-- this builds a totally standalone jar file when you invoke: mvn package -Pdesktop -->
+			<!-- this builds a totally standalone jar file when you invoke: mvn package 
+				-Pdesktop -->
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.4</version>
