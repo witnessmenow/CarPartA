@@ -7,14 +7,15 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.ladinc.core.CarPartA;
 
 public class MainMenuScreen implements Screen {
-	private final Game game;
+	private final CarPartA game;
 	private final SpriteBatch batch;
 	BitmapFont font;
 	OrthographicCamera camera;
 	
-	public MainMenuScreen(Game game) {
+	public MainMenuScreen(CarPartA game) {
 		this.game = game;
 		batch = new SpriteBatch();
 		font = new BitmapFont();
@@ -30,6 +31,8 @@ public class MainMenuScreen implements Screen {
 		font.draw(batch, "Welcome to Car Part A!!! ", 100, 150);
 		font.draw(batch, "Click anywhere to begin!", 100, 100);
 		batch.end();
+		
+		this.game.controllerManager.checkForNewControllers();
 		
 		if (Gdx.input.isTouched())
 		{

@@ -14,6 +14,8 @@ public class GamePadControls implements IControls {
 	private final Vector2 rightMovement;
 	
 	private boolean divePressed;
+	private boolean acceleratePressed;
+	private boolean reversePressed;
 	
 	public boolean active;
 	
@@ -123,10 +125,41 @@ public class GamePadControls implements IControls {
 		this.divePressed = pressed;
 	}
 	
+	public void setAccelerateButton(boolean pressed)
+	{
+		if (!active && pressed)
+		{
+			activateController();
+		}
+		
+		this.acceleratePressed = pressed;
+	}
+	
+	public void setReverseButton(boolean pressed)
+	{
+		if (!active && pressed)
+		{
+			activateController();
+		}
+		
+		this.reversePressed = pressed;
+	}
+	
 	@Override
 	public boolean isActive()
 	{
 		return this.active;
+	}
+
+	@Override
+	public int getAcceleration() 
+	{
+		if(this.acceleratePressed)
+			return 1;
+		if(this.reversePressed)
+			return -1;
+		
+		return 0;
 	}
 	
 }

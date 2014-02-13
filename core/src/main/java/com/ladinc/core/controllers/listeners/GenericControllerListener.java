@@ -23,6 +23,10 @@ public class GenericControllerListener implements ControllerListener {
 	
 	public int DiveButton;
 	
+	public int AccelerateButton;
+	public int ReverseButton;
+	
+	
 	@Override
 	public boolean accelerometerMoved(Controller arg0, int arg1, Vector3 arg2)
 	{
@@ -68,9 +72,13 @@ public class GenericControllerListener implements ControllerListener {
 		Gdx.app.debug("GenericControllerListener",
 				"buttonDown: arg1=" + String.valueOf(arg1));
 		
-		if (arg1 == DiveButton)
+		if (arg1 == AccelerateButton)
 		{
-			controls.setDiveButton(true);
+			controls.setAccelerateButton(true);
+		}
+		else if(arg1 == ReverseButton)
+		{
+			controls.setReverseButton(true);
 		}
 		
 		return false;
@@ -79,9 +87,13 @@ public class GenericControllerListener implements ControllerListener {
 	@Override
 	public boolean buttonUp(Controller arg0, int arg1)
 	{
-		if (arg1 == DiveButton)
+		if (arg1 == AccelerateButton)
 		{
-			controls.setDiveButton(false);
+			controls.setAccelerateButton(false);
+		}
+		else if(arg1 == ReverseButton)
+		{
+			controls.setReverseButton(false);
 		}
 		
 		return false;

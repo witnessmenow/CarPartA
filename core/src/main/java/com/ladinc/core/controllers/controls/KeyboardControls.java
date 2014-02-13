@@ -94,4 +94,10 @@ public class KeyboardControls implements IControls {
 		// TODO Auto-generated method stub
 		return true;
 	}
+
+	@Override
+	public int getAcceleration() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

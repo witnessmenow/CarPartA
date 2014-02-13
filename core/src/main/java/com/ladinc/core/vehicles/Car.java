@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.controllers.controls.IControls;
+import com.ladinc.core.player.PlayerInfo;
 
 public class Car extends Vehicle {
 
-	public Car(IControls controls, Object player, World world, Vector2 position,
+	public Car(PlayerInfo player, World world, Vector2 position,
 			float angle, Sprite carSprite, Sprite wheelSprite) 
 	{
 		super();
@@ -29,7 +29,7 @@ public class Car extends Vehicle {
 		float wheelLength = 2f;
 
 		this.player = player;
-		this.controls = controls;
+		this.controls = player.controls;
 
 		this.steer = Vehicle.STEER_NONE;
 		this.accelerate = Vehicle.ACC_NONE;

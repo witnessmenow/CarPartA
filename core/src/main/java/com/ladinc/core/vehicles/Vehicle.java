@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.controllers.controls.IControls;
+import com.ladinc.core.player.PlayerInfo;
 
 public class Vehicle {
 
@@ -24,7 +25,7 @@ public class Vehicle {
 	public List<Wheel> wheels;
 
 	public IControls controls;
-	public Object player;
+	public PlayerInfo player;
 
 	private float acceleration = 0f;
 

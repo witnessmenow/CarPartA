@@ -8,7 +8,8 @@ public class XboxListener  extends GenericControllerListener{
 	
 	public XboxListener()
 	{
-		this.DiveButton = Xbox360WindowsMapper.A_BUTTON;
+		this.AccelerateButton = Xbox360WindowsMapper.A_BUTTON;
+		this.ReverseButton = Xbox360WindowsMapper.X_BUTTON;
 		
 		this.LeftAxisX = Xbox360WindowsMapper.LEFT_ANALOG_X;
 		this.LeftAxisY = Xbox360WindowsMapper.LEFT_ANALOG_Y;

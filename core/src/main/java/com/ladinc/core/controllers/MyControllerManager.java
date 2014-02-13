@@ -10,22 +10,23 @@ import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.ladinc.core.controllers.controls.IControls;
 import com.ladinc.core.controllers.listeners.desktop.KeyboardAndMouseListener;
 import com.ladinc.core.controllers.listeners.desktop.XboxListener;
+import com.ladinc.core.player.PlayerInfo;
 
 public class MyControllerManager {
 	
 	public ArrayList<IControls> inActiveControls;
-	public ArrayList<IControls> controls;
+	public ArrayList<PlayerInfo> players;
 	
 	public MyControllerManager() {
 		inActiveControls = new ArrayList<IControls>();
-		controls = new ArrayList<IControls>();
+		players = new ArrayList<PlayerInfo>();
 		
 		setUpControls();
 	}
 	
 	private void setUpControls()
 	{
-		this.controls.clear();
+		this.players.clear();
 		this.inActiveControls.clear();
 		
 		for (Controller controller : Controllers.getControllers())
@@ -88,6 +89,20 @@ public class MyControllerManager {
 		}
 	}
 	
+	private boolean checkIsControllerAlreadyActive(IControls cont)
+	{
+		if(this.players != null)
+		{
+			for(PlayerInfo player : this.players)
+			{
+				if(player.controls == cont)
+					return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	public boolean checkForNewControllers()
 	{
 		ArrayList<IControls> tempControllers = (ArrayList<IControls>) inActiveControls
@@ -98,10 +113,10 @@ public class MyControllerManager {
 		{
 			if (cont.isActive())
 			{
-				if (!this.controls.contains(cont))
+				if (!checkIsControllerAlreadyActive(cont))
 				{
 					// cont.setIdentifier(getNextAvailableIdentifer());
-					this.controls.add(cont);
+					this.players.add(new PlayerInfo(cont));
 					this.inActiveControls.remove(cont);
 					foundNew = true;
 				}
