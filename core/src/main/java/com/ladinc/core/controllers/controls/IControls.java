@@ -6,6 +6,8 @@ public interface IControls {
 	
 	public int getAcceleration();
 	
+	public float getSteering();
+	
 	// TODO: Add start etc
 	
 }

@@ -100,4 +100,10 @@ public class KeyboardControls implements IControls {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	@Override
+	public float getSteering() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

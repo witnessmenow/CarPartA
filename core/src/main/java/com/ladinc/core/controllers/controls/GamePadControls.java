@@ -161,5 +161,11 @@ public class GamePadControls implements IControls {
 		
 		return 0;
 	}
+
+	@Override
+	public float getSteering() 
+	{
+		return leftMovement.x;
+	}
 	
 }

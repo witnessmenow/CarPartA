@@ -83,32 +83,21 @@ public class Vehicle {
 		if(this.controls != null)
 		{
 			//Steering
-//			if(this.controls.getLeftBool())
-//			{
-//				this.steer = Vehicle.STEER_LEFT;
-//			}
-//			else if(this.controls.getRightBool())
-//			{
-//				this.steer = Vehicle.STEER_RIGHT;
-//			}
-//			else
-//			{
-//				this.steer = Vehicle.STEER_NONE;
-//			}
+			if(this.controls.getSteering() > 0)
+			{
+				this.steer = Vehicle.STEER_RIGHT;
+			}
+			else if(this.controls.getSteering() < 0)
+			{
+				this.steer = Vehicle.STEER_LEFT;
+			}
+			else
+			{
+				this.steer = Vehicle.STEER_NONE;
+			}
 //
-//			//Forward Movement
-//			if(this.controls.getAccelerateBool())
-//			{
-//				this.acceleration = 1;
-//			}
-//			else if (this.controls.getBrakeBool())
-//			{
-//				this.acceleration = -1;
-//			}
-//			else
-//			{
-//				this.acceleration = this.controls.getAcceleration();
-//			}
+			
+			this.acceleration = this.controls.getAcceleration();
 		}
 
 		this.update(Gdx.app.getGraphics().getDeltaTime());
