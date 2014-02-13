@@ -11,6 +11,12 @@ public class KeyboardControls implements IControls {
 	
 	private final Vector2 movement;
 	
+	private boolean acceleratePressed;
+	private boolean reversePressed;
+	
+	private boolean leftPressed;
+	private boolean rightPressed;
+	
 	public KeyboardAndMouseListener listener;
 	
 	public KeyboardControls(KeyboardAndMouseListener listen) {
@@ -76,6 +82,46 @@ public class KeyboardControls implements IControls {
 		return actualRotationPoint;
 	}
 	
+	public void setAccelerateButton(boolean pressed)
+	{
+		if (!active && pressed)
+		{
+			checkForActive();
+		}
+		
+		this.acceleratePressed = pressed;
+	}
+	
+	public void setReverseButton(boolean pressed)
+	{
+		if (!active && pressed)
+		{
+			checkForActive();
+		}
+		
+		this.reversePressed = pressed;
+	}
+	
+	public void setLeftButton(boolean pressed)
+	{
+		if (!active && pressed)
+		{
+			checkForActive();
+		}
+		
+		this.leftPressed = pressed;
+	}
+	
+	public void setRightButton(boolean pressed)
+	{
+		if (!active && pressed)
+		{
+			checkForActive();
+		}
+		
+		this.rightPressed = pressed;
+	}
+	
 	public boolean getDivePressed()
 	{
 		// TODO Auto-generated method stub
@@ -96,14 +142,24 @@ public class KeyboardControls implements IControls {
 	}
 
 	@Override
-	public int getAcceleration() {
-		// TODO Auto-generated method stub
+	public int getAcceleration() 
+	{
+		if(this.acceleratePressed)
+			return 1;
+		if(this.reversePressed)
+			return -1;
+		
 		return 0;
 	}
 
 	@Override
-	public float getSteering() {
-		// TODO Auto-generated method stub
+	public float getSteering() 
+	{
+		if(this.rightPressed)
+			return 1;
+		if(this.leftPressed)
+			return -1;
+		
 		return 0;
 	}
 }

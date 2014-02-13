@@ -20,30 +20,48 @@ public class KeyboardAndMouseListener implements InputProcessor {
 				"keyDown: keycode=" + String.valueOf(keyCode));
 		if (KeyboardMapper.isAccelerateButton(keyCode))
 		{
-			// Increase acceleration
+			this.controls.setAccelerateButton(true);
 		}
 		else if (KeyboardMapper.isDeaccelerateButton(keyCode))
 		{
-			// decrease acceleration
+			this.controls.setReverseButton(true);
 		}
 		
 		if (KeyboardMapper.isRotateLeftButton(keyCode))
 		{
-			// Rotate car left
+			this.controls.setLeftButton(true);
 		}
 		else if (KeyboardMapper.isRotateRightButton(keyCode))
 		{
-			// Rotate car right
+			this.controls.setRightButton(true);
 		}
 		
 		return true;
 	}
 	
 	@Override
-	public boolean keyUp(int keycode)
+	public boolean keyUp(int keyCode)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		Gdx.app.debug("KeyBoardAndMouseListener",
+				"keyUp: keycode=" + String.valueOf(keyCode));
+		if (KeyboardMapper.isAccelerateButton(keyCode))
+		{
+			this.controls.setAccelerateButton(false);
+		}
+		else if (KeyboardMapper.isDeaccelerateButton(keyCode))
+		{
+			this.controls.setReverseButton(false);
+		}
+		
+		if (KeyboardMapper.isRotateLeftButton(keyCode))
+		{
+			this.controls.setLeftButton(false);
+		}
+		else if (KeyboardMapper.isRotateRightButton(keyCode))
+		{
+			this.controls.setRightButton(false);
+		}
+		return true;
 	}
 	
 	@Override
