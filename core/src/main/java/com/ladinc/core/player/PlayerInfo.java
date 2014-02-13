@@ -19,6 +19,13 @@ public class PlayerInfo
 		this.playerId = getNextID();
 	}
 	
+	public PlayerInfo(IControls controls, Team team)
+	{
+		this.controls = controls;
+		this.team = team;
+		this.playerId = getNextID();
+	}
+	
 	public int getNextID()
 	{
 		for(int i = 0; i < PlayerInfo.ID_LIST.length; i++)

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ladinc.core.CarPartA;
+import com.ladinc.core.screen.gamemodes.SimpleRaceScreen;
 
 public class MainMenuScreen implements Screen {
 	private final CarPartA game;
@@ -36,7 +37,7 @@ public class MainMenuScreen implements Screen {
 		
 		if (Gdx.input.isTouched())
 		{
-			game.setScreen(new DemoScreen(game));
+			game.setScreen(new SimpleRaceScreen(game));
 			dispose();
 		}
 	}

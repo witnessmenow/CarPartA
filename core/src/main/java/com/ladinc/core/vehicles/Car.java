@@ -6,12 +6,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.controllers.controls.IControls;
+import com.ladinc.core.objects.StartingPosition;
 import com.ladinc.core.player.PlayerInfo;
 
 public class Car extends Vehicle {
 
-	public Car(PlayerInfo player, World world, Vector2 position,
-			float angle, Sprite carSprite, Sprite wheelSprite) 
+	public Car(PlayerInfo player, World world, StartingPosition position, Sprite carSprite, Sprite wheelSprite) 
 	{
 		super();
 
@@ -35,8 +35,8 @@ public class Car extends Vehicle {
 		this.accelerate = Vehicle.ACC_NONE;
 
 
-		this.angle = angle;
-		this.position = position;
+		this.angle = position.angle;
+		this.position = position.position;
 		this.wheelAngle = 0;
 
 		super.createBody(world);

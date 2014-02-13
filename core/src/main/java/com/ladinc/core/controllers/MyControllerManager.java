@@ -11,6 +11,7 @@ import com.ladinc.core.controllers.controls.IControls;
 import com.ladinc.core.controllers.listeners.desktop.KeyboardAndMouseListener;
 import com.ladinc.core.controllers.listeners.desktop.XboxListener;
 import com.ladinc.core.player.PlayerInfo;
+import com.ladinc.core.player.PlayerInfo.Team;
 
 public class MyControllerManager {
 	
@@ -116,7 +117,7 @@ public class MyControllerManager {
 				if (!checkIsControllerAlreadyActive(cont))
 				{
 					// cont.setIdentifier(getNextAvailableIdentifer());
-					this.players.add(new PlayerInfo(cont));
+					this.players.add(new PlayerInfo(cont, Team.home));
 					this.inActiveControls.remove(cont);
 					foundNew = true;
 				}
