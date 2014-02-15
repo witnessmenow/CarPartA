@@ -13,7 +13,7 @@ public class GamePadControls implements IControls {
 	
 	private final Vector2 rightMovement;
 	
-	private boolean divePressed;
+	private boolean handbreakPressed;
 	private boolean acceleratePressed;
 	private boolean reversePressed;
 	
@@ -115,16 +115,6 @@ public class GamePadControls implements IControls {
 		
 	}
 	
-	public void setDiveButton(boolean pressed)
-	{
-		if (!active && pressed)
-		{
-			activateController();
-		}
-		
-		this.divePressed = pressed;
-	}
-	
 	public void setAccelerateButton(boolean pressed)
 	{
 		if (!active && pressed)
@@ -143,6 +133,16 @@ public class GamePadControls implements IControls {
 		}
 		
 		this.reversePressed = pressed;
+	}
+	
+	public void setHandBreakButton(boolean pressed)
+	{
+		if (!active && pressed)
+		{
+			activateController();
+		}
+		
+		this.handbreakPressed = pressed;
 	}
 	
 	@Override
@@ -166,6 +166,13 @@ public class GamePadControls implements IControls {
 	public float getSteering() 
 	{
 		return leftMovement.x;
+	}
+
+	@Override
+	public boolean getHandbreakStatus() 
+	{
+		// TODO Auto-generated method stub
+		return this.handbreakPressed;
 	}
 	
 }

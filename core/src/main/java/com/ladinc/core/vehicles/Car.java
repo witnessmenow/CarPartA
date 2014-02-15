@@ -22,7 +22,7 @@ public class Car extends Vehicle {
 
 		//Handling
 		this.maxSteerAngle = 20f;
-		this.maxSpeed = 300f;
+		this.maxSpeed = 350f;
 		this.power = 500f;
 
 		float wheelWidth = 1f;

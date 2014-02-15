@@ -8,6 +8,8 @@ public interface IControls {
 	
 	public float getSteering();
 	
+	public boolean getHandbreakStatus();
+	
 	// TODO: Add start etc
 	
 }

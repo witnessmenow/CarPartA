@@ -64,10 +64,16 @@ public class Wheel {
 	        jointdef.enableMotor=false; //we'll be controlling the wheel's angle manually
 		    world.createJoint(jointdef);
 	    }else{
-	    	PrismaticJointDef jointdef=new PrismaticJointDef();
-	        jointdef.initialize(this.vehcile.body, this.body, this.body.getWorldCenter(), new Vector2(1, 0));
-	        jointdef.enableLimit=true;
-	        jointdef.lowerTranslation=jointdef.upperTranslation=0;
+//	    	PrismaticJointDef jointdef=new PrismaticJointDef();
+//	        jointdef.initialize(this.vehcile.body, this.body, this.body.getWorldCenter(), new Vector2(1, 0));
+//	        jointdef.enableMotor=false;
+//	        jointdef.enableLimit=true;
+//	        jointdef.lowerTranslation=jointdef.upperTranslation=0;
+//		    world.createJoint(jointdef);
+	    	
+	    	RevoluteJointDef jointdef=new RevoluteJointDef();
+	        jointdef.initialize(this.vehcile.body, this.body, this.body.getWorldCenter());
+	        jointdef.enableMotor=false; //we'll be controlling the wheel's angle manually
 		    world.createJoint(jointdef);
 	    }
 	}

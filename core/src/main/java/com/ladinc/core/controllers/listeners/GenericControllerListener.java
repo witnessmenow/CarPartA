@@ -25,6 +25,7 @@ public class GenericControllerListener implements ControllerListener {
 	
 	public int AccelerateButton;
 	public int ReverseButton;
+	public int HandbreakButton;
 	
 	
 	@Override
@@ -72,14 +73,7 @@ public class GenericControllerListener implements ControllerListener {
 		Gdx.app.debug("GenericControllerListener",
 				"buttonDown: arg1=" + String.valueOf(arg1));
 		
-		if (arg1 == AccelerateButton)
-		{
-			controls.setAccelerateButton(true);
-		}
-		else if(arg1 == ReverseButton)
-		{
-			controls.setReverseButton(true);
-		}
+		handleButtonPresses(arg1, true);
 		
 		return false;
 	}
@@ -87,16 +81,28 @@ public class GenericControllerListener implements ControllerListener {
 	@Override
 	public boolean buttonUp(Controller arg0, int arg1)
 	{
-		if (arg1 == AccelerateButton)
-		{
-			controls.setAccelerateButton(false);
-		}
-		else if(arg1 == ReverseButton)
-		{
-			controls.setReverseButton(false);
-		}
+		Gdx.app.debug("GenericControllerListener",
+				"buttonUp: arg1=" + String.valueOf(arg1));
+		
+		handleButtonPresses(arg1, false);
 		
 		return false;
+	}
+	
+	private void handleButtonPresses(int buttonId, Boolean set)
+	{
+		if (buttonId == AccelerateButton)
+		{
+			controls.setAccelerateButton(set);
+		}
+		else if(buttonId == ReverseButton)
+		{
+			controls.setReverseButton(set);
+		}
+		else if(buttonId == HandbreakButton)
+		{
+			controls.setHandBreakButton(set);
+		}
 	}
 	
 	@Override

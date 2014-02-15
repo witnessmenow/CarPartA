@@ -162,4 +162,10 @@ public class KeyboardControls implements IControls {
 		
 		return 0;
 	}
+
+	@Override
+	public boolean getHandbreakStatus() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

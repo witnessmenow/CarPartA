@@ -74,7 +74,7 @@ public class SimpleRaceScreen extends GameScreen implements Screen
 	
 	private void resetGame()
 	{
-		this.maze = new SimpleMaze(world, worldWidth, worldHeight, center, 4);
+		this.maze = new SimpleMaze(world, worldWidth, worldHeight, center, 0);
 		
 		createCarsForPlayers();
 	}
