@@ -1,6 +1,5 @@
 package com.ladinc.core.screen;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
@@ -8,11 +7,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ladinc.core.CarPartA;
-import com.ladinc.core.screen.gamemodes.SimpleRaceScreen;
+import com.ladinc.core.screen.gamemodes.mazes.MazeScreen;
+import com.ladinc.core.screen.gamemodes.soccer.SoccerScreen;
 
 public class MainMenuScreen implements Screen {
 	private final CarPartA game;
 	private final SpriteBatch batch;
+	private static final int PRESS_SPACEBAR_FOR_SOCCAR = 62;
 	BitmapFont font;
 	OrthographicCamera camera;
 	
@@ -37,7 +38,12 @@ public class MainMenuScreen implements Screen {
 		
 		if (Gdx.input.isTouched())
 		{
-			game.setScreen(new SimpleRaceScreen(game));
+			game.setScreen(new MazeScreen(game));
+			dispose();
+		}
+		else if (Gdx.input.isKeyPressed(PRESS_SPACEBAR_FOR_SOCCAR))
+		{
+			game.setScreen(new SoccerScreen(game));
 			dispose();
 		}
 	}

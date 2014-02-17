@@ -16,6 +16,7 @@ public class KeyboardAndMouseListener implements InputProcessor {
 	@Override
 	public boolean keyDown(int keyCode)
 	{
+		controls.active = true;
 		Gdx.app.debug("KeyBoardAndMouseListener",
 				"keyDown: keycode=" + String.valueOf(keyCode));
 		if (KeyboardMapper.isAccelerateButton(keyCode))
