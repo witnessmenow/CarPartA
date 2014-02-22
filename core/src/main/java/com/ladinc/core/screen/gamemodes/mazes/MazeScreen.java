@@ -14,4 +14,10 @@ public class MazeScreen extends GenericScreen {
 	{
 		return new MazeLayout(world, worldWidth, worldHeight, center, 4);
 	}
+	
+	@Override
+	protected void renderUpdates(float delta)
+	{
+		// TODO Auto-generated method stub
+	}
 }

@@ -11,22 +11,21 @@ public class GameScreen {
 	
 	protected OrthographicCamera camera;
 	protected SpriteBatch spriteBatch;
-
-    protected World world;
-    
-    protected Box2DDebugRenderer debugRenderer;
-    
-    //Used for sprites etc
-    protected int screenWidth;
+	
+	protected World world;
+	
+	protected Box2DDebugRenderer debugRenderer;
+	
+	// Used for sprites etc
+	protected int screenWidth;
 	protected int screenHeight;
-    
-    //Used for Box2D
-    protected float worldWidth;
-    protected float worldHeight;
-    protected int PIXELS_PER_METER = 10;  
-    
-    protected Vector2 center;
-    
-    protected CarPartA game;
-
+	
+	// Used for Box2D
+	protected float worldWidth;
+	protected float worldHeight;
+	protected int PIXELS_PER_METER = 10;
+	
+	protected Vector2 center;
+	
+	protected CarPartA game;
 }

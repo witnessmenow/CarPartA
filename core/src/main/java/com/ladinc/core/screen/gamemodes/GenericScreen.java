@@ -49,15 +49,16 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		// tell the camera to update its matrices.
 		camera.update();
 		spriteBatch.setProjectionMatrix(camera.combined);
+		spriteBatch.begin();
 		
 		for (Vehicle v : this.vehicles)
 		{
 			v.controlVehicle();
 		}
-		
+		renderUpdates(delta);
 		world.step(Gdx.app.getGraphics().getDeltaTime(), 3, 3);
 		world.clearForces();
-		
+		spriteBatch.end();
 		debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,
 				PIXELS_PER_METER, PIXELS_PER_METER));
 	}
@@ -82,6 +83,8 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	}
 	
 	public abstract IGenericLayout resetLayout();
+	
+	protected abstract void renderUpdates(float delta);
 	
 	private void createCarsForPlayers()
 	{
