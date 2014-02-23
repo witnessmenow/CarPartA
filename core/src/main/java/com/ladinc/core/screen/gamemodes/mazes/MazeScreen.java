@@ -20,4 +20,11 @@ public class MazeScreen extends GenericScreen {
 	{
 		// TODO Auto-generated method stub
 	}
+	
+	@Override
+	public void initGame()
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

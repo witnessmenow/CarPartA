@@ -9,6 +9,7 @@ import com.ladinc.core.screen.gamemodes.GenericLayout;
 public class SoccerLayout extends GenericLayout {
 	private static final float GOAL_WIDTH = 10f;
 	private static final float GOAL_HEIGHT = 10f;
+	private final float timerAndScoringSpace = 2f;
 	
 	public SoccerLayout(World world, float worldWidth, float worldHeight,
 			Vector2 center, int numInnerWalls) {
@@ -39,7 +40,7 @@ public class SoccerLayout extends GenericLayout {
 	public void createWorld(World world)
 	{
 		createPitch(world, getWorldWidth(), getWorldHeight(), getCenter(),
-				getGapFromOuterEdge());
+				getGapFromOuterEdge(), getTimerAndScoringSpace());
 		createGoals();
 	}
 	
@@ -50,11 +51,12 @@ public class SoccerLayout extends GenericLayout {
 	}
 	
 	private void createPitch(World world, float worldWidth, float worldHeight,
-			Vector2 center, float gapFromOuterEdge)
+			Vector2 center, float gapFromOuterEdge, float timerAndScoringSpace)
 	{
 		// Touchlines
 		BoxProp touchLineWallTop = new BoxProp(world, worldWidth - GOAL_WIDTH,
-				1, new Vector2(worldWidth / 2, worldHeight - gapFromOuterEdge));
+				1, new Vector2(worldWidth / 2, worldHeight - gapFromOuterEdge
+						- timerAndScoringSpace));
 		BoxProp touchLineWallBot = new BoxProp(world, worldWidth - GOAL_WIDTH,
 				1, new Vector2(worldWidth / 2, gapFromOuterEdge));
 		
@@ -115,5 +117,10 @@ public class SoccerLayout extends GenericLayout {
 		getWalls().add(goalLineWallRightGoalHeight);
 		getWalls().add(goalLineWallRightGoalWidthBottom);
 		getWalls().add(goalLineWallRightBottom);
+	}
+	
+	public float getTimerAndScoringSpace()
+	{
+		return timerAndScoringSpace;
 	}
 }

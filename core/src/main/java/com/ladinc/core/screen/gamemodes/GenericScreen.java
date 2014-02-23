@@ -72,6 +72,7 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	public void resetGame()
 	{
 		this.layout = (GenericLayout) resetLayout();
+		initGame();
 		createCarsForPlayers();
 	}
 	
@@ -83,6 +84,8 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	}
 	
 	public abstract IGenericLayout resetLayout();
+	
+	public abstract void initGame();
 	
 	protected abstract void renderUpdates(float delta);
 	
