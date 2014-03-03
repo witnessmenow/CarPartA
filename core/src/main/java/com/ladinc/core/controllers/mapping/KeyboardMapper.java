@@ -24,4 +24,9 @@ public class KeyboardMapper {
 	{
 		return keyCode == Keys.D || keyCode == Keys.RIGHT;
 	}
+	
+	public static boolean isHandbrakeBurron(int keyCode)
+	{
+		return keyCode == Keys.SPACE;
+	}
 }

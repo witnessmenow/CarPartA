@@ -11,9 +11,14 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Ball {
 	public Body body;
-	public static final float ballSize = 2f;
+	float ballSize = 2f;
 	public static final float ballOffsetX = 0f;
 	public Sprite sprite;
+	
+	public Ball(World world, float x, float y, Sprite ballSprite, float ballSize) {
+		this.ballSize = ballSize;
+		createBallObject(world, x, y, ballSprite, false);
+	}
 	
 	public Ball(World world, float x, float y, Sprite ballSprite) {
 		createBallObject(world, x, y, ballSprite, false);

@@ -115,6 +115,11 @@ public abstract class GenericLayout implements IGenericLayout {
 		return walls;
 	}
 	
+	public void addWall(BoxProp w)
+	{
+		this.walls.add(w);
+	}
+	
 	public int getNumberOfInnerWalls()
 	{
 		return numberOfInnerWalls;

@@ -17,6 +17,8 @@ public class KeyboardControls implements IControls {
 	private boolean leftPressed;
 	private boolean rightPressed;
 	
+	private boolean handbrakePressed;
+	
 	public KeyboardAndMouseListener listener;
 	
 	public KeyboardControls(KeyboardAndMouseListener listen) {
@@ -112,6 +114,16 @@ public class KeyboardControls implements IControls {
 		this.leftPressed = pressed;
 	}
 	
+	public void setHandBreakButton(boolean pressed)
+	{
+		if (!active && pressed)
+		{
+			checkForActive();
+		}
+		
+		this.handbrakePressed = pressed;
+	}
+	
 	public void setRightButton(boolean pressed)
 	{
 		if (!active && pressed)
@@ -166,6 +178,6 @@ public class KeyboardControls implements IControls {
 	@Override
 	public boolean getHandbreakStatus() {
 		// TODO Auto-generated method stub
-		return false;
+		return this.handbrakePressed;
 	}
 }

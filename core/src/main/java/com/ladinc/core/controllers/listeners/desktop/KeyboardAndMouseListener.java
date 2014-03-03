@@ -19,23 +19,8 @@ public class KeyboardAndMouseListener implements InputProcessor {
 		controls.active = true;
 		Gdx.app.debug("KeyBoardAndMouseListener",
 				"keyDown: keycode=" + String.valueOf(keyCode));
-		if (KeyboardMapper.isAccelerateButton(keyCode))
-		{
-			this.controls.setAccelerateButton(true);
-		}
-		else if (KeyboardMapper.isDeaccelerateButton(keyCode))
-		{
-			this.controls.setReverseButton(true);
-		}
-		
-		if (KeyboardMapper.isRotateLeftButton(keyCode))
-		{
-			this.controls.setLeftButton(true);
-		}
-		else if (KeyboardMapper.isRotateRightButton(keyCode))
-		{
-			this.controls.setRightButton(true);
-		}
+
+		handleButtonPresses(keyCode, true);
 		
 		return true;
 	}
@@ -45,24 +30,34 @@ public class KeyboardAndMouseListener implements InputProcessor {
 	{
 		Gdx.app.debug("KeyBoardAndMouseListener",
 				"keyUp: keycode=" + String.valueOf(keyCode));
-		if (KeyboardMapper.isAccelerateButton(keyCode))
+		handleButtonPresses(keyCode, false);
+		return true;
+	}
+	
+	private void handleButtonPresses(int buttonId, Boolean set)
+	{
+		if (KeyboardMapper.isAccelerateButton(buttonId))
 		{
-			this.controls.setAccelerateButton(false);
+			controls.setAccelerateButton(set);
 		}
-		else if (KeyboardMapper.isDeaccelerateButton(keyCode))
+		else if(KeyboardMapper.isDeaccelerateButton(buttonId))
 		{
-			this.controls.setReverseButton(false);
+			controls.setReverseButton(set);
 		}
 		
-		if (KeyboardMapper.isRotateLeftButton(keyCode))
+		if(KeyboardMapper.isHandbrakeBurron(buttonId))
 		{
-			this.controls.setLeftButton(false);
+			controls.setHandBreakButton(set);
 		}
-		else if (KeyboardMapper.isRotateRightButton(keyCode))
+		
+		if (KeyboardMapper.isRotateLeftButton(buttonId))
 		{
-			this.controls.setRightButton(false);
+			this.controls.setLeftButton(set);
 		}
-		return true;
+		else if (KeyboardMapper.isRotateRightButton(buttonId))
+		{
+			this.controls.setRightButton(set);
+		}
 	}
 	
 	@Override

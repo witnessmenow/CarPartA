@@ -14,6 +14,10 @@ public class SoccerScreen extends GenericScreen {
 	private final int awayScore = 0;
 	private Ball ball;
 	
+	private SoccerLayout soccerLayout;
+	
+	private static final float BALL_SIZE  = 2.5f;
+	
 	BitmapFont bitmapFont = new BitmapFont();
 	
 	public SoccerScreen(CarPartA game) {
@@ -23,7 +27,8 @@ public class SoccerScreen extends GenericScreen {
 	@Override
 	public GenericLayout resetLayout()
 	{
-		return new SoccerLayout(world, worldWidth, worldHeight, center, 4);
+		soccerLayout = new SoccerLayout(world, worldWidth, worldHeight, center, 4);
+		return soccerLayout;
 	}
 	
 	@Override
@@ -67,7 +72,10 @@ public class SoccerScreen extends GenericScreen {
 	@Override
 	public void initGame()
 	{
+		this.soccerLayout.createGoals(world, BALL_SIZE*2);
+		
 		ball = new Ball(world, center.x + Ball.ballOffsetX, center.y,
-				new Sprite(Art.textureTable.get(Art.BALL), 0, 0, 40, 40));
+				new Sprite(Art.textureTable.get(Art.BALL), 0, 0, 40, 40),
+				BALL_SIZE);
 	}
 }
