@@ -1,6 +1,7 @@
 package com.ladinc.core.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ladinc.core.CarPartA;
 import com.ladinc.core.screen.gamemodes.mazes.MazeScreen;
 import com.ladinc.core.screen.gamemodes.soccer.SoccerScreen;
+import com.ladinc.core.screen.gamemodes.teamselect.TeamSelectScreen;
 
 public class MainMenuScreen implements Screen {
 	private final CarPartA game;
@@ -44,6 +46,11 @@ public class MainMenuScreen implements Screen {
 		else if (Gdx.input.isKeyPressed(PRESS_SPACEBAR_FOR_SOCCAR))
 		{
 			game.setScreen(new SoccerScreen(game));
+			dispose();
+		}
+		else if (Gdx.input.isKeyPressed(Input.Keys.ENTER))
+		{
+			game.setScreen(new TeamSelectScreen(game));
 			dispose();
 		}
 	}

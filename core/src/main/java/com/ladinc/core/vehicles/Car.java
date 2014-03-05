@@ -29,7 +29,10 @@ public class Car extends Vehicle {
 		float wheelLength = 2f;
 
 		this.player = player;
-		this.controls = player.controls;
+		if(player != null)
+		{
+			this.controls = player.controls;
+		}
 
 		this.steer = Vehicle.STEER_NONE;
 		this.accelerate = Vehicle.ACC_NONE;

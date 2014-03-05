@@ -89,7 +89,7 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	
 	protected abstract void renderUpdates(float delta);
 	
-	private void createCarsForPlayers()
+	protected void createCarsForPlayers()
 	{
 		Vehicle tempCar;
 		this.vehicles.clear();
@@ -133,5 +133,10 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	public GenericLayout getLayout()
 	{
 		return layout;
+	}
+	
+	public List<Vehicle> getVehicles()
+	{
+		return this.vehicles;
 	}
 }
