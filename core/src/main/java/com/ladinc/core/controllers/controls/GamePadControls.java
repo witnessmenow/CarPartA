@@ -19,6 +19,12 @@ public class GamePadControls implements IControls {
 	
 	public boolean active;
 	
+	private boolean startButtonPressed;
+	private boolean confirmButtonPressed;
+	private boolean backButtonPressed;
+	
+	private boolean interestedInMenuPresses = false;
+	
 	public GamePadControls(GenericControllerListener listen) {
 		this.listener = listen;
 		this.leftMovement = new Vector2(0, 0);
@@ -179,6 +185,92 @@ public class GamePadControls implements IControls {
 	public void setActive(boolean active) 
 	{
 		this.active = active;
+		
+	}
+
+	public void setStartStatus(boolean pressed)
+	{
+		if (!active && pressed)
+		{
+			activateController();
+		}
+		
+		this.startButtonPressed = pressed;
+	}
+	
+	public void setConfirmStatus(boolean pressed)
+	{
+		if(interestedInMenuPresses && pressed)
+		{
+			if (!active)
+			{
+				activateController();
+			}
+			
+			this.confirmButtonPressed = true;
+		}
+		else
+		{
+			this.confirmButtonPressed = false;
+		}
+	}
+	
+	public void setBackStatus(boolean pressed)
+	{
+		if(interestedInMenuPresses && pressed)
+		{
+			if (!active)
+			{
+				activateController();
+			}
+			
+			this.backButtonPressed = true;
+		}
+		else
+		{
+			this.backButtonPressed = false;
+		}
+	}
+	
+	@Override
+	public boolean getStartStatus() 
+	{
+		if(this.startButtonPressed)
+		{
+			//Dont allow one press be considered multiple
+			this.startButtonPressed = false;
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean getConfirmStatus() 
+	{
+		if(this.confirmButtonPressed)
+		{
+			//Dont allow one press be considered multiple
+			this.confirmButtonPressed = false;
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean getBackStatus() 
+	{
+		if(this.backButtonPressed)
+		{
+			//Dont allow one press be considered multiple
+			this.backButtonPressed = false;
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void setMenuInterest(boolean set) {
+		this.interestedInMenuPresses = set;
 		
 	}
 	

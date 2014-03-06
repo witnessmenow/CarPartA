@@ -2,11 +2,13 @@ package com.ladinc.core.screen.gamemodes.teamselect;
 
 import java.util.List;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.ladinc.core.CarPartA;
 import com.ladinc.core.controllers.controls.IControls;
 import com.ladinc.core.player.PlayerInfo;
 import com.ladinc.core.screen.gamemodes.GenericLayout;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
+import com.ladinc.core.screen.gamemodes.soccer.SoccerScreen;
 import com.ladinc.core.vehicles.Car;
 import com.ladinc.core.vehicles.Vehicle;
 
@@ -60,23 +62,79 @@ public class TeamSelectScreen extends GenericScreen
 
 	@Override
 	protected void renderUpdates(float delta) {
-		// TODO Auto-generated method stub
+
+		this.teamSelectLayout.teamSelectArea.displayNumbersInTeam(new BitmapFont(), spriteBatch);
 		
 	}
 
-	private PlayerInfo newPlayer = null;
+	private PlayerInfo tempPlayer = null;
+	
+	private boolean menuMode = false;
+	
+	private void setMenuMode(boolean set)
+	{
+		if(set)
+		{
+			menuMode = true;
+			this.allowVehicleControl = false;
+			this.allowWorldPhyics = false;
+		}
+		else
+		{
+			menuMode = false;
+			this.allowVehicleControl = true;
+			this.allowWorldPhyics = true;
+		}
+		
+		this.game.controllerManager.setMenuInterest(menuMode);
+	}
 	
 	@Override
 	public void customRender(float delta) 
 	{
-		newPlayer = this.game.controllerManager.checkForNewPlayer();
+		tempPlayer = this.game.controllerManager.checkForNewPlayer();
 		
-		if(newPlayer != null)
+		if(tempPlayer != null)
 		{
-			assignPlayerToCar(newPlayer);	
+			assignPlayerToCar(tempPlayer);	
+		}
+		
+		this.teamSelectLayout.teamSelectArea.checkTeams(getVehicles());
+		
+		tempPlayer = this.game.controllerManager.checkPlayersForStartPress();
+		if(tempPlayer != null)
+		{
+			setMenuMode(!menuMode);
+		}
+		
+		if(menuMode)
+		{
+			for (PlayerInfo player : this.game.controllerManager.players)
+			{
+				if(player.controls.getConfirmStatus())
+				{
+					handleStartNextScreen();
+				}
+				else if (player.controls.getBackStatus())
+				{
+					handleQuitToLastScreen();
+				}
+			}
 		}
 		
 	}
+	
+	private void handleStartNextScreen()
+	{
+		game.setScreen(new SoccerScreen(game));
+		dispose();
+	}
+	
+	private void handleQuitToLastScreen()
+	{
+		setMenuMode(false);
+	}
+	
 	
 	private void assignPlayerToCar(PlayerInfo newPlayer)
 	{

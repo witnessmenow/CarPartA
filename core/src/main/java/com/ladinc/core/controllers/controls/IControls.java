@@ -12,6 +12,14 @@ public interface IControls {
 	
 	public boolean getHandbreakStatus();
 	
+	public boolean getStartStatus();
+	
+	public boolean getConfirmStatus();
+	
+	public boolean getBackStatus();
+	
+	public void setMenuInterest(boolean set);
+	
 	// TODO: Add start etc
 	
 }

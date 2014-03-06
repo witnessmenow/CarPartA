@@ -1,5 +1,7 @@
 package com.ladinc.core.controllers.mapping;
 
+import java.awt.RenderingHints.Key;
+
 import com.badlogic.gdx.Input.Keys;
 
 public class KeyboardMapper {
@@ -25,8 +27,23 @@ public class KeyboardMapper {
 		return keyCode == Keys.D || keyCode == Keys.RIGHT;
 	}
 	
-	public static boolean isHandbrakeBurron(int keyCode)
+	public static boolean isHandbrakeButton(int keyCode)
 	{
 		return keyCode == Keys.SPACE;
+	}
+	
+	public static boolean isStartButton(int keyCode)
+	{
+		return  keyCode == Keys.ESCAPE;
+	}
+	
+	public static boolean isConfirmButton(int keyCode)
+	{
+		return keyCode == Keys.ENTER;
+	}
+	
+	public static boolean isBackButton(int keyCode)
+	{
+		return keyCode == Keys.BACKSPACE;
 	}
 }

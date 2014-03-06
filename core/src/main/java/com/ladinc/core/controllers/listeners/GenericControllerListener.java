@@ -27,6 +27,10 @@ public class GenericControllerListener implements ControllerListener {
 	public int ReverseButton;
 	public int HandbreakButton;
 	
+	public int StartButton;
+	public int ConfirmButton;
+	public int BackButton;
+	
 	
 	@Override
 	public boolean accelerometerMoved(Controller arg0, int arg1, Vector3 arg2)
@@ -102,6 +106,19 @@ public class GenericControllerListener implements ControllerListener {
 		else if(buttonId == HandbreakButton)
 		{
 			controls.setHandBreakButton(set);
+		}
+		
+		if(buttonId == StartButton)
+		{
+			controls.setStartStatus(set);
+		}
+		else if(buttonId == ConfirmButton)
+		{
+			controls.setConfirmStatus(set);
+		}
+		else if(buttonId == BackButton)
+		{
+			controls.setBackStatus(set);
 		}
 	}
 	

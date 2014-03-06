@@ -45,7 +45,7 @@ public class KeyboardAndMouseListener implements InputProcessor {
 			controls.setReverseButton(set);
 		}
 		
-		if(KeyboardMapper.isHandbrakeBurron(buttonId))
+		if(KeyboardMapper.isHandbrakeButton(buttonId))
 		{
 			controls.setHandBreakButton(set);
 		}
@@ -57,6 +57,19 @@ public class KeyboardAndMouseListener implements InputProcessor {
 		else if (KeyboardMapper.isRotateRightButton(buttonId))
 		{
 			this.controls.setRightButton(set);
+		}
+		
+		if(KeyboardMapper.isStartButton(buttonId))
+		{
+			this.controls.setStartStatus(set);
+		}
+		else if (KeyboardMapper.isConfirmButton(buttonId))
+		{
+			this.controls.setConfirmStatus(set);
+		}
+		else if (KeyboardMapper.isBackButton(buttonId))
+		{
+			this.controls.setBackStatus(set);
 		}
 	}
 	

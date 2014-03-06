@@ -3,6 +3,8 @@ package com.ladinc.core.objects;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.vehicles.Vehicle;
@@ -20,6 +22,10 @@ public class TeamSelectArea
 	public int carsInHomeArea = 0;
 	public int carsInAwayArea = 0;
 	
+	public float homeTextX;
+	public float awayTextX;
+	public float commonTextY;
+	
 	public TeamSelectArea(World world, float worldWidth, float worldHeight, Vector2 center, float gapFromOuterEdge, float playerGapX, float playerGapY)
 	{		
 		this.center = center;
@@ -34,10 +40,10 @@ public class TeamSelectArea
 		
 		createInnerWalls(world, worldWidth, worldHeight, center, gapFromOuterEdge);
 		
-//		this.blueTextPosition = (gapFromOuterEdge + ((worldWidth/4)-gapFromOuterEdge)/2)*10;
-//		this.redTextPosition = (worldWidth*10)-blueTextPosition;
-//		
-//		this.textY = ((worldHeight/2)*10) + 50; 		
+		this.homeTextX = (gapFromOuterEdge + ((worldWidth/4)-gapFromOuterEdge)/2)*10;
+		this.awayTextX = (worldWidth*10)-homeTextX;
+		
+		this.commonTextY = ((worldHeight/2)*10) + 50; 		
 	}
 	
 	private void createOuterWalls(World world, float worldWidth, float worldHeight, Vector2 center, float gapFromOuterEdge)
@@ -106,6 +112,19 @@ public class TeamSelectArea
 				this.carsInAwayArea++;
 			}
 		}
+	}
+	
+	public void displayNumbersInTeam(BitmapFont font, SpriteBatch spriteBatch)
+	{
+		String blueMessage = String.valueOf(this.carsInHomeArea) + " HOME";
+		//Set for blue
+		font.setColor(0f, 0f, 1f, 1.0f);
+        font.draw(spriteBatch, blueMessage, homeTextX - font.getBounds(blueMessage).width/2, commonTextY);
+        
+      //Set for red
+        String redMessage = String.valueOf(this.carsInAwayArea) + " AWAY";
+      	font.setColor(1f, 0f, 0f, 1.0f);
+        font.draw(spriteBatch, redMessage, awayTextX - font.getBounds(redMessage).width/2, commonTextY);
 	}
 	
 	private boolean checkVehicleInHomeArea(Vehicle vehicle)

@@ -19,6 +19,12 @@ public class KeyboardControls implements IControls {
 	
 	private boolean handbrakePressed;
 	
+	private boolean startButtonPressed;
+	private boolean confirmButtonPressed;
+	private boolean backButtonPressed;
+	
+	private boolean interestedInMenuPresses = false;
+	
 	public KeyboardAndMouseListener listener;
 	
 	public KeyboardControls(KeyboardAndMouseListener listen) {
@@ -185,6 +191,83 @@ public class KeyboardControls implements IControls {
 	public void setActive(boolean active) 
 	{
 		this.active = active;
+		
+	}
+
+	public void setStartStatus(boolean pressed)
+	{
+		checkForActive();
+		
+		this.startButtonPressed = pressed;
+	}
+	
+	public void setConfirmStatus(boolean pressed)
+	{
+		if(interestedInMenuPresses && pressed)
+		{
+			checkForActive();
+			
+			this.confirmButtonPressed = true;
+		}
+		else
+		{
+			this.confirmButtonPressed = false;
+		}
+	}
+	
+	public void setBackStatus(boolean pressed)
+	{
+		if(interestedInMenuPresses && pressed)
+		{
+			checkForActive();
+			
+			this.backButtonPressed = true;
+		}
+		else
+		{
+			this.backButtonPressed = false;
+		}
+	}
+	
+	@Override
+	public boolean getStartStatus() 
+	{
+		if(this.startButtonPressed)
+		{
+			//Dont allow one press be considered multiple
+			this.startButtonPressed = false;
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean getConfirmStatus() 
+	{
+		if(this.confirmButtonPressed)
+		{
+			//Dont allow one press be considered multiple
+			this.confirmButtonPressed = false;
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean getBackStatus() 
+	{
+		if(this.backButtonPressed)
+		{
+			//Dont allow one press be considered multiple
+			this.backButtonPressed = false;
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public void setMenuInterest(boolean set) {
+		this.interestedInMenuPresses = set;
 		
 	}
 }

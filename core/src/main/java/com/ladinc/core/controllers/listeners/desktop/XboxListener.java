@@ -12,6 +12,10 @@ public class XboxListener  extends GenericControllerListener{
 		this.ReverseButton = Xbox360WindowsMapper.X_BUTTON;
 		this.HandbreakButton = Xbox360WindowsMapper.R_BUMPER;
 		
+		this.StartButton = Xbox360WindowsMapper.START_BUTTON;
+		this.ConfirmButton = Xbox360WindowsMapper.A_BUTTON;
+		this.BackButton = Xbox360WindowsMapper.B_BUTTON;
+		
 		this.LeftAxisX = Xbox360WindowsMapper.LEFT_ANALOG_X;
 		this.LeftAxisY = Xbox360WindowsMapper.LEFT_ANALOG_Y;
 		

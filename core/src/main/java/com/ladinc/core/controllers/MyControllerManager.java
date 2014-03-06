@@ -148,4 +148,24 @@ public class MyControllerManager {
 		
 		return null;
 	}
+	
+	public PlayerInfo checkPlayersForStartPress()
+	{
+		for (PlayerInfo player : players)
+		{
+			if(player.controls.getStartStatus())
+				return player;
+		}
+		
+		return null;
+	}
+	
+	public void setMenuInterest(boolean set)
+	{
+		for (PlayerInfo player : players)
+		{
+			player.controls.setMenuInterest(set);
+		}
+		
+	}
 }

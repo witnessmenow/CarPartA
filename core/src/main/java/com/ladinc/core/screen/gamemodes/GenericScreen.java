@@ -40,6 +40,9 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		this.camera.setToOrtho(false, this.screenWidth, this.screenHeight);
 	}
 	
+	protected boolean allowVehicleControl = true;
+	protected boolean allowWorldPhyics = true;
+	
 	@Override
 	public void render(float delta)
 	{
@@ -60,15 +63,21 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	
 	public void calculateMovements(float delta)
 	{
-		for (Vehicle v : this.vehicles)
+		if(allowVehicleControl)
 		{
-			v.controlVehicle();
+			for (Vehicle v : this.vehicles)
+			{
+				v.controlVehicle();
+			}
 		}
 		
 		customRender(delta);
 		
-		world.step(Gdx.app.getGraphics().getDeltaTime(), 3, 3);
-		world.clearForces();
+		if(allowWorldPhyics)
+		{
+			world.step(Gdx.app.getGraphics().getDeltaTime(), 3, 3);
+			world.clearForces();
+		}
 	}
 	
 	public abstract void customRender(float delta);
