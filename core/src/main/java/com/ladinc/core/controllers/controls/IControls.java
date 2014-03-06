@@ -4,6 +4,8 @@ public interface IControls {
 	
 	public boolean isActive();
 	
+	public void setActive(boolean active);
+	
 	public int getAcceleration();
 	
 	public float getSteering();

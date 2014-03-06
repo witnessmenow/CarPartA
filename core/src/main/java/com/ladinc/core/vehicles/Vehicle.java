@@ -62,6 +62,15 @@ public class Vehicle {
 		fixtureDef.shape = carShape;
 		this.body.createFixture(fixtureDef);
 	}
+	
+	public void setPlayerInfo(PlayerInfo player)
+	{
+		this.player = player;
+		if(player != null)
+		{
+			this.controls = player.controls;
+		}
+	}
 
 	public List<Wheel> getPoweredWheels() {
 		List<Wheel> poweredWheels = new ArrayList<Wheel>();

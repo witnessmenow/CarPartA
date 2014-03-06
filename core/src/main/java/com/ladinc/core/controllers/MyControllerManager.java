@@ -104,11 +104,30 @@ public class MyControllerManager {
 		return false;
 	}
 	
-	public boolean checkForNewControllers()
+	public void resetActiveStateOfControllers()
 	{
-		ArrayList<IControls> tempControllers = (ArrayList<IControls>) inActiveControls
-				.clone();
-		boolean foundNew = false;
+		ArrayList<PlayerInfo> tempPlayersToRemove = new ArrayList<PlayerInfo>();
+		IControls tempCont;
+		for (PlayerInfo player : players)
+		{
+			tempCont = player.controls;
+			tempCont.setActive(false);
+			this.inActiveControls.add(tempCont);
+			tempPlayersToRemove.add(player);
+		}
+		
+		for (PlayerInfo player : tempPlayersToRemove)
+		{
+			this.players.remove(player);
+		}
+		
+	}
+	
+	
+	
+	public PlayerInfo checkForNewPlayer()
+	{
+		ArrayList<IControls> tempControllers = (ArrayList<IControls>) inActiveControls.clone();
 		
 		for (IControls cont : tempControllers)
 		{
@@ -117,13 +136,16 @@ public class MyControllerManager {
 				if (!checkIsControllerAlreadyActive(cont))
 				{
 					// cont.setIdentifier(getNextAvailableIdentifer());
-					this.players.add(new PlayerInfo(cont, Team.home));
+					
+					//Setting new player is mutating the object that is passed as a reference
+					PlayerInfo newPlayer = new PlayerInfo(cont, Team.home);
+					this.players.add(newPlayer);
 					this.inActiveControls.remove(cont);
-					foundNew = true;
+					return newPlayer;
 				}
 			}
 		}
 		
-		return foundNew;
+		return null;
 	}
 }

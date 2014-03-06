@@ -174,5 +174,12 @@ public class GamePadControls implements IControls {
 		// TODO Auto-generated method stub
 		return this.handbreakPressed;
 	}
+
+	@Override
+	public void setActive(boolean active) 
+	{
+		this.active = active;
+		
+	}
 	
 }

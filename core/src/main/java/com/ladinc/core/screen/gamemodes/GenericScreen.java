@@ -46,22 +46,32 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0f, 0f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
+		calculateMovements(delta);
+		
 		// tell the camera to update its matrices.
 		camera.update();
 		spriteBatch.setProjectionMatrix(camera.combined);
 		spriteBatch.begin();
-		
-		for (Vehicle v : this.vehicles)
-		{
-			v.controlVehicle();
-		}
 		renderUpdates(delta);
-		world.step(Gdx.app.getGraphics().getDeltaTime(), 3, 3);
-		world.clearForces();
 		spriteBatch.end();
 		debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,
 				PIXELS_PER_METER, PIXELS_PER_METER));
 	}
+	
+	public void calculateMovements(float delta)
+	{
+		for (Vehicle v : this.vehicles)
+		{
+			v.controlVehicle();
+		}
+		
+		customRender(delta);
+		
+		world.step(Gdx.app.getGraphics().getDeltaTime(), 3, 3);
+		world.clearForces();
+	}
+	
+	public abstract void customRender(float delta);
 	
 	@Override
 	public void resize(int width, int height)

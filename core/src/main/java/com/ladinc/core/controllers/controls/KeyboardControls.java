@@ -180,4 +180,11 @@ public class KeyboardControls implements IControls {
 		// TODO Auto-generated method stub
 		return this.handbrakePressed;
 	}
+	
+	@Override
+	public void setActive(boolean active) 
+	{
+		this.active = active;
+		
+	}
 }

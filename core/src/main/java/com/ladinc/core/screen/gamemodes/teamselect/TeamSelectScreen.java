@@ -1,6 +1,9 @@
 package com.ladinc.core.screen.gamemodes.teamselect;
 
+import java.util.List;
+
 import com.ladinc.core.CarPartA;
+import com.ladinc.core.controllers.controls.IControls;
 import com.ladinc.core.player.PlayerInfo;
 import com.ladinc.core.screen.gamemodes.GenericLayout;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
@@ -9,6 +12,8 @@ import com.ladinc.core.vehicles.Vehicle;
 
 public class TeamSelectScreen extends GenericScreen
 {
+	
+	private List<PlayerInfo> assignedPlayers;
 	
 	//Need a better place for this!
 	private static final int MAX_PLAYERS = 8;
@@ -25,8 +30,6 @@ public class TeamSelectScreen extends GenericScreen
 	{
 		Vehicle tempCar;
 		getVehicles().clear();
-		PlayerInfo tempPlayer;
-		
 			
 		for( int i = 0; i < 8; i++)
 		{
@@ -49,14 +52,42 @@ public class TeamSelectScreen extends GenericScreen
 	}
 
 	@Override
-	public void initGame() {
-		// TODO Auto-generated method stub
+	public void initGame() 
+	{
+		this.game.controllerManager.resetActiveStateOfControllers();
 		
 	}
 
 	@Override
 	protected void renderUpdates(float delta) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	private PlayerInfo newPlayer = null;
+	
+	@Override
+	public void customRender(float delta) 
+	{
+		newPlayer = this.game.controllerManager.checkForNewPlayer();
+		
+		if(newPlayer != null)
+		{
+			assignPlayerToCar(newPlayer);	
+		}
+		
+	}
+	
+	private void assignPlayerToCar(PlayerInfo newPlayer)
+	{
+		for(Vehicle v : this.getVehicles())
+		{
+			if(v.player == null)
+			{
+				v.setPlayerInfo(newPlayer);
+				return;
+			}
+		}
 		
 	}
 

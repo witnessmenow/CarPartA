@@ -36,7 +36,7 @@ public class MainMenuScreen implements Screen {
 		font.draw(batch, "Click anywhere to begin!", 100, 100);
 		batch.end();
 		
-		this.game.controllerManager.checkForNewControllers();
+		this.game.controllerManager.checkForNewPlayer();
 		
 		if (Gdx.input.isTouched())
 		{

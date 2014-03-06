@@ -78,4 +78,10 @@ public class SoccerScreen extends GenericScreen {
 				new Sprite(Art.textureTable.get(Art.BALL), 0, 0, 40, 40),
 				BALL_SIZE);
 	}
+
+	@Override
+	public void customRender(float delta) {
+		// TODO Auto-generated method stub
+		
+	}
 }
