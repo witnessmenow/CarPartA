@@ -33,52 +33,54 @@ public abstract class GenericLayout implements IGenericLayout {
 	}
 	
 	// TODO: I think this can be simplified
-	public StartingPosition getPlayerStartPoint(Team team)
+	public StartingPosition getPlayerStartPoint(Team team, int playerTeamNumber)
 	{
-		if (getTopStartPosList().size() < getBottomStartPosList().size())
-		{
-			getTopStartPosList().add(team);
-			return getTopStartPoint();
-		}
-		else if (getBottomStartPosList().size() < getTopStartPosList().size())
-		{
-			getBottomStartPosList().add(team);
-			return getBottomStartPoint();
-		}
-		else
-		{
-			// numbers are the same at top and bottom, spreading out the team as
-			// best as possible
-			int ownTeamTop = countTeamPlayersInPosition(team,
-					getTopStartPosList());
-			int ownTeamBottom = countTeamPlayersInPosition(team,
-					getBottomStartPosList());
-			
-			if (ownTeamTop < ownTeamBottom)
-			{
-				getTopStartPosList().add(team);
-				return getTopStartPoint();
-			}
-			else if (ownTeamBottom < ownTeamTop)
-			{
-				getBottomStartPosList().add(team);
-				return getBottomStartPoint();
-			}
-		}
+//		if (getTopStartPosList().size() < getBottomStartPosList().size())
+//		{
+//			getTopStartPosList().add(team);
+//			return getTopStartPoint();
+//		}
+//		else if (getBottomStartPosList().size() < getTopStartPosList().size())
+//		{
+//			getBottomStartPosList().add(team);
+//			return getBottomStartPoint();
+//		}
+//		else
+//		{
+//			// numbers are the same at top and bottom, spreading out the team as
+//			// best as possible
+//			int ownTeamTop = countTeamPlayersInPosition(team,
+//					getTopStartPosList());
+//			int ownTeamBottom = countTeamPlayersInPosition(team,
+//					getBottomStartPosList());
+//			
+//			if (ownTeamTop < ownTeamBottom)
+//			{
+//				getTopStartPosList().add(team);
+//				return getTopStartPoint();
+//			}
+//			else if (ownTeamBottom < ownTeamTop)
+//			{
+//				getBottomStartPosList().add(team);
+//				return getBottomStartPoint();
+//			}
+//		}
+//		
+//		getTopStartPosList().add(team);
+//		return getTopStartPoint();
 		
-		getTopStartPosList().add(team);
-		return getTopStartPoint();
+		return new StartingPosition(getCenter(), 0.0f);
 	}
 	
-	public List<Team> getTopStartPosList()
-	{
-		return topStartPosList;
-	}
-	
-	public List<Team> getBottomStartPosList()
-	{
-		return bottomStartPosList;
-	}
+//	public List<Team> getTopStartPosList()
+//	{
+//		return topStartPosList;
+//	}
+//	
+//	public List<Team> getBottomStartPosList()
+//	{
+//		return bottomStartPosList;
+//	}
 	
 	public float getWorldWidth()
 	{

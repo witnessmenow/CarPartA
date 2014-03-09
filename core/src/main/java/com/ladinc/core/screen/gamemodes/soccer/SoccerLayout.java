@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.objects.BoxProp;
 import com.ladinc.core.objects.Goal;
 import com.ladinc.core.objects.StartingPosition;
+import com.ladinc.core.player.PlayerInfo.Team;
 import com.ladinc.core.screen.gamemodes.GenericLayout;
 import com.ladinc.core.utilities.Enums.Direction;
 import com.ladinc.core.utilities.Enums.Side;
@@ -15,6 +16,9 @@ public class SoccerLayout extends GenericLayout {
 	private static final float POST_THICKNESS = 1f;
 	private static final float GAP_BETWEEN_GOAL_AND_EDGE = 0.5f;
 	private static final float Y_AXIS_GAP  = 10f;
+	
+	private static final float CAR_START_GAP_FROM_EDGE = 35f;
+	private static final float GAP_BETWEEN_CARS = 12f;
 	
 	private final float timerAndScoringSpace = 2f;
 	
@@ -65,56 +69,6 @@ public class SoccerLayout extends GenericLayout {
 	private void createPitch(World world, float worldWidth, float worldHeight,
 			Vector2 center, float gapFromOuterEdge, float timerAndScoringSpace)
 	{
-//		// Touchlines
-//		BoxProp touchLineWallTop = new BoxProp(world, worldWidth - GOAL_WIDTH,
-//				1, new Vector2(worldWidth / 2, worldHeight - gapFromOuterEdge
-//						- timerAndScoringSpace));
-//		BoxProp touchLineWallBot = new BoxProp(world, worldWidth - GOAL_WIDTH,
-//				1, new Vector2(worldWidth / 2, gapFromOuterEdge));
-//		
-//		// Goal on the left
-//		BoxProp goalLineWallLeftTop = new BoxProp(world, 1, (worldHeight / 2)
-//				- GOAL_HEIGHT, new Vector2(GOAL_WIDTH - gapFromOuterEdge,
-//				worldHeight - ((worldHeight / 2 - GOAL_HEIGHT / 2) / 2)));
-//		
-//		BoxProp goalLineWallLeftGoalWidthTop = new BoxProp(world, GOAL_WIDTH,
-//				1, new Vector2(gapFromOuterEdge,
-//						(worldHeight + GOAL_HEIGHT) / 2));
-//		
-//		BoxProp goalLineWallLeftGoalHeight = new BoxProp(world, 1, GOAL_HEIGHT,
-//				new Vector2(gapFromOuterEdge, (worldHeight) / 2));
-//		
-//		BoxProp goalLineWallLeftGoalWidthBottom = new BoxProp(world,
-//				GOAL_WIDTH, 1, new Vector2(gapFromOuterEdge,
-//						(worldHeight - GOAL_HEIGHT) / 2));
-//		
-//		BoxProp goalLineWallLeftBottom = new BoxProp(world, 1,
-//				(worldHeight / 2) - GOAL_HEIGHT, new Vector2(GOAL_WIDTH
-//						- gapFromOuterEdge,
-//						(worldHeight / 2 - GOAL_HEIGHT / 2) / 2));
-//		
-//		// Goal on the right
-//		BoxProp goalLineWallRightTop = new BoxProp(world, 1, (worldHeight / 2)
-//				- GOAL_HEIGHT, new Vector2(worldWidth - GOAL_WIDTH
-//				- gapFromOuterEdge, worldHeight
-//				- ((worldHeight / 2 - GOAL_HEIGHT / 2) / 2)));
-//		
-//		BoxProp goalLineWallRightGoalWidthTop = new BoxProp(world, GOAL_WIDTH,
-//				1, new Vector2(worldWidth - gapFromOuterEdge,
-//						(worldHeight + GOAL_HEIGHT) / 2));
-//		
-//		BoxProp goalLineWallRightGoalHeight = new BoxProp(world, 1,
-//				GOAL_HEIGHT, new Vector2(worldWidth - gapFromOuterEdge,
-//						(worldHeight) / 2));
-//		
-//		BoxProp goalLineWallRightGoalWidthBottom = new BoxProp(world,
-//				GOAL_WIDTH, 1, new Vector2(worldWidth - gapFromOuterEdge,
-//						(worldHeight - GOAL_HEIGHT) / 2));
-//		
-//		BoxProp goalLineWallRightBottom = new BoxProp(world, 1,
-//				(worldHeight / 2) - GOAL_HEIGHT, new Vector2(worldWidth
-//						- GOAL_WIDTH - gapFromOuterEdge,
-//						(worldHeight / 2 - GOAL_HEIGHT / 2) / 2));
 		
 		float touchlineLength = (worldHeight/2) - ((GOAL_HEIGHT + (POST_THICKNESS))/2);
 		
@@ -133,15 +87,80 @@ public class SoccerLayout extends GenericLayout {
 		this.addWall(touchLineWallTop);
 		
 		this.addWall(goalLineWallLeftTop);
-//		getWalls().add(goalLineWallLeftGoalWidthTop);
-//		getWalls().add(goalLineWallLeftGoalHeight);
-//		getWalls().add(goalLineWallLeftGoalWidthBottom);
 		this.addWall(goalLineWallLeftBottom);
 		this.addWall(goalLineWallRightTop);
-//		getWalls().add(goalLineWallRightGoalWidthTop);
-//		getWalls().add(goalLineWallRightGoalHeight);
-//		getWalls().add(goalLineWallRightGoalWidthBottom);
 		this.addWall(goalLineWallRightBottom);
+	}
+	
+	@Override
+	public StartingPosition getPlayerStartPoint(Team team, int playerTeamNumber)
+	{
+		if(team == Team.away)
+		{
+			return getAwayStartingPosisiton(playerTeamNumber);
+		}
+		else
+		{
+			return getHomeStartingPosition(playerTeamNumber);
+		}
+	}
+	
+	private StartingPosition getHomeStartingPosition(int playerTeamNumber)
+	{
+		//Face Right
+		float direction = (float) Math.PI/2;
+		float x = CAR_START_GAP_FROM_EDGE;
+		float y = this.getCenter().y;
+		
+		//0 is ok with defaults
+		if(playerTeamNumber != 0)
+		{
+			//because we are ingoring 0, we need to offset the rest of the values
+			playerTeamNumber -= 1;
+			
+			int dir = 0;
+			if(playerTeamNumber % 2 == 0)
+			{
+				dir = 1;
+			}
+			else
+			{
+				dir = -1;
+			}
+			
+			y = y + ((dir)*((float)(((playerTeamNumber/2) + 1)*GAP_BETWEEN_CARS)));
+		}
+		
+		return new StartingPosition(new Vector2(x, y), direction);
+	}
+	
+	private StartingPosition getAwayStartingPosisiton(int playerTeamNumber)
+	{
+		//Face Left
+		float direction = (float) (Math.PI + Math.PI/2);
+		float x = this.getWorldWidth() - CAR_START_GAP_FROM_EDGE;
+		float y = this.getCenter().y;
+		
+		//0 is ok with defaults
+		if(playerTeamNumber != 0)
+		{
+			//because we are ingoring 0, we need to offset the rest of the values
+			playerTeamNumber -= 1;
+			
+			int dir = 0;
+			if(playerTeamNumber % 2 == 0)
+			{
+				dir = -1;
+			}
+			else
+			{
+				dir = +1;
+			}
+			
+			y = y + ((dir)*((float)(((playerTeamNumber/2) + 1)*GAP_BETWEEN_CARS)));
+		}
+		
+		return new StartingPosition(new Vector2(x, y), direction);
 	}
 	
 	public float getTimerAndScoringSpace()

@@ -127,12 +127,12 @@ public class TeamSelectArea
         font.draw(spriteBatch, redMessage, awayTextX - font.getBounds(redMessage).width/2, commonTextY);
 	}
 	
-	private boolean checkVehicleInHomeArea(Vehicle vehicle)
+	public boolean checkVehicleInHomeArea(Vehicle vehicle)
 	{
 		return (vehicle.body.getPosition().x <= worldWidth/4); 
 	}
 	
-	private boolean checkVehicleInAwayArea(Vehicle vehicle)
+	public boolean checkVehicleInAwayArea(Vehicle vehicle)
 	{
 		return (vehicle.body.getPosition().x >= 3*(worldWidth/4)); 
 	}

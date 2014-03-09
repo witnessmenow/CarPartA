@@ -12,7 +12,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.CarPartA;
+import com.ladinc.core.collision.CollisionHelper;
 import com.ladinc.core.player.PlayerInfo;
+import com.ladinc.core.player.PlayerInfo.Team;
 import com.ladinc.core.screen.GameScreen;
 import com.ladinc.core.vehicles.Car;
 import com.ladinc.core.vehicles.Vehicle;
@@ -20,6 +22,8 @@ import com.ladinc.core.vehicles.Vehicle;
 public abstract class GenericScreen extends GameScreen implements Screen {
 	private final List<Vehicle> vehicles;
 	private GenericLayout layout;
+	
+	public CollisionHelper colHelper;
 	
 	public GenericScreen(CarPartA game) {
 		this.game = game;
@@ -38,6 +42,8 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		
 		this.camera = new OrthographicCamera();
 		this.camera.setToOrtho(false, this.screenWidth, this.screenHeight);
+		
+		colHelper = new CollisionHelper();
 	}
 	
 	protected boolean allowVehicleControl = true;
@@ -99,6 +105,7 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	public void show()
 	{
 		this.world = new World(new Vector2(0.0f, 0.0f), true);
+		world.setContactListener(this.colHelper);
 		resetGame();
 	}
 	
@@ -108,17 +115,37 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	
 	protected abstract void renderUpdates(float delta);
 	
+	private int homePlayerCount = 0;
+	private int awayPlayerCount = 0;
+	
 	protected void createCarsForPlayers()
 	{
 		Vehicle tempCar;
 		this.vehicles.clear();
 		PlayerInfo tempPlayer;
+		
+		this.homePlayerCount = 0;
+		this.awayPlayerCount = 0;
+		
 		for (int i = 0; i < this.game.controllerManager.players.size(); i++)
 		{
 			tempPlayer = this.game.controllerManager.players.get(i);
 			
+			int teamId = 0;
+			
+			if(tempPlayer.team == Team.home)
+			{
+				teamId = this.homePlayerCount;
+				this.homePlayerCount ++;
+			}
+			else if(tempPlayer.team == Team.away)
+			{
+				teamId = this.awayPlayerCount;
+				this.awayPlayerCount ++;
+			}
+			
 			tempCar = new Car(tempPlayer, this.world,
-					this.layout.getPlayerStartPoint(tempPlayer.team), null,
+					this.layout.getPlayerStartPoint(tempPlayer.team, teamId), null,
 					null);
 			
 			this.vehicles.add(tempCar);

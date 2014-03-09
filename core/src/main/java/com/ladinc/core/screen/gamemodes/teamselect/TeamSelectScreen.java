@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.ladinc.core.CarPartA;
 import com.ladinc.core.controllers.controls.IControls;
 import com.ladinc.core.player.PlayerInfo;
+import com.ladinc.core.player.PlayerInfo.Team;
 import com.ladinc.core.screen.gamemodes.GenericLayout;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.soccer.SoccerScreen;
@@ -126,6 +127,28 @@ public class TeamSelectScreen extends GenericScreen
 	
 	private void handleStartNextScreen()
 	{
+		//Remove players who are not active, assign active ones to right team
+		for (Vehicle v : this.getVehicles())
+		{
+			if(v.player != null)
+			{
+				
+				if(this.teamSelectLayout.teamSelectArea.checkVehicleInHomeArea(v))
+				{
+					v.player.team = Team.home;
+				}
+				else if (this.teamSelectLayout.teamSelectArea.checkVehicleInAwayArea(v))
+				{
+					v.player.team = Team.away;
+				}
+				else
+				{
+					//player is not in either area, remove from active player list.
+					this.game.controllerManager.resetStateOfPlayer(v.player);
+				}
+			}
+		}
+		
 		game.setScreen(new SoccerScreen(game));
 		dispose();
 	}

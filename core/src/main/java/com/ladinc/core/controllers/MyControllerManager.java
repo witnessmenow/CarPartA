@@ -123,6 +123,17 @@ public class MyControllerManager {
 		
 	}
 	
+	public void resetStateOfPlayer(PlayerInfo player)
+	{
+		if(player != null && players.contains(player))
+		{
+			player.controls.setActive(false);
+			this.inActiveControls.add(player.controls);
+			players.remove(player);	
+		}
+		
+	}
+	
 	
 	
 	public PlayerInfo checkForNewPlayer()

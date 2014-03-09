@@ -1,5 +1,6 @@
 package com.ladinc.core.objects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -8,6 +9,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ladinc.core.collision.CollisionInfo;
+import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
 
 public class Ball {
 	public Body body;
@@ -33,20 +36,6 @@ public class Ball {
 	private void createBallObject(World world, float x, float y,
 			Sprite ballSprite, boolean networked)
 	{
-		// Dynamic Body
-		/*
-		 * BodyDef bodyDef = new BodyDef(); bodyDef.type = BodyType.DynamicBody;
-		 * bodyDef.position.set(x, y); this.body = world.createBody(bodyDef);
-		 * CircleShape dynamicCircle = new CircleShape();
-		 * dynamicCircle.setRadius(ballSize); FixtureDef fixtureDef = new
-		 * FixtureDef(); fixtureDef.shape = dynamicCircle; fixtureDef.density =
-		 * 0.25f; fixtureDef.friction = 0f; fixtureDef.restitution = 1f;
-		 * 
-		 * this.body.createFixture(fixtureDef);
-		 * 
-		 * // this.body.setUserData(new CollisionInfo("Ball", //
-		 * CollisionObjectType.ball));
-		 */
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.position.set(x, y);
@@ -61,6 +50,10 @@ public class Ball {
 		
 		this.body.createFixture(fixtureDef);
 		this.sprite = ballSprite;
+		
+		this.body.setUserData(new CollisionInfo("Ball", CollisionObjectType.Ball));
+		
+		dynamicCircle.dispose();
 	}
 	
 	public Vector2 getLocalVelocity()
@@ -74,19 +67,17 @@ public class Ball {
 	
 	public void update()
 	{
-		/*
-		 * Vector2 currentVelocity = this.getLocalVelocity(); Vector2 position =
-		 * this.getLocation();
-		 * 
-		 * // System.out.println("Ball Position - " + position +
-		 * "Ball Velocity - " // + currentVelocity);
-		 * 
-		 * float slowDownMultiplier = 0.5f;
-		 * 
-		 * this.body.applyForce(this.body.getWorldVector(new Vector2(
-		 * -(currentVelocity.x * (slowDownMultiplier)), -(currentVelocity.y *
-		 * (slowDownMultiplier)))), position, true);
-		 */
+		
+		 Vector2 currentVelocity = this.getLocalVelocity(); Vector2 position = this.getLocation();
+		 
+		 Gdx.app.debug("Ball Update",
+				 "Ball Position - " + position +
+						  "Ball Velocity - " + currentVelocity);
+		  
+		  float slowDownMultiplier = 0.75f;
+		  
+		  this.body.applyForce(this.body.getWorldVector(new Vector2( -(currentVelocity.x * (slowDownMultiplier)), -(currentVelocity.y * (slowDownMultiplier)))), position, true);
+		 
 	}
 	
 	public void networkUpdate(Vector2 velocity, Vector2 position)

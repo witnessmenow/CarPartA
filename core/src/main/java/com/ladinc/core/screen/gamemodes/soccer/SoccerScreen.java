@@ -7,11 +7,12 @@ import com.ladinc.core.assets.Art;
 import com.ladinc.core.objects.Ball;
 import com.ladinc.core.screen.gamemodes.GenericLayout;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
+import com.ladinc.core.utilities.Enums.Side;
 
 public class SoccerScreen extends GenericScreen {
 	private float secondsLeft = 5;
-	private final int homeScore = 0;
-	private final int awayScore = 0;
+	private int homeScore = 0;
+	private int awayScore = 0;
 	private Ball ball;
 	
 	private SoccerLayout soccerLayout;
@@ -80,8 +81,32 @@ public class SoccerScreen extends GenericScreen {
 	}
 
 	@Override
-	public void customRender(float delta) {
-		// TODO Auto-generated method stub
+	public void customRender(float delta) 
+	{
+		this.ball.update();
+		
+		if(this.colHelper.newScore)
+		{
+			handleGoalScored();	
+		}
 		
 	}
+	
+    private void handleGoalScored()
+    {
+    	if(this.colHelper.getLastScored() == Side.Home)
+    	{
+    		//Goal was in home's new, goal for away team
+    		awayScore ++;
+    		//lastSideToScore = Side.Away;
+    	}
+    	else
+    	{
+    		homeScore ++;
+    		//lastSideToScore = Side.Home;
+    	}
+    	
+    	//goalCoolOffTimer = 5.0f;
+    	//processingGoal = true;
+    }
 }
