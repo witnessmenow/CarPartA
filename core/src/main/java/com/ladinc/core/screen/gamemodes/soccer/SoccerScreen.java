@@ -2,6 +2,7 @@ package com.ladinc.core.screen.gamemodes.soccer;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.ladinc.core.CarPartA;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.objects.Ball;
@@ -85,13 +86,42 @@ public class SoccerScreen extends GenericScreen {
 	{
 		this.ball.update();
 		
+		if(processingGoal)
+		{
+			if(goalCoolOffTimer > 0)
+			{
+				goalCoolOffTimer = goalCoolOffTimer - delta;
+			}
+			else
+			{
+				resetPlayersAndBall();
+				processingGoal = false;
+			}
+		}
+		
 		if(this.colHelper.newScore)
 		{
-			handleGoalScored();	
+			if(processingGoal)
+			{
+				//not interested in goals scored during processing goals
+				this.colHelper.newScore = false;
+			}
+			else
+			{
+				handleGoalScored();
+			}
 		}
 		
 	}
 	
+	private void resetPlayersAndBall()
+	{
+		resetCars();
+		this.ball.resetPositionToStart(this.center);
+	}
+	
+	private float goalCoolOffTimer = 0f;
+    private boolean processingGoal = false;
     private void handleGoalScored()
     {
     	if(this.colHelper.getLastScored() == Side.Home)
@@ -106,7 +136,7 @@ public class SoccerScreen extends GenericScreen {
     		//lastSideToScore = Side.Home;
     	}
     	
-    	//goalCoolOffTimer = 5.0f;
-    	//processingGoal = true;
+    	goalCoolOffTimer = 5.0f;
+    	processingGoal = true;
     }
 }

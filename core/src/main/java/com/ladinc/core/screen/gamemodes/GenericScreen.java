@@ -185,4 +185,16 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	{
 		return this.vehicles;
 	}
+	
+	public void resetCars()
+	{
+		for (Vehicle v : this.vehicles)
+		{
+			v.destroyVehicle();
+		}
+		
+		createCarsForPlayers();
+	}
+	
+	
 }

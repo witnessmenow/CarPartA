@@ -63,6 +63,13 @@ public class Vehicle {
 		this.body.createFixture(fixtureDef);
 	}
 	
+	public void resetPositionToStart()
+	{
+		this.body.setTransform(position, angle);
+		this.body.setLinearVelocity(0f, 0f);
+		this.body.setAngularVelocity(0f);
+	}
+	
 	public void setPlayerInfo(PlayerInfo player)
 	{
 		this.player = player;

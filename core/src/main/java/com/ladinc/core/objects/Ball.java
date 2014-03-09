@@ -80,6 +80,13 @@ public class Ball {
 		 
 	}
 	
+	public void resetPositionToStart(Vector2 startPoint)
+	{
+		this.body.setTransform(startPoint, 0f);
+		this.body.setLinearVelocity(0f,0f);
+		this.body.setAngularVelocity(0f);
+	}
+	
 	public void networkUpdate(Vector2 velocity, Vector2 position)
 	{
 		this.body.setTransform(position, 0);
