@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.collision.CollisionInfo;
 import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
 import com.ladinc.core.utilities.Enums.Direction;
-import com.ladinc.core.utilities.Enums.Side;
+import com.ladinc.core.utilities.Enums.Team;
 
 public class Goal 
 {
@@ -20,7 +20,7 @@ public class Goal
     public Body scoringZone;
     
     Direction facing;
-    Side side;
+    Team team;
     
     float postLength;
     float goalThickness;
@@ -29,7 +29,7 @@ public class Goal
     float goalLineX;
 	float goalY;
 	
-	public Goal(World world, float x, float y, Direction facing, float postLength, float goalThickness, float barLength, Side side, float compensationSize)
+	public Goal(World world, float x, float y, Direction facing, float postLength, float goalThickness, float barLength, Team side, float compensationSize)
 	{
 		this.postLength = postLength;
 		this.goalThickness = goalThickness;
@@ -38,7 +38,7 @@ public class Goal
 		int direction = 1;
     	
     	this.facing = facing;
-    	this.side = side;
+    	this.team = side;
     	
     	
 		if(facing == Direction.left)
@@ -69,7 +69,7 @@ public class Goal
 		
 		float xSize;
 		
-		if (side == Side.Home)
+		if (team == Team.Home)
 		{
 			xSize = (this.back.body.getPosition().x - goalThickness/2 + postLength - copensationSize) - (this.back.body.getPosition().x + goalThickness/2);
 			zoneCenter.x =(this.back.body.getPosition().x + goalThickness/2) + xSize/2;
@@ -97,7 +97,7 @@ public class Goal
 		fixtureDef.shape = zoneShape;
 		this.scoringZone.createFixture(fixtureDef);
 		
-		this.scoringZone.setUserData(new CollisionInfo("", CollisionObjectType.ScoreZone, side));
+		this.scoringZone.setUserData(new CollisionInfo("", CollisionObjectType.ScoreZone, team));
 		
 		zoneShape.dispose();
 	}

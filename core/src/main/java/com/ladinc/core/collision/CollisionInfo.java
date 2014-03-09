@@ -1,6 +1,6 @@
 package com.ladinc.core.collision;
 
-import com.ladinc.core.utilities.Enums.Side;
+import com.ladinc.core.utilities.Enums.Team;
 
 public class CollisionInfo 
 {
@@ -8,7 +8,7 @@ public class CollisionInfo
 	public CollisionObjectType type;
 	public Object object;
 	
-	public Side side;
+	public Team team;
 
 	
 	public CollisionInfo(String text, CollisionObjectType type)
@@ -17,11 +17,11 @@ public class CollisionInfo
 		this.type = type;
 	}
 	
-	public CollisionInfo(String text, CollisionObjectType type, Side side)
+	public CollisionInfo(String text, CollisionObjectType type, Team side)
 	{
 		this.text = text;		
 		this.type = type;
-		this.side = side;
+		this.team = side;
 	}
 	
 	public CollisionInfo(String text, CollisionObjectType type, Object object)

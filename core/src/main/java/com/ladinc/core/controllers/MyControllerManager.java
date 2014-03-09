@@ -11,7 +11,7 @@ import com.ladinc.core.controllers.controls.IControls;
 import com.ladinc.core.controllers.listeners.desktop.KeyboardAndMouseListener;
 import com.ladinc.core.controllers.listeners.desktop.XboxListener;
 import com.ladinc.core.player.PlayerInfo;
-import com.ladinc.core.player.PlayerInfo.Team;
+import com.ladinc.core.utilities.Enums.Team;
 
 public class MyControllerManager {
 	
@@ -149,7 +149,7 @@ public class MyControllerManager {
 					// cont.setIdentifier(getNextAvailableIdentifer());
 					
 					//Setting new player is mutating the object that is passed as a reference
-					PlayerInfo newPlayer = new PlayerInfo(cont, Team.home);
+					PlayerInfo newPlayer = new PlayerInfo(cont, Team.Home);
 					this.players.add(newPlayer);
 					this.inActiveControls.remove(cont);
 					return newPlayer;

@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.objects.BoxProp;
 import com.ladinc.core.objects.StartingPosition;
-import com.ladinc.core.player.PlayerInfo.Team;
+import com.ladinc.core.utilities.Enums.Team;
 
 public abstract class GenericLayout implements IGenericLayout {
 	public boolean gameFinished = false;

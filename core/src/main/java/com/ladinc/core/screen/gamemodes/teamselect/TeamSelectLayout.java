@@ -1,7 +1,9 @@
 package com.ladinc.core.screen.gamemodes.teamselect;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ladinc.core.assets.Art;
 import com.ladinc.core.objects.StartingPosition;
 import com.ladinc.core.objects.TeamSelectArea;
 import com.ladinc.core.screen.gamemodes.GenericLayout;
@@ -20,17 +22,15 @@ public class TeamSelectLayout extends GenericLayout
 		super(world, worldWidth, worldHeight, center, numberOfInnerWalls);
 		// TODO Auto-generated constructor stub
 	}
-
-	@Override
-	public StartingPosition getTopStartPoint() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public StartingPosition getBottomStartPoint() {
-		// TODO Auto-generated method stub
-		return null;
+	
+	public Sprite getTeamAreaSprite()
+	{
+		if(!Art.spriteTable.containsKey(Art.TEAM_SELECT_AREA))
+		{
+			Art.spriteTable.put(Art.TEAM_SELECT_AREA, new Sprite(Art.textureTable.get(Art.TEAM_SELECT_AREA)));
+		}
+		
+		return Art.spriteTable.get(Art.TEAM_SELECT_AREA);
 	}
 
 	@Override

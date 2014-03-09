@@ -14,7 +14,7 @@ public class CarPartA extends Game {
 	@Override
 	public void create()
 	{
-		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		Gdx.app.setLogLevel(Application.LOG_ERROR);
 		Assets.load();
 		controllerManager = new MyControllerManager();
 		setScreen(new MainMenuScreen(this));

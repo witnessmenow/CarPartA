@@ -14,7 +14,6 @@ public class MazeLayout extends GenericLayout {
 		super(world, worldWidth, worldHeight, center, numberOfInnerWalls);
 	}
 	
-	@Override
 	public StartingPosition getTopStartPoint()
 	{
 		return new StartingPosition(new Vector2(getWorldWidth()
@@ -23,7 +22,6 @@ public class MazeLayout extends GenericLayout {
 				(float) (Math.PI + Math.PI / 2));
 	}
 	
-	@Override
 	public StartingPosition getBottomStartPoint()
 	{
 		return new StartingPosition(new Vector2(getGapFromOuterEdge()

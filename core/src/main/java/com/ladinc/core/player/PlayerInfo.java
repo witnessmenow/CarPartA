@@ -1,6 +1,7 @@
 package com.ladinc.core.player;
 
 import com.ladinc.core.controllers.controls.IControls;
+import com.ladinc.core.utilities.Enums.Team;
 
 public class PlayerInfo 
 {
@@ -9,7 +10,6 @@ public class PlayerInfo
 	public int playerId;
 	public Team team;
 
-	public static enum Team{home, away}
 	
 	private static boolean[] ID_LIST = new boolean[8];
 	

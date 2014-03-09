@@ -34,4 +34,10 @@ public class SimpleRaceScreen extends GenericScreen {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void preCarRender(float delta) {
+		// TODO Auto-generated method stub
+		
+	}
 }

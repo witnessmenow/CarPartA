@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -14,8 +15,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.CarPartA;
 import com.ladinc.core.collision.CollisionHelper;
 import com.ladinc.core.player.PlayerInfo;
-import com.ladinc.core.player.PlayerInfo.Team;
 import com.ladinc.core.screen.GameScreen;
+import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.vehicles.Car;
 import com.ladinc.core.vehicles.Vehicle;
 
@@ -24,6 +25,8 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	private GenericLayout layout;
 	
 	public CollisionHelper colHelper;
+	
+	public Sprite backgroundSprite;
 	
 	public GenericScreen(CarPartA game) {
 		this.game = game;
@@ -61,10 +64,22 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		camera.update();
 		spriteBatch.setProjectionMatrix(camera.combined);
 		spriteBatch.begin();
+		
+		if (this.backgroundSprite != null)
+		{
+			this.backgroundSprite.draw(spriteBatch);
+		}
+		
+		preCarRender(delta);
+		
+		for (Vehicle v : this.vehicles)
+		{
+			v.updateSprite(spriteBatch, PIXELS_PER_METER);
+		}
+		
 		renderUpdates(delta);
 		spriteBatch.end();
-		debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,
-				PIXELS_PER_METER, PIXELS_PER_METER));
+		//debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,PIXELS_PER_METER, PIXELS_PER_METER));
 	}
 	
 	public void calculateMovements(float delta)
@@ -86,6 +101,8 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		}
 	}
 	
+	public abstract void preCarRender(float delta);
+	
 	public abstract void customRender(float delta);
 	
 	@Override
@@ -97,8 +114,8 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	public void resetGame()
 	{
 		this.layout = (GenericLayout) resetLayout();
-		initGame();
 		createCarsForPlayers();
+		initGame();
 	}
 	
 	@Override
@@ -133,12 +150,12 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 			
 			int teamId = 0;
 			
-			if(tempPlayer.team == Team.home)
+			if(tempPlayer.team == Team.Home)
 			{
 				teamId = this.homePlayerCount;
 				this.homePlayerCount ++;
 			}
-			else if(tempPlayer.team == Team.away)
+			else if(tempPlayer.team == Team.Away)
 			{
 				teamId = this.awayPlayerCount;
 				this.awayPlayerCount ++;

@@ -1,14 +1,15 @@
 package com.ladinc.core.screen.gamemodes.soccer;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ladinc.core.assets.Art;
 import com.ladinc.core.objects.BoxProp;
 import com.ladinc.core.objects.Goal;
 import com.ladinc.core.objects.StartingPosition;
-import com.ladinc.core.player.PlayerInfo.Team;
 import com.ladinc.core.screen.gamemodes.GenericLayout;
 import com.ladinc.core.utilities.Enums.Direction;
-import com.ladinc.core.utilities.Enums.Side;
+import com.ladinc.core.utilities.Enums.Team;
 
 public class SoccerLayout extends GenericLayout {
 	private static final float GOAL_WIDTH = 15f;
@@ -30,7 +31,6 @@ public class SoccerLayout extends GenericLayout {
 		super(world, worldWidth, worldHeight, center, numInnerWalls);
 	}
 	
-	@Override
 	public StartingPosition getTopStartPoint()
 	{
 		return new StartingPosition(
@@ -42,7 +42,6 @@ public class SoccerLayout extends GenericLayout {
 				(float) (Math.PI + Math.PI / 2));
 	}
 	
-	@Override
 	public StartingPosition getBottomStartPoint()
 	{
 		return new StartingPosition(new Vector2(getGapFromOuterEdge()
@@ -60,9 +59,9 @@ public class SoccerLayout extends GenericLayout {
 	public void createGoals(World world, Float ballSize)
 	{
 		//Create Home Goal
-		this.homeGoal = new Goal(world, GAP_BETWEEN_GOAL_AND_EDGE + POST_THICKNESS/2 , getCenter().y, Direction.right, GOAL_WIDTH, POST_THICKNESS, GOAL_HEIGHT, Side.Home, ballSize);
+		this.homeGoal = new Goal(world, GAP_BETWEEN_GOAL_AND_EDGE + POST_THICKNESS/2 , getCenter().y, Direction.right, GOAL_WIDTH, POST_THICKNESS, GOAL_HEIGHT, Team.Home, ballSize);
 		
-		this.awayGoal = new Goal(world, (getWorldWidth() - POST_THICKNESS/2 - GAP_BETWEEN_GOAL_AND_EDGE) , getCenter().y, Direction.left, GOAL_WIDTH, POST_THICKNESS, GOAL_HEIGHT, Side.Away, ballSize);
+		this.awayGoal = new Goal(world, (getWorldWidth() - POST_THICKNESS/2 - GAP_BETWEEN_GOAL_AND_EDGE) , getCenter().y, Direction.left, GOAL_WIDTH, POST_THICKNESS, GOAL_HEIGHT, Team.Away, ballSize);
 		
 	}
 	
@@ -95,7 +94,7 @@ public class SoccerLayout extends GenericLayout {
 	@Override
 	public StartingPosition getPlayerStartPoint(Team team, int playerTeamNumber)
 	{
-		if(team == Team.away)
+		if(team == Team.Away)
 		{
 			return getAwayStartingPosisiton(playerTeamNumber);
 		}
@@ -132,6 +131,16 @@ public class SoccerLayout extends GenericLayout {
 		}
 		
 		return new StartingPosition(new Vector2(x, y), direction);
+	}
+	
+	public Sprite getPitchSprite()
+	{
+		if(!Art.spriteTable.containsKey(Art.SOCCER_PITCH))
+		{
+			Art.spriteTable.put(Art.SOCCER_PITCH, new Sprite(Art.textureTable.get(Art.SOCCER_PITCH)));
+		}
+		
+		return Art.spriteTable.get(Art.SOCCER_PITCH);
 	}
 	
 	private StartingPosition getAwayStartingPosisiton(int playerTeamNumber)

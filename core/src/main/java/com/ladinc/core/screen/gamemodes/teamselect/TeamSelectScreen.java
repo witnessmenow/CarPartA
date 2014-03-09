@@ -3,13 +3,16 @@ package com.ladinc.core.screen.gamemodes.teamselect;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.ladinc.core.CarPartA;
+import com.ladinc.core.assets.Art;
+import com.ladinc.core.assets.CarsHelper;
 import com.ladinc.core.controllers.controls.IControls;
 import com.ladinc.core.player.PlayerInfo;
-import com.ladinc.core.player.PlayerInfo.Team;
 import com.ladinc.core.screen.gamemodes.GenericLayout;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.soccer.SoccerScreen;
+import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.vehicles.Car;
 import com.ladinc.core.vehicles.Vehicle;
 
@@ -40,7 +43,7 @@ public class TeamSelectScreen extends GenericScreen
 			tempCar = new Car(	null, 
 								world, 
 								this.teamSelectLayout.teamSelectArea.getStartPosition(i), 
-								null,
+								CarsHelper.getDefaultCar(),
 								null);
 			
 			getVehicles().add(tempCar);
@@ -58,6 +61,9 @@ public class TeamSelectScreen extends GenericScreen
 	public void initGame() 
 	{
 		this.game.controllerManager.resetActiveStateOfControllers();
+		
+		this.backgroundSprite = this.teamSelectLayout.getTeamAreaSprite();
+		this.backgroundSprite.setPosition(0.0f, 0.0f);
 		
 	}
 
@@ -135,11 +141,11 @@ public class TeamSelectScreen extends GenericScreen
 				
 				if(this.teamSelectLayout.teamSelectArea.checkVehicleInHomeArea(v))
 				{
-					v.player.team = Team.home;
+					v.player.team = Team.Home;
 				}
 				else if (this.teamSelectLayout.teamSelectArea.checkVehicleInAwayArea(v))
 				{
-					v.player.team = Team.away;
+					v.player.team = Team.Away;
 				}
 				else
 				{
@@ -169,6 +175,12 @@ public class TeamSelectScreen extends GenericScreen
 				return;
 			}
 		}
+		
+	}
+
+	@Override
+	public void preCarRender(float delta) {
+		// TODO Auto-generated method stub
 		
 	}
 

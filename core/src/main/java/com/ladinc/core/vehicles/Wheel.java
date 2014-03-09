@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.PrismaticJointDef;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
+import com.ladinc.core.assets.Art;
 
 public class Wheel {	
 	/**
@@ -141,6 +142,18 @@ public class Wheel {
 
 	public void updateSprite(SpriteBatch spriteBatch, int PIXELS_PER_METER)
 	{
-		//SpriteHelper.updateSprite(this.sprite, spriteBatch, PIXELS_PER_METER, this.body);
+		if(this.sprite == null)
+		{
+			if(!Art.spriteTable.containsKey(Art.WHEELS))
+			{
+				int w = ((2) * (int) this.width * PIXELS_PER_METER)/3;
+				int l = (int) this.length * PIXELS_PER_METER;
+				Art.spriteTable.put(Art.WHEELS, new Sprite(Art.textureTable.get(Art.WHEELS), w, l ));
+			}
+			
+			this.sprite =  Art.spriteTable.get(Art.WHEELS);
+		}
+		
+		Art.updateSprite(this.sprite, spriteBatch, PIXELS_PER_METER, this.body);
 	}
 }

@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
-import com.ladinc.core.utilities.Enums.Side;
+import com.ladinc.core.utilities.Enums.Team;
 
 public class CollisionHelper implements ContactListener
 {
@@ -17,10 +17,10 @@ public class CollisionHelper implements ContactListener
 	{
 	}
 	
-	private Side lastScore;
+	private Team lastScore;
 	public boolean newScore = false;
 	
-	public Side getLastScored()
+	public Team getLastScored()
 	{
 		newScore = false;
 		return lastScore;
@@ -49,9 +49,9 @@ public class CollisionHelper implements ContactListener
         		Gdx.app.log("beginContact", "Goal Scored!");
         		
         		if(bodyAInfo.type == CollisionObjectType.ScoreZone)
-        			lastScore = bodyAInfo.side;
+        			lastScore = bodyAInfo.team;
         		else
-        			lastScore = bodyBInfo.side;
+        			lastScore = bodyBInfo.team;
         		
         		newScore = true;
         		
