@@ -16,6 +16,7 @@ public class Art {
 	public static final String CARS = "CARS";
 	
 	public static final String WHEELS = "WHEELS";
+	public static final String IDENTIFIER = "IDENTIFIER";
 	
 	public static final String SOCCER_PITCH = "SOCCER_PITCH";
 	public static final String TEAM_SELECT_AREA = "TEAM_SELECT_AREA";
@@ -36,6 +37,7 @@ public class Art {
 		textureTable.put(SOCCER_PITCH, new Texture(Gdx.files.internal("pitch.png")));
 		textureTable.put(TEAM_SELECT_AREA, new Texture(Gdx.files.internal("teamSelect.png")));
 		textureTable.put(WHEELS, new Texture(Gdx.files.internal("Wheel.png")));
+		textureTable.put(IDENTIFIER, new Texture(Gdx.files.internal("Identfiers.png")));
 	}
 	
 	public static void updateSprite(Sprite sprite, SpriteBatch spriteBatch, int PIXELS_PER_METER, Body body)

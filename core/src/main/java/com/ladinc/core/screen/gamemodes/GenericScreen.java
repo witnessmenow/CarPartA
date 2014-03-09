@@ -74,6 +74,14 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		
 		for (Vehicle v : this.vehicles)
 		{
+			if(v.player != null)
+			{
+				v.player.drawIndentifier(spriteBatch, PIXELS_PER_METER, v.body);
+			}
+		}
+		
+		for (Vehicle v : this.vehicles)
+		{
 			v.updateSprite(spriteBatch, PIXELS_PER_METER);
 		}
 		
@@ -144,9 +152,9 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		this.homePlayerCount = 0;
 		this.awayPlayerCount = 0;
 		
-		for (int i = 0; i < this.game.controllerManager.players.size(); i++)
+		for (int i = 0; i < this.game.controllerManager.getPlayers().size(); i++)
 		{
-			tempPlayer = this.game.controllerManager.players.get(i);
+			tempPlayer = this.game.controllerManager.getPlayers().get(i);
 			
 			int teamId = 0;
 			

@@ -27,6 +27,8 @@ public class Vehicle {
 
 	public IControls controls;
 	public PlayerInfo player;
+	
+	public Sprite identifier;
 
 	private float acceleration = 0f;
 

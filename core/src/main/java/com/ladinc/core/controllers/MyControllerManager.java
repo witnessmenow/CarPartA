@@ -16,13 +16,24 @@ import com.ladinc.core.utilities.Enums.Team;
 public class MyControllerManager {
 	
 	public ArrayList<IControls> inActiveControls;
-	public ArrayList<PlayerInfo> players;
+	private ArrayList<PlayerInfo> players;
 	
 	public MyControllerManager() {
 		inActiveControls = new ArrayList<IControls>();
 		players = new ArrayList<PlayerInfo>();
 		
 		setUpControls();
+	}
+	
+	public ArrayList<PlayerInfo> getPlayers()
+	{
+		return this.players;
+	}
+	
+	public void removePlayerFromList(PlayerInfo p)
+	{
+		p.releaseId();
+		this.players.remove(p);
 	}
 	
 	private void setUpControls()
@@ -118,7 +129,7 @@ public class MyControllerManager {
 		
 		for (PlayerInfo player : tempPlayersToRemove)
 		{
-			this.players.remove(player);
+			removePlayerFromList(player);
 		}
 		
 	}
@@ -129,7 +140,7 @@ public class MyControllerManager {
 		{
 			player.controls.setActive(false);
 			this.inActiveControls.add(player.controls);
-			players.remove(player);	
+			removePlayerFromList(player);
 		}
 		
 	}

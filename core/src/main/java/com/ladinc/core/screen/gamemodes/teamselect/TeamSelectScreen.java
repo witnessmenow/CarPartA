@@ -116,7 +116,7 @@ public class TeamSelectScreen extends GenericScreen
 		
 		if(menuMode)
 		{
-			for (PlayerInfo player : this.game.controllerManager.players)
+			for (PlayerInfo player : this.game.controllerManager.getPlayers())
 			{
 				if(player.controls.getConfirmStatus())
 				{
