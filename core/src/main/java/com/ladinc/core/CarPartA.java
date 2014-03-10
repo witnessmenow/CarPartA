@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.ladinc.core.assets.Assets;
 import com.ladinc.core.controllers.MyControllerManager;
 import com.ladinc.core.screen.MainMenuScreen;
+import com.ladinc.core.screen.gamemodes.teamselect.TeamSelectScreen;
 
 public class CarPartA extends Game {
 	
@@ -17,6 +18,6 @@ public class CarPartA extends Game {
 		Gdx.app.setLogLevel(Application.LOG_ERROR);
 		Assets.load();
 		controllerManager = new MyControllerManager();
-		setScreen(new MainMenuScreen(this));
+		setScreen(new TeamSelectScreen(this));
 	}
 }

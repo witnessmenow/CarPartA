@@ -8,6 +8,7 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.ladinc.core.controllers.controls.IControls;
+import com.ladinc.core.controllers.listeners.android.OuyaListener;
 import com.ladinc.core.controllers.listeners.desktop.KeyboardAndMouseListener;
 import com.ladinc.core.controllers.listeners.desktop.XboxListener;
 import com.ladinc.core.player.PlayerInfo;
@@ -85,13 +86,11 @@ public class MyControllerManager {
 						"addControllerToList - Android");
 				if (Ouya.runningOnOuya)
 				{
-					// Gdx.app.debug("ControllerManager",
-					// "Added Listener for Ouya Controller");
-					//
-					// OuyaListener ouyaListener = new OuyaListener();
-					// controller.addListener(ouyaListener);
-					//
-					// inActiveControls.add(ouyaListener.controls);
+					 Gdx.app.debug("ControllerManager", "Added Listener for Ouya Controller");
+					
+					 OuyaListener ouyaListener = new OuyaListener();
+					 controller.addListener(ouyaListener);
+					 inActiveControls.add(ouyaListener.controls);
 				}
 				break;
 			case WebGL:

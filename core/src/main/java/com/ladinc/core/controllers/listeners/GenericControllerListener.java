@@ -28,6 +28,7 @@ public class GenericControllerListener implements ControllerListener {
 	public int HandbreakButton;
 	
 	public int StartButton;
+	public int StartButtonSecondry;
 	public int ConfirmButton;
 	public int BackButton;
 	
@@ -110,6 +111,11 @@ public class GenericControllerListener implements ControllerListener {
 		
 		if(buttonId == StartButton)
 		{
+			controls.setStartStatus(set);
+		}
+		else if (buttonId == StartButtonSecondry && set)
+		{
+			//Ouya menu button causes issues, have to ignore button releases from it.
 			controls.setStartStatus(set);
 		}
 		else if(buttonId == ConfirmButton)
