@@ -2,9 +2,12 @@ package com.ladinc.core.screen.gamemodes.teamselect;
 
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.ladinc.core.CarPartA;
+import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.assets.CarsHelper;
 import com.ladinc.core.controllers.controls.IControls;
@@ -106,6 +109,8 @@ public class TeamSelectScreen extends GenericScreen
 			assignPlayerToCar(tempPlayer);	
 		}
 		
+		aiCreationLoop(delta);
+		
 		this.teamSelectLayout.teamSelectArea.checkTeams(getVehicles());
 		
 		tempPlayer = this.game.controllerManager.checkPlayersForStartPress();
@@ -157,6 +162,35 @@ public class TeamSelectScreen extends GenericScreen
 		
 		game.setScreen(new SoccerScreen(game));
 		dispose();
+	}
+	
+	private float aiCoolDown = 0;
+	private void aiCreationLoop(float delta)
+    {
+		if(aiCoolDown > 0)
+		{
+			aiCoolDown -= delta;
+		}
+		
+		if(Gdx.input.isKeyPressed(Input.Keys.NUM_0) && aiCoolDown <= 0)
+		{
+			aiCoolDown = 0.5f;
+			createAIPlayer(Team.Away);
+		}
+		
+		if(Gdx.input.isKeyPressed(Input.Keys.NUM_9) && aiCoolDown <= 0)
+		{
+			aiCoolDown = 0.5f;
+			createAIPlayer(Team.Home);
+		}
+    }
+	
+	private void createAIPlayer(Team team)
+	{
+		
+		SimpleAi ai = new SimpleAi();
+		this.game.controllerManager.addAi(ai, team);
+		
 	}
 	
 	private void handleQuitToLastScreen()

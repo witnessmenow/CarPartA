@@ -20,6 +20,8 @@ public interface IControls {
 	
 	public void setMenuInterest(boolean set);
 	
+	public boolean isAi();
+	
 	// TODO: Add start etc
 	
 }

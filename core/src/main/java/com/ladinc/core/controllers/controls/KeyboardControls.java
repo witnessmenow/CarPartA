@@ -270,4 +270,10 @@ public class KeyboardControls implements IControls {
 		this.interestedInMenuPresses = set;
 		
 	}
+
+	@Override
+	public boolean isAi() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

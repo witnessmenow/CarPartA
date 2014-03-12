@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonValue.ValueType;
 import com.ladinc.core.CarPartA;
+import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.assets.CarsHelper;
 import com.ladinc.core.objects.Ball;
@@ -156,6 +157,17 @@ public class SoccerScreen extends GenericScreen {
 		resetCars();
 		assignTeamSpritesToCars();
 		recreateBall();
+	}
+	
+	@Override
+	public void calculateAiMovements(float delta)
+	{
+		this.aiMove.position = this.ball.body.getWorldCenter();
+		
+		for (SimpleAi ai : this.game.controllerManager.getAi())
+		{
+			ai.setDesiredPosition(aiMove);
+		}
 	}
 	
 	private float goalCoolOffTimer = 0f;

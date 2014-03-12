@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.mappings.Ouya;
+import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.controllers.controls.IControls;
 import com.ladinc.core.controllers.listeners.android.OuyaListener;
 import com.ladinc.core.controllers.listeners.desktop.KeyboardAndMouseListener;
@@ -18,10 +19,12 @@ public class MyControllerManager {
 	
 	public ArrayList<IControls> inActiveControls;
 	private ArrayList<PlayerInfo> players;
+	private ArrayList<SimpleAi> ai;
 	
 	public MyControllerManager() {
 		inActiveControls = new ArrayList<IControls>();
 		players = new ArrayList<PlayerInfo>();
+		ai = new ArrayList<SimpleAi>();
 		
 		setUpControls();
 	}
@@ -122,7 +125,10 @@ public class MyControllerManager {
 		{
 			tempCont = player.controls;
 			tempCont.setActive(false);
-			this.inActiveControls.add(tempCont);
+			if(!player.controls.isAi())
+			{
+				this.inActiveControls.add(tempCont);
+			}
 			tempPlayersToRemove.add(player);
 		}
 		
@@ -138,7 +144,10 @@ public class MyControllerManager {
 		if(player != null && players.contains(player))
 		{
 			player.controls.setActive(false);
-			this.inActiveControls.add(player.controls);
+			if(!player.controls.isAi())
+			{
+				this.inActiveControls.add(player.controls);
+			}
 			removePlayerFromList(player);
 		}
 		
@@ -187,6 +196,19 @@ public class MyControllerManager {
 		{
 			player.controls.setMenuInterest(set);
 		}
+		
+	}
+	
+	public ArrayList<SimpleAi> getAi()
+	{
+		return this.ai;
+	}
+	
+	public void addAi(SimpleAi ai, Team team)
+	{
+		this.ai.add(ai);
+		PlayerInfo newPlayer = new PlayerInfo(ai, team);
+		this.players.add(newPlayer);
 		
 	}
 }

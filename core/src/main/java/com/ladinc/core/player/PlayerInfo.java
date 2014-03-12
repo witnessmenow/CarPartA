@@ -58,7 +58,10 @@ public class PlayerInfo
 	
 	public void drawIndentifier(SpriteBatch spriteBatch, int PIXELS_PER_METER, Body carBody)
 	{
-		Art.updateSprite(getIdentifierSprite(), spriteBatch, PIXELS_PER_METER, carBody);
+		if(this.controls != null && !this.controls.isAi())
+		{
+			Art.updateSprite(getIdentifierSprite(), spriteBatch, PIXELS_PER_METER, carBody);
+		}
 	}
 	
 	public void releaseId()

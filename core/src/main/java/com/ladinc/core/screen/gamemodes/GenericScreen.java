@@ -13,7 +13,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.CarPartA;
+import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.collision.CollisionHelper;
+import com.ladinc.core.objects.StartingPosition;
 import com.ladinc.core.player.PlayerInfo;
 import com.ladinc.core.screen.GameScreen;
 import com.ladinc.core.utilities.Enums.Team;
@@ -89,11 +91,20 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		spriteBatch.end();
 		//debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,PIXELS_PER_METER, PIXELS_PER_METER));
 	}
+	public StartingPosition aiMove = new StartingPosition(new Vector2(0, 0), 0);
+	
+	public void calculateAiMovements(float delta)
+	{
+		
+	}
 	
 	public void calculateMovements(float delta)
 	{
 		if(allowVehicleControl)
 		{
+			
+			calculateAiMovements(delta);
+			
 			for (Vehicle v : this.vehicles)
 			{
 				v.controlVehicle();
@@ -174,6 +185,12 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 					null);
 			
 			this.vehicles.add(tempCar);
+			
+			if(tempPlayer.controls != null && tempPlayer.controls.isAi())
+			{
+				SimpleAi ai = (SimpleAi)tempPlayer.controls;
+				ai.setVehicle(tempCar);
+			}
 		}
 	}
 	
