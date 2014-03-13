@@ -14,7 +14,7 @@ public class SimpleAi implements IControls
 	private Vehicle aiVehicle;
 	
 	private float steer;
-	private float accelerate;
+	private int accelerate;
 	
 	@Override
 	public boolean isActive() {
@@ -31,7 +31,7 @@ public class SimpleAi implements IControls
 	@Override
 	public int getAcceleration() {
 		// TODO Auto-generated method stub
-		return 1;
+		return accelerate;
 	}
 
 	@Override
@@ -70,21 +70,78 @@ public class SimpleAi implements IControls
 		
 	}
 	
+	public void resetTimers()
+	{
+		remaingOutOfStuckTime = 0.0f;
+		timeAtLowSpeed = 0.0f;
+		
+	}
+	
 	public void setDesiredPosition(StartingPosition pos)
 	{
 		desiredPos = pos;
 	}
 	
-	public void calculateMove()
+	float timeAtAngle = 0.0f;
+	float timeAtLowSpeed = 0.0f;
+	float previousAngle = 0.0f;
+	
+	float remaingOutOfStuckTime = 0.0f;
+	
+	private boolean checkForStuck(float delta)
 	{
-		calculateCarAngleInWorldTerms();
-		calculateRelativeAngle();
+		Gdx.app.error("SimpleAi - checkForStuck",
+				" Car velocity: " + this.aiVehicle.getSpeedKMH() + " Car Angle: " + this.carAngle);
+		if(this.aiVehicle.getSpeedKMH() < 5)
+		{
+			timeAtLowSpeed += delta;
+			
+			if(timeAtLowSpeed > 1.5f)
+			{
+				remaingOutOfStuckTime = 1.0f;
+				return true;
+			}
+		}
 		
-		steer = steeringDirect(carAngle, relativeAngle);
+		return false;
+	}
+	
+	public void calculateMove(float delta)
+	{
+		if(this.aiVehicle != null)
+		{
+			calculateCarAngleInWorldTerms();
+			calculateRelativeAngle();
+		
+			
+			if(remaingOutOfStuckTime > 0|| checkForStuck(delta))
+			{
+				escapeStuck(delta);
+			}
+			else
+			{
+				steer = steeringDirect(carAngle, relativeAngle);
+				accelerate = 1;
+			}
+		}
+		else
+		{
+			steer = 0;
+			accelerate = 0;
+		}
 		
 	}
 	
 	
+	private void escapeStuck(float delta) 
+	{
+		remaingOutOfStuckTime -= delta;
+		
+		steer = 1;
+		accelerate = -1;
+		
+	}
+
 	//Basically the default angle of the car is pointing down, so it needs to be converted relative to world
 	private void calculateCarAngleInWorldTerms()
 	{
@@ -151,7 +208,7 @@ public class SimpleAi implements IControls
 	//When car is facing right direction and ball is in front
 	private float steeringDirect(float cAngle, float relAngle)
 	{
-		Gdx.app.error("SimpleAi - steeringDirect",
+		Gdx.app.debug("SimpleAi - steeringDirect",
 				" Car Angle: " + cAngle + " , Relative Angle: " +  relAngle);
 		
 		tempDir = 0.0f;
@@ -165,7 +222,7 @@ public class SimpleAi implements IControls
 			relAngle = relAngle - 360.0f;
 		}
 		
-		Gdx.app.error("SimpleAi - steeringDirect",
+		Gdx.app.debug("SimpleAi - steeringDirect",
 				" Adjusted Relative Angle: " +  relAngle);
 		
 		if(cAngle + 6f >= relAngle &&  cAngle - 6f <= relAngle)
@@ -187,7 +244,7 @@ public class SimpleAi implements IControls
 				tempDir = 1;
 		}
 		
-		Gdx.app.error("SimpleAi - steeringDirect",
+		Gdx.app.debug("SimpleAi - steeringDirect",
 				" Calculated Direction (1=R, -1=L): " +  tempDir);
 	
 		return tempDir;

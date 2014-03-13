@@ -94,6 +94,11 @@ public class SoccerScreen extends GenericScreen {
 		
 		recreateBall();
 		
+		for (SimpleAi ai : this.game.controllerManager.getAi())
+		{
+			ai.resetTimers();
+		}
+		
 	}
 	
 	private void recreateBall()
@@ -157,6 +162,10 @@ public class SoccerScreen extends GenericScreen {
 		resetCars();
 		assignTeamSpritesToCars();
 		recreateBall();
+		for (SimpleAi ai : this.game.controllerManager.getAi())
+		{
+			ai.resetTimers();
+		}
 	}
 	
 	@Override
@@ -167,7 +176,7 @@ public class SoccerScreen extends GenericScreen {
 		for (SimpleAi ai : this.game.controllerManager.getAi())
 		{
 			ai.setDesiredPosition(aiMove);
-			ai.calculateMove();
+			ai.calculateMove(delta);
 		}
 	}
 	
