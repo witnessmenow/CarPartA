@@ -167,6 +167,7 @@ public class SoccerScreen extends GenericScreen {
 		for (SimpleAi ai : this.game.controllerManager.getAi())
 		{
 			ai.setDesiredPosition(aiMove);
+			ai.calculateMove();
 		}
 	}
 	

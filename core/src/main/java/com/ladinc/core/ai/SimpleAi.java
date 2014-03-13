@@ -10,8 +10,11 @@ import com.ladinc.core.vehicles.Vehicle;
 public class SimpleAi implements IControls
 {
 
-	StartingPosition desiredPos;
-	Vehicle aiVehicle;
+	private StartingPosition desiredPos;
+	private Vehicle aiVehicle;
+	
+	private float steer;
+	private float accelerate;
 	
 	@Override
 	public boolean isActive() {
@@ -34,8 +37,7 @@ public class SimpleAi implements IControls
 	@Override
 	public float getSteering() {
 		//1 full right, -1 full left
-		//return 1;
-		return steeringDirect();
+		return steer;
 	}
 
 	@Override
@@ -73,31 +75,33 @@ public class SimpleAi implements IControls
 		desiredPos = pos;
 	}
 	
-	public void setVehicle(Vehicle vehicle)
+	public void calculateMove()
 	{
-		this.aiVehicle = vehicle;
+		calculateCarAngleInWorldTerms();
+		calculateRelativeAngle();
+		
+		steer = steeringDirect(carAngle, relativeAngle);
+		
 	}
 	
-	float carAngle;
-	float relativeAngle;
-	Vector2 relativeVector = new Vector2();
 	
-	//When car is facing right direction and ball is in front
-	private float steeringDirect()
+	//Basically the default angle of the car is pointing down, so it needs to be converted relative to world
+	private void calculateCarAngleInWorldTerms()
 	{
 		if(this.aiVehicle != null)
 		{
+			//Angle is provided in radians, convert to degrees
 			carAngle = (this.aiVehicle.body.getAngle() * MathUtils.radiansToDegrees);
 			
-			Gdx.app.error("SimpleAi",
-					" carAngle1: " + carAngle);
+			Gdx.app.debug("SimpleAi - Car Angle",
+					" Car Angle after converted from radians to degrees: " + carAngle);
 			
-			//if the car is facing down it has an angle of 0. To offest this so it reads as you would think
+			//when the car is facing down it has an angle of 0. To offest this so it reads as you would think (0 being left, 180 being right)
 			//we need to take 90 degrees away from it
 			carAngle = carAngle - 90.0f;
 			
-			Gdx.app.error("SimpleAi",
-					" carAngle2: " + carAngle);
+			Gdx.app.debug("SimpleAi - Car Angle",
+					" Car Angle adjusted by 90 degrees so it is a world angle: " + carAngle);
 			
 			if(carAngle > 360.0f)
 			{
@@ -109,66 +113,84 @@ public class SimpleAi implements IControls
 				
 				carAngle = carAngle % 360.0f;
 				
-				Gdx.app.error("SimpleAi",
-						" carAngle3: " + carAngle);
-				
 				carAngle = 360.0f + carAngle;
 				
+				//Adjust negative angles: -1 degree == 359 degrees
+				
 			}
-			//Purposely letting carAngle == 0.0f fall through
 			
-			Gdx.app.error("SimpleAi",
-					" carAngle4: " + carAngle);
-			
-//			//if the car is facing down it has an angle of 0. To offest this so it reads as you would think
-//			//we need to take 90 degrees away from it
-//			carAngle = carAngle - 90.0f;
-//			
-//			Gdx.app.error("SimpleAi",
-//					" carAngle3: " + carAngle);
-//			
-//			if(carAngle < 0.0f)
-//			{
-//				carAngle = 360.0f - carAngle;
-//				
-//				Gdx.app.error("SimpleAi",
-//						" carAngle4: " + carAngle);
-//			}
-			
+			Gdx.app.debug("SimpleAi - Car Angle",
+					" finalised car angle: " + carAngle);
+		}
+	}
+	
+	private void calculateRelativeAngle()
+	{
+		if(this.aiVehicle != null)
+		{
 			relativeVector.x = this.desiredPos.position.x - this.aiVehicle.body.getWorldCenter().x;
 			relativeVector.y = this.desiredPos.position.y - this.aiVehicle.body.getWorldCenter().y;
 			
 			relativeAngle = relativeVector.angle();
+			
+			Gdx.app.debug("SimpleAi - Relative Angle",
+					" Relative Vector: (" + relativeVector.x + "," + relativeVector.y + ") , Relative Angle: " +  relativeAngle);
+		}
+	}
+	
+	public void setVehicle(Vehicle vehicle)
+	{
+		this.aiVehicle = vehicle;
+	}
+	
+	float carAngle;
+	float relativeAngle;
+	Vector2 relativeVector = new Vector2();
+	
+	float tempDir;
+	//When car is facing right direction and ball is in front
+	private float steeringDirect(float cAngle, float relAngle)
+	{
+		Gdx.app.error("SimpleAi - steeringDirect",
+				" Car Angle: " + cAngle + " , Relative Angle: " +  relAngle);
+		
+		tempDir = 0.0f;
+		
+		if( Math.abs((relAngle + 360.0f) - cAngle) < Math.abs(relAngle - cAngle))
+		{
+			relAngle = relAngle + 360.0f;
+		}
+		else if( Math.abs((relAngle - 360.0f) - cAngle) < Math.abs(relAngle - cAngle))
+		{
+			relAngle = relAngle - 360.0f;
 		}
 		
-		Gdx.app.error("SimpleAi",
-				"relativeAngle: " + relativeAngle + " carAngle: " + carAngle);
+		Gdx.app.error("SimpleAi - steeringDirect",
+				" Adjusted Relative Angle: " +  relAngle);
 		
-		if( ((relativeAngle + 360.0f) - carAngle) < (relativeAngle - carAngle))
+		if(cAngle + 6f >= relAngle &&  cAngle - 6f <= relAngle)
 		{
-			relativeAngle = relativeAngle + 360.0f;
+			tempDir = 0;
 		}
-		
-		if(carAngle + 6f >= relativeAngle &&  carAngle - 6f <= relativeAngle)
+		else if(relAngle > cAngle)
 		{
-			return 0;
-		}
-		
-		if(relativeAngle > carAngle)
-		{
-			if(carAngle + 180f < relativeAngle)
-				return  1.0f;
-			else
-				return -1;
+//			if(cAngle + 180f < relAngle)
+//				tempDir = 1;
+//			else
+				tempDir = -1;
 		}
 		else
 		{
-			return 1;
-//			if(angleMovement - 180f < angleStick)
-//				direction = -1.0f;
+//			if(cAngle - 180f < relAngle)
+//				tempDir = -1.0f;
+//			else
+				tempDir = 1;
 		}
+		
+		Gdx.app.error("SimpleAi - steeringDirect",
+				" Calculated Direction (1=R, -1=L): " +  tempDir);
 	
-		//return 0;
+		return tempDir;
 	}
 
 	@Override
