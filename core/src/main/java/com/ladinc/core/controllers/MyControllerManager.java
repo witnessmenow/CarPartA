@@ -10,6 +10,7 @@ import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.controllers.controls.IControls;
 import com.ladinc.core.controllers.listeners.android.OuyaListener;
+import com.ladinc.core.controllers.listeners.android.TouchScreenListener;
 import com.ladinc.core.controllers.listeners.desktop.KeyboardAndMouseListener;
 import com.ladinc.core.controllers.listeners.desktop.XboxListener;
 import com.ladinc.core.player.PlayerInfo;
@@ -65,6 +66,11 @@ public class MyControllerManager {
 			KeyboardAndMouseListener keyboardAndMouseListener = new KeyboardAndMouseListener();
 			inActiveControls.add(keyboardAndMouseListener.controls);
 			Gdx.input.setInputProcessor(keyboardAndMouseListener);
+		}
+		else if(Gdx.app.getType() == ApplicationType.Android)
+		{
+			TouchScreenListener tsl = new TouchScreenListener();
+			Gdx.input.setInputProcessor(tsl);
 		}
 	}
 	
