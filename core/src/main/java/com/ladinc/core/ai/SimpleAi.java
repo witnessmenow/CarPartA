@@ -90,7 +90,7 @@ public class SimpleAi implements IControls
 	
 	private boolean checkForStuck(float delta)
 	{
-		Gdx.app.error("SimpleAi - checkForStuck",
+		Gdx.app.debug("SimpleAi - checkForStuck",
 				" Car velocity: " + this.aiVehicle.getSpeedKMH() + " Car Angle: " + this.carAngle);
 		if(this.aiVehicle.getSpeedKMH() < 5)
 		{

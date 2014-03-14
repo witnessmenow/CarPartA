@@ -115,7 +115,8 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		
 		if(allowWorldPhyics)
 		{
-			world.step(Gdx.app.getGraphics().getDeltaTime(), 3, 3);
+			//world.step(Gdx.app.getGraphics().getDeltaTime(), 6, 6);
+			world.step(1/60f, 6, 6);
 			world.clearForces();
 		}
 	}
