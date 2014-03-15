@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
+import com.ladinc.core.assets.Art;
 import com.ladinc.core.collision.CollisionHelper;
 import com.ladinc.core.objects.StartingPosition;
 import com.ladinc.core.player.PlayerInfo;
@@ -29,6 +30,7 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	public CollisionHelper colHelper;
 	
 	public Sprite backgroundSprite;
+	public Sprite touchOverlaySprite;
 	
 	public GenericScreen(CarPartA game) {
 		this.game = game;
@@ -47,6 +49,8 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		
 		this.camera = new OrthographicCamera();
 		this.camera.setToOrtho(false, this.screenWidth, this.screenHeight);
+		
+		this.touchOverlaySprite = Art.getTouchOverlay();
 		
 		colHelper = new CollisionHelper();
 	}
@@ -88,6 +92,11 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		}
 		
 		renderUpdates(delta);
+		
+		if(this.game.controllerManager.hasTouchControls)
+		{
+			this.touchOverlaySprite.draw(spriteBatch);
+		}
 		spriteBatch.end();
 		//debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,PIXELS_PER_METER, PIXELS_PER_METER));
 	}
@@ -143,6 +152,9 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	{
 		this.world = new World(new Vector2(0.0f, 0.0f), true);
 		world.setContactListener(this.colHelper);
+		
+		this.touchOverlaySprite.setPosition(0, 0);
+		
 		resetGame();
 	}
 	

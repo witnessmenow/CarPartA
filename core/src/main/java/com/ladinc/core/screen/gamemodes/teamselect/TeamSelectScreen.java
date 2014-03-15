@@ -138,7 +138,14 @@ public class TeamSelectScreen extends GenericScreen
 	
 	private void handleStartNextScreen()
 	{
+		if(this.game.controllerManager.hasTouchControls)
+		{
+			createAIPlayer(Team.Away);
+		}
+		
 		//Remove players who are not active, assign active ones to right team
+		
+		
 		for (Vehicle v : this.getVehicles())
 		{
 			if(v.player != null)

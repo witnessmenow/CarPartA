@@ -9,6 +9,7 @@
 		<activity android:name="CarPartAActivity"
 							android:label="@string/app_name"
 							android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+							android:screenOrientation="landscape"
 							android:configChanges="keyboard|keyboardHidden|orientation">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />

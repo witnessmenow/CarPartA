@@ -11,7 +11,13 @@ public class TouchPadControls implements IControls
 	
 	private boolean handbrakePressed;
 	
+	private boolean startButtonPressed;
+	private boolean confirmButtonPressed;
+	private boolean backButtonPressed;
+	
 	public boolean active;
+	
+	private boolean interestedInMenuPresses = false;
 	
 	private void checkForActive()
 	{
@@ -71,6 +77,50 @@ public class TouchPadControls implements IControls
 		this.rightPressed = pressed;
 	}
 	
+	public void setStartStatus(boolean pressed)
+	{
+		if (!active && pressed)
+		{
+			checkForActive();
+		}
+		
+		this.startButtonPressed = pressed;
+	}
+	
+	public void setConfirmStatus(boolean pressed)
+	{
+		if(interestedInMenuPresses && pressed)
+		{
+			if (!active)
+			{
+				checkForActive();
+			}
+			
+			this.confirmButtonPressed = true;
+		}
+		else
+		{
+			this.confirmButtonPressed = false;
+		}
+	}
+	
+	public void setBackStatus(boolean pressed)
+	{
+		if(interestedInMenuPresses && pressed)
+		{
+			if (!active)
+			{
+				checkForActive();
+			}
+			
+			this.backButtonPressed = true;
+		}
+		else
+		{
+			this.backButtonPressed = false;
+		}
+	}
+	
 	@Override
 	public boolean isActive() {
 		// TODO Auto-generated method stub
@@ -113,25 +163,40 @@ public class TouchPadControls implements IControls
 
 	@Override
 	public boolean getStartStatus() {
-		// TODO Auto-generated method stub
+		if(this.startButtonPressed)
+		{
+			//Dont allow one press be considered multiple
+			this.startButtonPressed = false;
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public boolean getConfirmStatus() {
-		// TODO Auto-generated method stub
+		if(this.confirmButtonPressed)
+		{
+			//Dont allow one press be considered multiple
+			this.confirmButtonPressed = false;
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public boolean getBackStatus() {
-		// TODO Auto-generated method stub
+		if(this.backButtonPressed)
+		{
+			//Dont allow one press be considered multiple
+			this.backButtonPressed = false;
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public void setMenuInterest(boolean set) {
-		// TODO Auto-generated method stub
+		this.interestedInMenuPresses = set;
 		
 	}
 

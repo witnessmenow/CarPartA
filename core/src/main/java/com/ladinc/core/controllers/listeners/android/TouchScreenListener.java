@@ -21,7 +21,7 @@ public class TouchScreenListener implements InputProcessor
 		
 	}
 	
-	private void processTouch(int screenX, int screenY, int pointer, boolean touched)
+	private void processTouch(int screenX, int screenY, int pointer, boolean touched, boolean moveEvent)
 	{
 		if(screenY > screenHeight/2)
 		{
@@ -60,6 +60,9 @@ public class TouchScreenListener implements InputProcessor
 				Gdx.app.debug("TouchScreenListener",
 						"setReverseButton: touched=" + String.valueOf(touched) );
 				
+				if(!moveEvent)
+					this.controls.setBackStatus(touched);
+				
 				return;
 			}
 			
@@ -72,7 +75,17 @@ public class TouchScreenListener implements InputProcessor
 				Gdx.app.debug("TouchScreenListener",
 						"setAccelerateButton: touched=" + String.valueOf(touched) );
 				
+				if(!moveEvent)
+					this.controls.setConfirmStatus(touched);
+				
 				return;
+			}
+		}
+		else
+		{
+			if(!moveEvent && (screenX > (this.screenWidth/4) && screenX < 3 * (this.screenWidth/4)))
+			{
+				this.controls.setStartStatus(touched);
 			}
 		}
 	}
@@ -101,7 +114,7 @@ public class TouchScreenListener implements InputProcessor
 		Gdx.app.error("TouchScreenListener",
 				"touchDown: screenX=" + String.valueOf(screenX) + ", screenY=" + String.valueOf(screenY) + ", pointer=" + String.valueOf(pointer) + ", button=" + String.valueOf(button));
 		
-		processTouch(screenX, screenY,pointer, true);
+		processTouch(screenX, screenY,pointer, true, false);
 		return false;
 	}
 
@@ -110,7 +123,7 @@ public class TouchScreenListener implements InputProcessor
 		Gdx.app.error("TouchScreenListener",
 				"touchUp: screenX=" + String.valueOf(screenX) + ", screenY=" + String.valueOf(screenY) + ", pointer=" + String.valueOf(pointer) + ", button=" + String.valueOf(button));
 		
-		processTouch(screenX, screenY,pointer, false);
+		processTouch(screenX, screenY,pointer, false, false);
 		
 		return false;
 	}
@@ -120,7 +133,7 @@ public class TouchScreenListener implements InputProcessor
 		Gdx.app.debug("TouchScreenListener",
 				"touchDragged: screenX=" + String.valueOf(screenX) + ", screenY=" + String.valueOf(screenY) + ", pointer=" + String.valueOf(pointer));
 		
-		processTouch(screenX, screenY,pointer, true);
+		processTouch(screenX, screenY,pointer, true, true);
 		
 		return false;
 	}

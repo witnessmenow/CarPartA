@@ -22,6 +22,8 @@ public class MyControllerManager {
 	private ArrayList<PlayerInfo> players;
 	private ArrayList<SimpleAi> ai;
 	
+	public Boolean hasTouchControls = false;
+	
 	public MyControllerManager() {
 		inActiveControls = new ArrayList<IControls>();
 		players = new ArrayList<PlayerInfo>();
@@ -72,6 +74,8 @@ public class MyControllerManager {
 			TouchScreenListener tsl = new TouchScreenListener();
 			inActiveControls.add(tsl.controls);
 			Gdx.input.setInputProcessor(tsl);
+			
+			hasTouchControls = true;
 		}
 	}
 	

@@ -20,6 +20,7 @@ public class Art {
 	
 	public static final String SOCCER_PITCH = "SOCCER_PITCH";
 	public static final String TEAM_SELECT_AREA = "TEAM_SELECT_AREA";
+	public static final String TOUCH_OVERLAY = "TOUCH_OVERLAY";
 	
 	public static Hashtable<String, Sprite> spriteTable = new Hashtable<String, Sprite>();
 	
@@ -38,6 +39,17 @@ public class Art {
 		textureTable.put(TEAM_SELECT_AREA, new Texture(Gdx.files.internal("teamSelect.png")));
 		textureTable.put(WHEELS, new Texture(Gdx.files.internal("Wheel.png")));
 		textureTable.put(IDENTIFIER, new Texture(Gdx.files.internal("Identfiers.png")));
+		textureTable.put(TOUCH_OVERLAY, new Texture(Gdx.files.internal("touchOverlay.png")));
+	}
+	
+	public static Sprite getTouchOverlay()
+	{
+		if(!spriteTable.contains(TOUCH_OVERLAY))
+		{
+			spriteTable.put(TOUCH_OVERLAY, new Sprite(Art.textureTable.get(TOUCH_OVERLAY)));
+		}
+		
+		return spriteTable.get(TOUCH_OVERLAY);
 	}
 	
 	public static void updateSprite(Sprite sprite, SpriteBatch spriteBatch, int PIXELS_PER_METER, Body body)
