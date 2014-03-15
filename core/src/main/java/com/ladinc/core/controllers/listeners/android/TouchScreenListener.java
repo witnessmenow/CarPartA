@@ -30,6 +30,8 @@ public class TouchScreenListener implements InputProcessor
 			if(screenX <= 0)
 			{
 				this.controls.setLeftButton(touched);
+				if(touched)
+					this.controls.setRightButton(false);
 				Gdx.app.debug("TouchScreenListener",
 						"setLeftButton: touched=" + String.valueOf(touched) );
 				
@@ -41,6 +43,8 @@ public class TouchScreenListener implements InputProcessor
 			if(screenX <= 0)
 			{
 				this.controls.setRightButton(touched);
+				if(touched)
+					this.controls.setLeftButton(false);
 				Gdx.app.debug("TouchScreenListener",
 						"setRightButton: touched=" + String.valueOf(touched) );
 				
@@ -51,6 +55,8 @@ public class TouchScreenListener implements InputProcessor
 			if(screenX <= 0)
 			{
 				this.controls.setReverseButton(touched);
+				if(touched)
+					this.controls.setAccelerateButton(false);
 				Gdx.app.debug("TouchScreenListener",
 						"setReverseButton: touched=" + String.valueOf(touched) );
 				
@@ -61,6 +67,8 @@ public class TouchScreenListener implements InputProcessor
 			if(screenX <= 0)
 			{
 				this.controls.setAccelerateButton(touched);
+				if(touched)
+					this.controls.setReverseButton(false);
 				Gdx.app.debug("TouchScreenListener",
 						"setAccelerateButton: touched=" + String.valueOf(touched) );
 				
@@ -111,6 +119,9 @@ public class TouchScreenListener implements InputProcessor
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
 		Gdx.app.debug("TouchScreenListener",
 				"touchDragged: screenX=" + String.valueOf(screenX) + ", screenY=" + String.valueOf(screenY) + ", pointer=" + String.valueOf(pointer));
+		
+		processTouch(screenX, screenY,pointer, true);
+		
 		return false;
 	}
 
