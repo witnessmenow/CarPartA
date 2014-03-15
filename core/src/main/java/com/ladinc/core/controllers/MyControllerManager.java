@@ -70,6 +70,7 @@ public class MyControllerManager {
 		else if(Gdx.app.getType() == ApplicationType.Android)
 		{
 			TouchScreenListener tsl = new TouchScreenListener();
+			inActiveControls.add(tsl.controls);
 			Gdx.input.setInputProcessor(tsl);
 		}
 	}
