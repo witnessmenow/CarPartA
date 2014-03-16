@@ -14,6 +14,7 @@ import com.ladinc.core.controllers.controls.IControls;
 import com.ladinc.core.player.PlayerInfo;
 import com.ladinc.core.screen.gamemodes.GenericLayout;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
+import com.ladinc.core.screen.gamemodes.carpool.CarPoolScreen;
 import com.ladinc.core.screen.gamemodes.soccer.SoccerScreen;
 import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.vehicles.Car;
@@ -21,8 +22,6 @@ import com.ladinc.core.vehicles.Vehicle;
 
 public class TeamSelectScreen extends GenericScreen
 {
-	
-	private List<PlayerInfo> assignedPlayers;
 	
 	//Need a better place for this!
 	private static final int MAX_PLAYERS = 8;
@@ -168,6 +167,7 @@ public class TeamSelectScreen extends GenericScreen
 		}
 		
 		game.setScreen(new SoccerScreen(game));
+		//game.setScreen(new CarPoolScreen(game));
 		dispose();
 	}
 	

@@ -8,14 +8,15 @@ import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.assets.CarsHelper;
-import com.ladinc.core.objects.Ball;
+import com.ladinc.core.objects.balls.Ball;
 import com.ladinc.core.screen.gamemodes.GenericLayout;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.vehicles.Vehicle;
 
-public class SoccerScreen extends GenericScreen {
-	private float secondsLeft = 5;
+public class SoccerScreen extends GenericScreen 
+{
+	private float secondsLeft = 180;
 	private int homeScore = 0;
 	private int awayScore = 0;
 	private Ball ball;
@@ -76,10 +77,13 @@ public class SoccerScreen extends GenericScreen {
 				secondsLeft = 0;
 			}
 		}
-		int milliSeconds = (int) (1000 * (secondsLeft - (int) secondsLeft));
+		
 		int minutes = (int) secondsLeft / 60;
-		int seconds = (int) secondsLeft;
-		return minutes + ":" + seconds + ":" + milliSeconds;
+		int seconds = (int) secondsLeft % 60;
+		
+		String secondPrepend =  (seconds< 10)?"0":"";
+		
+		return minutes + ":" + secondPrepend + seconds;
 	}
 	
 	@Override
@@ -109,19 +113,18 @@ public class SoccerScreen extends GenericScreen {
 		}
 		
 		ball = new Ball(world, center.x + Ball.ballOffsetX, center.y,
-				new Sprite(Art.textureTable.get(Art.BALL)),
+				getSoccerBallSrpite(),
 				BALL_SIZE);
 	}
 	
-	private void assignTeamSpritesToCars()
+	private Sprite ballSprite;
+	private Sprite getSoccerBallSrpite()
 	{
-		for(Vehicle v : getVehicles())
+		if(ballSprite == null)
 		{
-			if(v.player != null)
-			{
-				v.sprite = CarsHelper.getTeamCar(v.player.team);
-			}
+			ballSprite = new Sprite(Art.textureTable.get(Art.BALLS), 0, 0, 53, 52);
 		}
+		return ballSprite;
 	}
 
 	@Override

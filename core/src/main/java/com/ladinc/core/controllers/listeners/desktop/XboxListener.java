@@ -22,6 +22,8 @@ public class XboxListener  extends GenericControllerListener{
 		//Fix this!
 		this.RightAxisX = Xbox360WindowsMapper.RIGHT_ANALOG_X;
 		this.RightAxisY= Xbox360WindowsMapper.RIGHT_ANALOG_Y;
+		
+		this.StartButtonSecondry = 222;
 	}
 
 }

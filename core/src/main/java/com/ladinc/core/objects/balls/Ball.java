@@ -1,7 +1,8 @@
-package com.ladinc.core.objects;
+package com.ladinc.core.objects.balls;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -9,18 +10,32 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ladinc.core.assets.Art;
 import com.ladinc.core.collision.CollisionInfo;
 import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
 
 public class Ball {
 	public Body body;
-	float ballSize = 2f;
+	public float ballSize = 2f;
+	protected float density = 0.25f;
+	protected float slowDownMultiplier = 0.75f;
+	protected float linDamp = 01.f;
 	public static final float ballOffsetX = 0f;
 	public Sprite sprite;
 	
 	public Ball(World world, float x, float y, Sprite ballSprite, float ballSize) {
 		this.ballSize = ballSize;
 		createBallObject(world, x, y, ballSprite, false);
+	}
+	
+	public Ball(World world, float x, float y, Sprite ballSprite, float ballSize, float density, float linDamp) 
+	{
+		this.density = density;
+		this.ballSize = ballSize;
+		this.linDamp = linDamp;
+		createBallObject(world, x, y, ballSprite, false);
+		
+		this.body.setLinearDamping(linDamp);
 	}
 	
 	public Ball(World world, float x, float y, Sprite ballSprite) {
@@ -33,7 +48,7 @@ public class Ball {
 		createBallObject(world, x, y, ballSprite, networked);
 	}
 	
-	private void createBallObject(World world, float x, float y,
+	protected void createBallObject(World world, float x, float y,
 			Sprite ballSprite, boolean networked)
 	{
 		BodyDef bodyDef = new BodyDef();
@@ -44,7 +59,7 @@ public class Ball {
 		dynamicCircle.setRadius(ballSize);
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = dynamicCircle;
-		fixtureDef.density = 0.25f;
+		fixtureDef.density = density;
 		fixtureDef.friction = 0f;
 		fixtureDef.restitution = 1f;
 		
@@ -74,9 +89,8 @@ public class Ball {
 				 "Ball Position - " + position +
 						  "Ball Velocity - " + currentVelocity);
 		  
-		  float slowDownMultiplier = 0.75f;
 		  
-		  this.body.applyForce(this.body.getWorldVector(new Vector2( -(currentVelocity.x * (slowDownMultiplier)), -(currentVelocity.y * (slowDownMultiplier)))), position, true);
+		  //this.body.applyForce(this.body.getWorldVector(new Vector2( -(currentVelocity.x * (slowDownMultiplier)), -(currentVelocity.y * (slowDownMultiplier)))), position, true);
 		 
 	}
 	
@@ -96,5 +110,10 @@ public class Ball {
 	public Vector2 getLocation()
 	{
 		return this.body.getWorldCenter();
+	}
+	
+	public void updateSprite(SpriteBatch spriteBatch, int PIXELS_PER_METER)
+	{
+		Art.updateSprite(this.sprite, spriteBatch, PIXELS_PER_METER, this.body);
 	}
 }

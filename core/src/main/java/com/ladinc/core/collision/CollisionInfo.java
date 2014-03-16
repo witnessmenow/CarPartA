@@ -31,5 +31,5 @@ public class CollisionInfo
 		this.object = object;
 	}
 	
-	public static enum CollisionObjectType{Wall, Vehicle, ScoreZone, Ball};
+	public static enum CollisionObjectType{Wall, Vehicle, ScoreZone, Ball, Pocket};
 }

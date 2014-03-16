@@ -12,7 +12,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 public class Art {
 	public static Hashtable<String, Texture> textureTable = new Hashtable<String, Texture>();
 	public static final String LOGO = "LOGO";
-	public static final String BALL = "BALL";
+	public static final String BALLS = "BALLS";
 	public static final String CARS = "CARS";
 	
 	public static final String WHEELS = "WHEELS";
@@ -21,6 +21,10 @@ public class Art {
 	public static final String SOCCER_PITCH = "SOCCER_PITCH";
 	public static final String TEAM_SELECT_AREA = "TEAM_SELECT_AREA";
 	public static final String TOUCH_OVERLAY = "TOUCH_OVERLAY";
+	
+	//Car Pool
+	
+	public static final String POOL_TABLE = "POOL_TABLE";
 	
 	public static Hashtable<String, Sprite> spriteTable = new Hashtable<String, Sprite>();
 	
@@ -33,18 +37,19 @@ public class Art {
 	{
 		textureTable.put(LOGO,
 				new Texture(Gdx.files.internal("libgdx-logo.png")));
-		textureTable.put(BALL, new Texture(Gdx.files.internal("ball.png")));
+		textureTable.put(BALLS, new Texture(Gdx.files.internal("balls.png")));
 		textureTable.put(CARS, new Texture(Gdx.files.internal("CarSpritesheet.png")));
-		textureTable.put(SOCCER_PITCH, new Texture(Gdx.files.internal("pitch.png")));
+		textureTable.put(SOCCER_PITCH, new Texture(Gdx.files.internal("SocCar/GreenPitch.jpg")));
 		textureTable.put(TEAM_SELECT_AREA, new Texture(Gdx.files.internal("teamSelect.png")));
 		textureTable.put(WHEELS, new Texture(Gdx.files.internal("Wheel.png")));
 		textureTable.put(IDENTIFIER, new Texture(Gdx.files.internal("Identfiers.png")));
 		textureTable.put(TOUCH_OVERLAY, new Texture(Gdx.files.internal("touchOverlay.png")));
+		textureTable.put(POOL_TABLE, new Texture(Gdx.files.internal("CarPool/carsnu.png")));
 	}
 	
 	public static Sprite getTouchOverlay()
 	{
-		if(!spriteTable.contains(TOUCH_OVERLAY))
+		if(!spriteTable.containsKey(TOUCH_OVERLAY))
 		{
 			spriteTable.put(TOUCH_OVERLAY, new Sprite(Art.textureTable.get(TOUCH_OVERLAY)));
 		}

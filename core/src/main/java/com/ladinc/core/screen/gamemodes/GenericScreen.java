@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
+import com.ladinc.core.assets.CarsHelper;
 import com.ladinc.core.collision.CollisionHelper;
 import com.ladinc.core.objects.StartingPosition;
 import com.ladinc.core.player.PlayerInfo;
@@ -249,6 +250,17 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		}
 		
 		createCarsForPlayers();
+	}
+	
+	public void assignTeamSpritesToCars()
+	{
+		for(Vehicle v : getVehicles())
+		{
+			if(v.player != null)
+			{
+				v.sprite = CarsHelper.getTeamCar(v.player.team);
+			}
+		}
 	}
 	
 	
