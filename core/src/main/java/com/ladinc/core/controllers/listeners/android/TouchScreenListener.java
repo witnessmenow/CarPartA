@@ -83,9 +83,19 @@ public class TouchScreenListener implements InputProcessor
 		}
 		else
 		{
-			if(!moveEvent && (screenX > (this.screenWidth/4) && screenX < 3 * (this.screenWidth/4)))
+			if(!moveEvent && screenX <= (this.screenWidth/4))
+			{
+				this.controls.setExtraButton1Pressed(touched);
+				return;
+			}
+			else if(!moveEvent && (screenX > (this.screenWidth/4) && screenX < 3 * (this.screenWidth/4)))
 			{
 				this.controls.setStartStatus(touched);
+			}
+			else if(!moveEvent)
+			{
+				this.controls.setExtraButton2Pressed(touched);
+				return;
 			}
 		}
 	}

@@ -46,4 +46,14 @@ public class KeyboardMapper {
 	{
 		return keyCode == Keys.BACKSPACE;
 	}
+	
+	public static boolean isExtraButton1(int keyCode)
+	{
+		return keyCode == Keys.NUM_9;
+	}
+	
+	public static boolean isExtraButton2(int keyCode)
+	{
+		return keyCode == Keys.NUM_0;
+	}
 }

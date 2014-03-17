@@ -18,6 +18,10 @@ public interface IControls {
 	
 	public boolean getBackStatus();
 	
+	public boolean getExtraButton1Status();
+	
+	public boolean getExtraButton2Status();
+	
 	public void setMenuInterest(boolean set);
 	
 	public boolean isAi();

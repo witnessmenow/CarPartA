@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.ladinc.core.controllers.controls.IControls;
 import com.ladinc.core.objects.StartingPosition;
+import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.vehicles.Vehicle;
 
 public class SimpleAi implements IControls
@@ -13,8 +14,15 @@ public class SimpleAi implements IControls
 	private StartingPosition desiredPos;
 	private Vehicle aiVehicle;
 	
+	public Team team;
+	
 	private float steer;
 	private int accelerate;
+	
+	public Vehicle getVehicle()
+	{
+		return aiVehicle;
+	}
 	
 	@Override
 	public boolean isActive() {
@@ -77,10 +85,25 @@ public class SimpleAi implements IControls
 		
 	}
 	
-	public void setDesiredPosition(StartingPosition pos)
+	public void setDesiredCoOrd(Vector2 coOrd)
 	{
-		desiredPos = pos;
+		if(coOrd != null)
+		{
+			if(desiredPos == null)
+			{
+				desiredPos = new StartingPosition(coOrd, 0);
+			}
+			else
+			{
+				desiredPos.position = coOrd;
+			}
+		}
 	}
+	
+//	public void setDesiredPosition(StartingPosition pos)
+//	{
+//		desiredPos = pos;
+//	}
 	
 	float timeAtAngle = 0.0f;
 	float timeAtLowSpeed = 0.0f;
@@ -98,7 +121,11 @@ public class SimpleAi implements IControls
 			
 			if(timeAtLowSpeed > 1.5f)
 			{
+				timeAtLowSpeed = 0.0f;
 				remaingOutOfStuckTime = 1.0f;
+				
+				lastUsedSteer = lastUsedSteer * (-1);
+				
 				return true;
 			}
 		}
@@ -114,12 +141,13 @@ public class SimpleAi implements IControls
 			calculateRelativeAngle();
 		
 			
-			if(remaingOutOfStuckTime > 0|| checkForStuck(delta))
+			if(remaingOutOfStuckTime > 0)
 			{
 				escapeStuck(delta);
 			}
 			else
 			{
+				checkForStuck(delta);
 				steer = steeringDirect(carAngle, relativeAngle);
 				accelerate = 1;
 			}
@@ -132,12 +160,13 @@ public class SimpleAi implements IControls
 		
 	}
 	
+	private float lastUsedSteer = 1;
 	
 	private void escapeStuck(float delta) 
 	{
 		remaingOutOfStuckTime -= delta;
 		
-		steer = 1;
+		steer = lastUsedSteer;
 		accelerate = -1;
 		
 	}
@@ -254,6 +283,18 @@ public class SimpleAi implements IControls
 	public boolean isAi() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+	@Override
+	public boolean getExtraButton1Status() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean getExtraButton2Status() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

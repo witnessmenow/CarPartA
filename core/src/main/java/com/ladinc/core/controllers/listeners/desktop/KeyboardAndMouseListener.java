@@ -71,6 +71,15 @@ public class KeyboardAndMouseListener implements InputProcessor {
 		{
 			this.controls.setBackStatus(set);
 		}
+		
+		if(KeyboardMapper.isExtraButton1(buttonId))
+		{
+			this.controls.setExtraButton1Pressed(set);
+		}
+		else if(KeyboardMapper.isExtraButton2(buttonId))
+		{
+			this.controls.setExtraButton2Pressed(set);
+		}
 	}
 	
 	@Override

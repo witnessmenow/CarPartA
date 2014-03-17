@@ -39,9 +39,17 @@ public class PoolTable
 	private static final float BALL_LIN_DAMP  = 0.2f;
 	
 	public List<PoolBall> activeBalls =  new ArrayList<PoolBall>();
+	public List<PoolBall> pottedBalls =  new ArrayList<PoolBall>();
+	
+	public int pottedYellowBallsCount = 0;
+	public int pottedRedBallsCount  = 0;
+	
+	private World world;
 	
 	public PoolTable(World world, float worldHeight, float worldWidth, Vector2 center)
 	{
+		this.world = world;
+		
 		this.center = center;
 		
 		this.worldHeight = worldHeight;
@@ -89,6 +97,55 @@ public class PoolTable
 		return Art.spriteTable.get(Art.POOL_TABLE);
 	}
 	
+	public List<PoolBall> ballsToRemove = new ArrayList<PoolBall>();
+	public void checkForPottedBall()
+	{
+		ballsToRemove.clear();
+		
+		for(PoolBall pb : this.activeBalls)
+		{
+			if(!pb.isActive)
+			{
+				this.pottedBalls.add(pb);
+				this.ballsToRemove.add(pb);
+				
+				pb.destroyBodies(world);
+				
+				if(pb.colour == ColourBall.Red)
+				{
+					this.pottedRedBallsCount ++;
+				}
+				else if(pb.colour == ColourBall.Yellow)
+				{
+					this.pottedYellowBallsCount ++;
+				}
+			}
+		}
+		
+		for(PoolBall pb : this.ballsToRemove)
+		{
+			this.activeBalls.remove(pb);
+		}
+	}
+	
+	public Team winningTeam;
+	
+	public Boolean checkForWin()
+	{
+		if(this.pottedRedBallsCount >= 7)
+		{
+			winningTeam = Team.Away;
+			return true;
+		}
+		else if(this.pottedYellowBallsCount >= 7)
+		{
+			winningTeam = Team.Home;
+			return true;
+		}
+		
+		return false;
+	}
+	
 	public StartingPosition getStartPosition(Team team, int carTeamNumber)
 	{
 		float carPosX = this.worldWidth/4;
@@ -116,9 +173,52 @@ public class PoolTable
 		
 	}
 	
-	public void createPoolBalls(World world)
+	public Vector2 getTriangleStartingPos()
 	{
-		activeBalls.add(new PoolBall(world, this.center.x, this.center.y, BALL_SIZE, BALL_DENSITY, BALL_LIN_DAMP, ColourBall.Black));
+		return this.center;
+	}
+	
+	public void createPoolBalls(World world, Vector2 startingPos)
+	{
+		float x = startingPos.x;
+		float y = startingPos.y;
+		float tempY;
+		float tempX;
+		
+		//Adding first row
+		activeBalls.add(new PoolBall(world, x, y, BALL_SIZE, BALL_DENSITY, BALL_LIN_DAMP, ColourBall.Yellow));
+		
+		//Second Row
+		tempY = y - BALL_SIZE;
+		tempX = x + ((BALL_SIZE*2)*0.9f);
+		activeBalls.add(new PoolBall(world, tempX, tempY, BALL_SIZE, BALL_DENSITY, BALL_LIN_DAMP, ColourBall.Yellow));
+		activeBalls.add(new PoolBall(world, tempX, tempY+(BALL_SIZE*2), BALL_SIZE, BALL_DENSITY, BALL_LIN_DAMP, ColourBall.Red));
+		
+		//thirdRow
+		tempX = tempX + ((BALL_SIZE*2)*0.9f);
+		tempY = y - (BALL_SIZE*2);
+		activeBalls.add(new PoolBall(world, tempX, tempY, BALL_SIZE, BALL_DENSITY, BALL_LIN_DAMP, ColourBall.Red));
+		activeBalls.add(new PoolBall(world, tempX, tempY+(BALL_SIZE*2), BALL_SIZE, BALL_DENSITY, BALL_LIN_DAMP, ColourBall.Black));
+		activeBalls.add(new PoolBall(world, tempX, tempY+((BALL_SIZE*2)*2), BALL_SIZE, BALL_DENSITY, BALL_LIN_DAMP, ColourBall.Yellow));
+		
+		//4th Row
+		tempX = tempX + ((BALL_SIZE*2)*0.9f);
+		tempY = y - (BALL_SIZE*3);
+		activeBalls.add(new PoolBall(world, tempX, tempY, BALL_SIZE, BALL_DENSITY, BALL_LIN_DAMP, ColourBall.Red));
+		activeBalls.add(new PoolBall(world, tempX, tempY+(BALL_SIZE*2), BALL_SIZE, BALL_DENSITY, BALL_LIN_DAMP, ColourBall.Yellow));
+		activeBalls.add(new PoolBall(world, tempX, tempY+((BALL_SIZE*2)*2), BALL_SIZE, BALL_DENSITY, BALL_LIN_DAMP, ColourBall.Red));
+		activeBalls.add(new PoolBall(world, tempX, tempY+((BALL_SIZE*2)*3), BALL_SIZE, BALL_DENSITY, BALL_LIN_DAMP, ColourBall.Red));
+		
+		//5th Row
+		tempX = tempX + ((BALL_SIZE*2)*0.9f);
+		tempY = y - (BALL_SIZE*4);
+		activeBalls.add(new PoolBall(world, tempX, tempY, BALL_SIZE, BALL_DENSITY, BALL_LIN_DAMP, ColourBall.Red));
+		activeBalls.add(new PoolBall(world, tempX, tempY+(BALL_SIZE*2), BALL_SIZE, BALL_DENSITY, BALL_LIN_DAMP, ColourBall.Yellow));
+		activeBalls.add(new PoolBall(world, tempX, tempY+((BALL_SIZE*2)*2), BALL_SIZE, BALL_DENSITY, BALL_LIN_DAMP, ColourBall.Red));
+		activeBalls.add(new PoolBall(world, tempX, tempY+((BALL_SIZE*2)*3), BALL_SIZE, BALL_DENSITY, BALL_LIN_DAMP, ColourBall.Yellow));
+		activeBalls.add(new PoolBall(world, tempX, tempY+((BALL_SIZE*2)*4), BALL_SIZE, BALL_DENSITY, BALL_LIN_DAMP, ColourBall.Yellow));
+		
+		
 	}
 	
 	public void updateBallSprites(SpriteBatch spriteBatch, int PIXELS_PER_METER)

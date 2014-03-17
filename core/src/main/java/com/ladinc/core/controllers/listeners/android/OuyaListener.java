@@ -20,6 +20,9 @@ public class OuyaListener extends GenericControllerListener
 		this.ConfirmButton = Ouya.BUTTON_O;
 		this.BackButton = Ouya.BUTTON_A;
 		
+		this.extraButton1 = Ouya.BUTTON_Y;
+		this.extraButton2 = Ouya.BUTTON_A;
+		
 		this.LeftAxisX = Ouya.AXIS_LEFT_X;
 		this.LeftAxisY = Ouya.AXIS_LEFT_Y;
 		

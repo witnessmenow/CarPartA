@@ -32,6 +32,9 @@ public class GenericControllerListener implements ControllerListener {
 	public int ConfirmButton;
 	public int BackButton;
 	
+	public int extraButton1;
+	public int extraButton2;
+	
 	
 	@Override
 	public boolean accelerometerMoved(Controller arg0, int arg1, Vector3 arg2)
@@ -125,6 +128,15 @@ public class GenericControllerListener implements ControllerListener {
 		else if(buttonId == BackButton)
 		{
 			controls.setBackStatus(set);
+		}
+		
+		if(buttonId == extraButton1)
+		{
+			controls.setExtraButton1Pressed(set);
+		}
+		else if(buttonId == extraButton2)
+		{
+			controls.setExtraButton2Pressed(set);
 		}
 	}
 	

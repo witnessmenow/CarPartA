@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
@@ -28,10 +29,13 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	private final List<Vehicle> vehicles;
 	private GenericLayout layout;
 	
-	public CollisionHelper colHelper;
+	public ContactListener colHelper;
 	
 	public Sprite backgroundSprite;
 	public Sprite touchOverlaySprite;
+	
+	protected float gameOverCoolOffTimer = 0f;
+    protected boolean proccessingGameOver = false;
 	
 	public GenericScreen(CarPartA game) {
 		this.game = game;
@@ -52,8 +56,6 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		this.camera.setToOrtho(false, this.screenWidth, this.screenHeight);
 		
 		this.touchOverlaySprite = Art.getTouchOverlay();
-		
-		colHelper = new CollisionHelper();
 	}
 	
 	protected boolean allowVehicleControl = true;
@@ -152,11 +154,25 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	public void show()
 	{
 		this.world = new World(new Vector2(0.0f, 0.0f), true);
-		world.setContactListener(this.colHelper);
 		
 		this.touchOverlaySprite.setPosition(0, 0);
 		
 		resetGame();
+	}
+	
+	protected boolean processGameOverTimer(float delta)
+	{
+
+		if(gameOverCoolOffTimer > 0)
+		{
+			gameOverCoolOffTimer = gameOverCoolOffTimer - delta;
+		}
+		else
+		{
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public abstract IGenericLayout resetLayout();

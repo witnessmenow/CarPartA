@@ -23,6 +23,9 @@ public class GamePadControls implements IControls {
 	private boolean confirmButtonPressed;
 	private boolean backButtonPressed;
 	
+	private boolean extraButton1Pressed;
+	private boolean extraButton2Pressed;
+	
 	private boolean interestedInMenuPresses = false;
 	
 	public GamePadControls(GenericControllerListener listen) {
@@ -278,6 +281,52 @@ public class GamePadControls implements IControls {
 	public boolean isAi() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	@Override
+	public boolean getExtraButton1Status() 
+	{
+		if(this.extraButton1Pressed)
+		{
+			//Dont allow one press be considered multiple
+			this.extraButton1Pressed = false;
+			return true;
+		}
+		return false;
+	}
+
+	public void setExtraButton1Pressed(boolean extraButton1Pressed) 
+	{
+		if (!active && extraButton1Pressed)
+		{
+			activateController();
+		}
+		
+		this.extraButton1Pressed = extraButton1Pressed;
+		
+	}
+
+	@Override
+	public boolean getExtraButton2Status() 
+	{
+		if(this.extraButton2Pressed)
+		{
+			//Dont allow one press be considered multiple
+			this.extraButton2Pressed = false;
+			return true;
+		}
+		return false;
+	}
+
+	public void setExtraButton2Pressed(boolean extraButton2Pressed) 
+	{
+		
+		if (!active && extraButton2Pressed)
+		{
+			activateController();
+		}
+		
+		this.extraButton2Pressed = extraButton2Pressed;
 	}
 	
 }

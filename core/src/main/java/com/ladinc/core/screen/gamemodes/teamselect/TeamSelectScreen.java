@@ -23,6 +23,9 @@ import com.ladinc.core.vehicles.Vehicle;
 public class TeamSelectScreen extends GenericScreen
 {
 	
+	private Sprite confirmSprite;
+	private Sprite controllsSprite;
+	
 	//Need a better place for this!
 	private static final int MAX_PLAYERS = 8;
 	
@@ -67,12 +70,34 @@ public class TeamSelectScreen extends GenericScreen
 		this.backgroundSprite = this.teamSelectLayout.getTeamAreaSprite();
 		this.backgroundSprite.setPosition(0.0f, 0.0f);
 		
+		if(this.game.controllerManager.hasTouchControls)
+		{
+			this.controllsSprite = Art.getSprite(Art.INSTRUCTIONS_TOUCH);
+			this.confirmSprite = Art.getSprite(Art.START_GAME_CONFIRM_TOUCH);
+		}
+		else
+		{
+			this.controllsSprite = Art.getSprite(Art.INSTRUCTIONS_CONTROLLER);
+			this.confirmSprite = Art.getSprite(Art.START_GAME_CONFIRM);
+		}
+		
+		this.controllsSprite.setPosition(0.0f, 0.0f);
+		this.confirmSprite.setPosition(0.0f, 0.0f);
 	}
 
+	private BitmapFont font = new BitmapFont();
+	
 	@Override
 	protected void renderUpdates(float delta) {
 
-		this.teamSelectLayout.teamSelectArea.displayNumbersInTeam(new BitmapFont(), spriteBatch);
+		this.controllsSprite.draw(spriteBatch);
+		
+		this.teamSelectLayout.teamSelectArea.displayNumbersInTeam(font, spriteBatch);
+		
+		if(menuMode)
+		{
+			this.confirmSprite.draw(spriteBatch);
+		}
 		
 	}
 
@@ -120,13 +145,13 @@ public class TeamSelectScreen extends GenericScreen
 		
 		if(menuMode)
 		{
-			for (PlayerInfo player : this.game.controllerManager.getPlayers())
+			for (IControls cont : this.game.controllerManager.allControls)
 			{
-				if(player.controls.getConfirmStatus())
+				if(cont.getConfirmStatus())
 				{
 					handleStartNextScreen();
 				}
-				else if (player.controls.getBackStatus())
+				else if (cont.getBackStatus())
 				{
 					handleQuitToLastScreen();
 				}
@@ -137,11 +162,6 @@ public class TeamSelectScreen extends GenericScreen
 	
 	private void handleStartNextScreen()
 	{
-		if(this.game.controllerManager.hasTouchControls)
-		{
-			createAIPlayer(Team.Away);
-		}
-		
 		//Remove players who are not active, assign active ones to right team
 		
 		
@@ -179,23 +199,27 @@ public class TeamSelectScreen extends GenericScreen
 			aiCoolDown -= delta;
 		}
 		
-		if(Gdx.input.isKeyPressed(Input.Keys.NUM_0) && aiCoolDown <= 0)
+		for (IControls cont : this.game.controllerManager.allControls)
 		{
-			aiCoolDown = 0.5f;
-			createAIPlayer(Team.Away);
+			if(cont.getExtraButton1Status())
+			{
+				//aiCoolDown = 0.2f;
+				createAIPlayer(Team.Home);
+			}
+			else if (cont.getExtraButton2Status())
+			{
+				//aiCoolDown = 0.2f;
+				createAIPlayer(Team.Away);
+			}
 		}
-		
-		if(Gdx.input.isKeyPressed(Input.Keys.NUM_9) && aiCoolDown <= 0)
-		{
-			aiCoolDown = 0.5f;
-			createAIPlayer(Team.Home);
-		}
+
     }
 	
 	private void createAIPlayer(Team team)
 	{
 		
 		SimpleAi ai = new SimpleAi();
+		ai.team = team;
 		this.game.controllerManager.addAi(ai, team);
 		
 	}

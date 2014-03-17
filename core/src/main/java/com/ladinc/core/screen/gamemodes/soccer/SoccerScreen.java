@@ -8,9 +8,11 @@ import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.assets.CarsHelper;
+import com.ladinc.core.collision.CollisionHelper;
 import com.ladinc.core.objects.balls.Ball;
 import com.ladinc.core.screen.gamemodes.GenericLayout;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
+import com.ladinc.core.screen.gamemodes.carpool.CarPoolScreen;
 import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.vehicles.Vehicle;
 
@@ -67,6 +69,12 @@ public class SoccerScreen extends GenericScreen
 				screenHeight - 10);
 	}
 	
+	private void handleWin()
+	{
+    	this.gameOverCoolOffTimer = 5.0f;
+    	this.proccessingGameOver = true;
+	}
+	
 	private String calculateTimeLeft(float secondsPast)
 	{
 		if (secondsLeft != 0)
@@ -76,6 +84,10 @@ public class SoccerScreen extends GenericScreen
 			{
 				secondsLeft = 0;
 			}
+		}
+		else if(!this.proccessingGameOver)
+		{
+			handleWin();
 		}
 		
 		int minutes = (int) secondsLeft / 60;
@@ -89,6 +101,10 @@ public class SoccerScreen extends GenericScreen
 	@Override
 	public void initGame()
 	{
+		this.colHelper = new CollisionHelper();
+		world.setContactListener(this.colHelper);
+		colh = (CollisionHelper)this.colHelper;
+		
 		this.soccerLayout.createGoals(world, BALL_SIZE*2);
 		
 		this.backgroundSprite = this.soccerLayout.getPitchSprite();
@@ -127,10 +143,36 @@ public class SoccerScreen extends GenericScreen
 		return ballSprite;
 	}
 
+	CollisionHelper colh;
+	
 	@Override
 	public void customRender(float delta) 
 	{
 		this.ball.update();
+		
+		if(!this.proccessingGameOver)
+		{
+			if(colh.newScore)
+			{
+				if(processingGoal)
+				{
+					//not interested in goals scored during processing goals
+					colh.newScore = false;
+				}
+				else
+				{
+					handleGoalScored();
+				}
+			}
+			
+		}
+		else
+		{
+			if(processGameOverTimer(delta))
+			{
+				handleGameOver();
+			}
+		}
 		
 		if(processingGoal)
 		{
@@ -145,19 +187,12 @@ public class SoccerScreen extends GenericScreen
 			}
 		}
 		
-		if(this.colHelper.newScore)
-		{
-			if(processingGoal)
-			{
-				//not interested in goals scored during processing goals
-				this.colHelper.newScore = false;
-			}
-			else
-			{
-				handleGoalScored();
-			}
-		}
-		
+	}
+	
+	private void handleGameOver()
+	{
+		this.game.setScreen(new CarPoolScreen(game));
+		dispose();
 	}
 	
 	private void resetPlayersAndBall()
@@ -178,7 +213,8 @@ public class SoccerScreen extends GenericScreen
 		
 		for (SimpleAi ai : this.game.controllerManager.getAi())
 		{
-			ai.setDesiredPosition(aiMove);
+			//ai.setDesiredPosition(aiMove);
+			ai.setDesiredCoOrd(this.aiMove.position);
 			ai.calculateMove(delta);
 		}
 	}
@@ -187,7 +223,7 @@ public class SoccerScreen extends GenericScreen
     private boolean processingGoal = false;
     private void handleGoalScored()
     {
-    	if(this.colHelper.getLastScored() == Team.Home)
+    	if(colh.getLastScored() == Team.Home)
     	{
     		//Goal was in home's new, goal for away team
     		awayScore ++;

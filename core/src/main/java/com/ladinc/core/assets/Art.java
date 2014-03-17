@@ -19,8 +19,14 @@ public class Art {
 	public static final String IDENTIFIER = "IDENTIFIER";
 	
 	public static final String SOCCER_PITCH = "SOCCER_PITCH";
-	public static final String TEAM_SELECT_AREA = "TEAM_SELECT_AREA";
 	public static final String TOUCH_OVERLAY = "TOUCH_OVERLAY";
+	
+	//Team Select
+	public static final String TEAM_SELECT_AREA = "TEAM_SELECT_AREA";
+	public static final String START_GAME_CONFIRM = "START_GAME_CONFIRM";
+	public static final String START_GAME_CONFIRM_TOUCH = "START_GAME_CONFIRM_TOUCH";
+	public static final String INSTRUCTIONS_CONTROLLER = "INSTRUCTIONS_CONTROLLER";
+	public static final String INSTRUCTIONS_TOUCH = "INSTRUCTIONS_TOUCH";
 	
 	//Car Pool
 	
@@ -38,13 +44,18 @@ public class Art {
 		textureTable.put(LOGO,
 				new Texture(Gdx.files.internal("libgdx-logo.png")));
 		textureTable.put(BALLS, new Texture(Gdx.files.internal("balls.png")));
-		textureTable.put(CARS, new Texture(Gdx.files.internal("CarSpritesheet.png")));
+		textureTable.put(CARS, new Texture(Gdx.files.internal("Vehicles/CarSpritesheet.png")));
 		textureTable.put(SOCCER_PITCH, new Texture(Gdx.files.internal("SocCar/GreenPitch.jpg")));
-		textureTable.put(TEAM_SELECT_AREA, new Texture(Gdx.files.internal("teamSelect.png")));
-		textureTable.put(WHEELS, new Texture(Gdx.files.internal("Wheel.png")));
+		textureTable.put(WHEELS, new Texture(Gdx.files.internal("Vehicles/Wheel.png")));
 		textureTable.put(IDENTIFIER, new Texture(Gdx.files.internal("Identfiers.png")));
 		textureTable.put(TOUCH_OVERLAY, new Texture(Gdx.files.internal("touchOverlay.png")));
 		textureTable.put(POOL_TABLE, new Texture(Gdx.files.internal("CarPool/carsnu.png")));
+		
+		textureTable.put(TEAM_SELECT_AREA, new Texture(Gdx.files.internal("TeamSelect/teamSelect.png")));
+		textureTable.put(START_GAME_CONFIRM, new Texture(Gdx.files.internal("TeamSelect/StartGameConfirmDialog.png")));
+		textureTable.put(START_GAME_CONFIRM_TOUCH, new Texture(Gdx.files.internal("TeamSelect/StartGameConfirmDialogTouch.png")));
+		textureTable.put(INSTRUCTIONS_CONTROLLER, new Texture(Gdx.files.internal("TeamSelect/teamSelectControls.png")));
+		textureTable.put(INSTRUCTIONS_TOUCH, new Texture(Gdx.files.internal("TeamSelect/teamSelectTouchControlls.png")));
 	}
 	
 	public static Sprite getTouchOverlay()
@@ -73,6 +84,16 @@ public class Art {
 		sprite.setPosition(PIXELS_PER_METER * body.getPosition().x - sprite.getWidth()/2,
 				PIXELS_PER_METER * body.getPosition().y  - sprite.getHeight()/2);
 		sprite.setRotation((MathUtils.radiansToDegrees * body.getAngle()));
+	}
+	
+	public static Sprite getSprite(String str)
+	{
+		if(!spriteTable.containsKey(str))
+		{
+			spriteTable.put(str, new Sprite(Art.textureTable.get(str)));
+		}
+		
+		return spriteTable.get(str);
 	}
 	
 }

@@ -19,6 +19,7 @@ import com.ladinc.core.utilities.Enums.Team;
 public class MyControllerManager {
 	
 	public ArrayList<IControls> inActiveControls;
+	public ArrayList<IControls> allControls;
 	private ArrayList<PlayerInfo> players;
 	private ArrayList<SimpleAi> ai;
 	
@@ -26,6 +27,7 @@ public class MyControllerManager {
 	
 	public MyControllerManager() {
 		inActiveControls = new ArrayList<IControls>();
+		allControls = new ArrayList<IControls>();
 		players = new ArrayList<PlayerInfo>();
 		ai = new ArrayList<SimpleAi>();
 		
@@ -66,17 +68,23 @@ public class MyControllerManager {
 		{
 			Gdx.app.debug("ControllerManager", "keyboard");
 			KeyboardAndMouseListener keyboardAndMouseListener = new KeyboardAndMouseListener();
-			inActiveControls.add(keyboardAndMouseListener.controls);
+			addNewController(keyboardAndMouseListener.controls);
 			Gdx.input.setInputProcessor(keyboardAndMouseListener);
 		}
-		else if(Gdx.app.getType() == ApplicationType.Android)
+		else if(Gdx.app.getType() == ApplicationType.Android && !Ouya.runningOnOuya)
 		{
 			TouchScreenListener tsl = new TouchScreenListener();
-			inActiveControls.add(tsl.controls);
+			addNewController(tsl.controls);
 			Gdx.input.setInputProcessor(tsl);
 			
 			hasTouchControls = true;
 		}
+	}
+	
+	private void addNewController(IControls cont)
+	{
+		this.inActiveControls.add(cont);
+		this.allControls.add(cont);
 	}
 	
 	public void addControllerToList(Controller controller)
@@ -92,7 +100,7 @@ public class MyControllerManager {
 				
 				XboxListener xboxListener = new XboxListener();
 				controller.addListener(xboxListener);
-				inActiveControls.add(xboxListener.controls);
+				addNewController(xboxListener.controls);
 				
 				break;
 			case Android:
@@ -104,7 +112,7 @@ public class MyControllerManager {
 					
 					 OuyaListener ouyaListener = new OuyaListener();
 					 controller.addListener(ouyaListener);
-					 inActiveControls.add(ouyaListener.controls);
+					 addNewController(ouyaListener.controls);
 				}
 				break;
 			case WebGL:

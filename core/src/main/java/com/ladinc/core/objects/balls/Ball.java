@@ -19,7 +19,7 @@ public class Ball {
 	public float ballSize = 2f;
 	protected float density = 0.25f;
 	protected float slowDownMultiplier = 0.75f;
-	protected float linDamp = 01.f;
+	protected float linDamp = 0.2f;
 	public static final float ballOffsetX = 0f;
 	public Sprite sprite;
 	
@@ -34,8 +34,6 @@ public class Ball {
 		this.ballSize = ballSize;
 		this.linDamp = linDamp;
 		createBallObject(world, x, y, ballSprite, false);
-		
-		this.body.setLinearDamping(linDamp);
 	}
 	
 	public Ball(World world, float x, float y, Sprite ballSprite) {
@@ -69,6 +67,8 @@ public class Ball {
 		this.body.setUserData(new CollisionInfo("Ball", CollisionObjectType.Ball));
 		
 		dynamicCircle.dispose();
+		
+		this.body.setLinearDamping(linDamp);
 	}
 	
 	public Vector2 getLocalVelocity()
