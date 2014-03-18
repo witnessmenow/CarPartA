@@ -9,16 +9,22 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.joints.PrismaticJointDef;
 import com.ladinc.core.assets.Art;
+import com.ladinc.core.collision.CollisionInfo;
+import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
 import com.ladinc.core.controllers.controls.IControls;
 import com.ladinc.core.player.PlayerInfo;
 
 public class Vehicle {
 
 	public Body body;
+	public Body sensorBody;
 	float width, length, angle, maxSteerAngle, maxSpeed, power;
 	float wheelAngle;
 	public int steer, accelerate;
@@ -64,6 +70,37 @@ public class Vehicle {
 		carShape.setAsBox(this.width / 2, this.length / 2);
 		fixtureDef.shape = carShape;
 		this.body.createFixture(fixtureDef);
+		
+		createSensorBody(world);
+		
+	}
+	
+	private void createSensorBody(World world)
+	{
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyType.DynamicBody;
+		bodyDef.position.set(position);
+		
+		this.sensorBody = world.createBody(bodyDef);
+
+		PolygonShape sensorShape = new PolygonShape();
+		sensorShape.setAsBox(this.width / 4, this.length / 4);
+		
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.density = 1f;
+		fixtureDef.isSensor=true;
+		fixtureDef.shape = sensorShape;
+		
+		this.sensorBody.createFixture(fixtureDef);
+
+	    PrismaticJointDef jointdef=new PrismaticJointDef();
+        jointdef.initialize(this.body, this.sensorBody, this.sensorBody.getWorldCenter(), new Vector2(1, 1));
+        jointdef.enableLimit=true;
+        jointdef.lowerTranslation=jointdef.upperTranslation=0;
+	    world.createJoint(jointdef);
+	    
+	    this.sensorBody.setUserData(new CollisionInfo("", CollisionObjectType.BallSensor, this));
+		
 	}
 	
 	public void resetPositionToStart()
