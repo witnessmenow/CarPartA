@@ -18,10 +18,12 @@ import com.ladinc.core.vehicles.Vehicle;
 
 public class SoccerScreen extends GenericScreen 
 {
-	private float secondsLeft = 180;
+	private float secondsLeft = 120;
 	private int homeScore = 0;
 	private int awayScore = 0;
 	private Ball ball;
+	
+	private Sprite goalMessageSprite;
 	
 	private SoccerLayout soccerLayout;
 	
@@ -52,6 +54,14 @@ public class SoccerScreen extends GenericScreen
 		Art.updateSprite(this.ball.sprite, spriteBatch, PIXELS_PER_METER, this.ball.body);
 		updateTimer(delta);
 		updateScore();
+		if(this.proccessingGameOver)
+		{
+			this.finishMessage.draw(spriteBatch);
+		}
+		else if(processingGoal)
+		{
+			this.goalMessageSprite.draw(spriteBatch);
+		}
 	}
 	
 	private void updateTimer(float delta)
@@ -108,6 +118,9 @@ public class SoccerScreen extends GenericScreen
 		this.soccerLayout.createGoals(world, BALL_SIZE*2);
 		
 		this.backgroundSprite = this.soccerLayout.getPitchSprite();
+		this.backgroundSprite.setPosition(0.0f, 0.0f);
+		
+		this.goalMessageSprite = Art.getSprite(Art.GOAL_OVERLAY);
 		this.backgroundSprite.setPosition(0.0f, 0.0f);
 		
 		assignTeamSpritesToCars();

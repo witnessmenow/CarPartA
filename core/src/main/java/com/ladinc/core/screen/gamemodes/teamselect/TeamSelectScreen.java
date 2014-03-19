@@ -186,8 +186,8 @@ public class TeamSelectScreen extends GenericScreen
 			}
 		}
 		
-		//game.setScreen(new SoccerScreen(game));
-		game.setScreen(new CarPoolScreen(game));
+		game.setScreen(new SoccerScreen(game));
+		//game.setScreen(new CarPoolScreen(game));
 		dispose();
 	}
 	

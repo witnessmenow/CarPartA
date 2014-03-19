@@ -33,6 +33,7 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	
 	public Sprite backgroundSprite;
 	public Sprite touchOverlaySprite;
+	public Sprite finishMessage;
 	
 	protected float gameOverCoolOffTimer = 0f;
     protected boolean proccessingGameOver = false;
@@ -56,6 +57,8 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		this.camera.setToOrtho(false, this.screenWidth, this.screenHeight);
 		
 		this.touchOverlaySprite = Art.getTouchOverlay();
+		this.finishMessage = Art.getSprite(Art.FINISHED_OVERLAY);
+		this.finishMessage.setPosition(0.0f, 0.0f);
 	}
 	
 	protected boolean allowVehicleControl = true;

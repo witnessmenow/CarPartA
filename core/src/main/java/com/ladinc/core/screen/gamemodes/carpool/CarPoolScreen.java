@@ -134,6 +134,10 @@ public class CarPoolScreen extends GenericScreen
 	protected void renderUpdates(float delta) 
 	{
 		this.carPoolLayout.poolTable.updateBallSprites(spriteBatch, PIXELS_PER_METER);	
+		if(this.proccessingGameOver)
+		{
+			this.finishMessage.draw(spriteBatch);
+		}
 	}
 
 }

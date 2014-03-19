@@ -19,7 +19,11 @@ public class Art {
 	public static final String IDENTIFIER = "IDENTIFIER";
 	
 	public static final String SOCCER_PITCH = "SOCCER_PITCH";
+	public static final String GOAL_OVERLAY = "GOAL_OVERLAY";
+	
+	
 	public static final String TOUCH_OVERLAY = "TOUCH_OVERLAY";
+	public static final String FINISHED_OVERLAY= "FINISHED_OVERLAY";
 	
 	//Team Select
 	public static final String TEAM_SELECT_AREA = "TEAM_SELECT_AREA";
@@ -45,7 +49,7 @@ public class Art {
 				new Texture(Gdx.files.internal("libgdx-logo.png")));
 		textureTable.put(BALLS, new Texture(Gdx.files.internal("balls.png")));
 		textureTable.put(CARS, new Texture(Gdx.files.internal("Vehicles/CarSpritesheet.png")));
-		textureTable.put(SOCCER_PITCH, new Texture(Gdx.files.internal("SocCar/GreenPitch.jpg")));
+	
 		textureTable.put(WHEELS, new Texture(Gdx.files.internal("Vehicles/Wheel.png")));
 		textureTable.put(IDENTIFIER, new Texture(Gdx.files.internal("Identfiers.png")));
 		textureTable.put(TOUCH_OVERLAY, new Texture(Gdx.files.internal("touchOverlay.png")));
@@ -56,6 +60,12 @@ public class Art {
 		textureTable.put(START_GAME_CONFIRM_TOUCH, new Texture(Gdx.files.internal("TeamSelect/StartGameConfirmDialogTouch.png")));
 		textureTable.put(INSTRUCTIONS_CONTROLLER, new Texture(Gdx.files.internal("TeamSelect/teamSelectControls.png")));
 		textureTable.put(INSTRUCTIONS_TOUCH, new Texture(Gdx.files.internal("TeamSelect/teamSelectTouchControlls.png")));
+		
+		textureTable.put(SOCCER_PITCH, new Texture(Gdx.files.internal("SocCar/GreenPitch.jpg")));
+		textureTable.put(GOAL_OVERLAY, new Texture(Gdx.files.internal("SocCar/GoalOverlay.png")));
+		
+		textureTable.put(FINISHED_OVERLAY, new Texture(Gdx.files.internal("FinishedOverlay.png")));
+		
 	}
 	
 	public static Sprite getTouchOverlay()
