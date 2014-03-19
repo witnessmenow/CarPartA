@@ -19,7 +19,7 @@ public class Wheel {
 	 * Common practice is to use a constant to convert pixels to and from
 	 * "meters".
 	 */
-	public static final float PIXELS_PER_METER = 60.0f;
+	//public static final float PIXELS_PER_METER = 60.0f;
 
 	public Vehicle vehcile ;//vehicle this wheel belongs to	
 	private float width; // width in meters
@@ -27,6 +27,8 @@ public class Wheel {
 	public boolean revolving; // does this wheel revolve when steering?
 	public boolean powered; // is this wheel powered?
 	public Body body;
+	
+	private float posX, posY;
 
 	public Sprite sprite;
 
@@ -40,43 +42,51 @@ public class Wheel {
 		this.powered = powered;
 
 		this.sprite = wheelSprite;
+		
+		this.posX = posX;
+		this.posY = posY;
 
+		createWheelBody(world);
+	}
+	
+	public void createWheelBody(World world)
+	{
 		//init body 
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyDef.BodyType.DynamicBody;
-		bodyDef.position.set(vehcile.body.getWorldPoint(new Vector2(posX, posY)));
-		bodyDef.angle = vehcile.body.getAngle();
-		this.body = world.createBody(bodyDef);
+				BodyDef bodyDef = new BodyDef();
+				bodyDef.type = BodyDef.BodyType.DynamicBody;
+				bodyDef.position.set(vehcile.body.getWorldPoint(new Vector2(posX, posY)));
+				bodyDef.angle = vehcile.body.getAngle();
+				this.body = world.createBody(bodyDef);
 
-		//init shape
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.density = 1.0f;
-		fixtureDef.isSensor=true; //wheel does not participate in collision calculations: resulting complications are unnecessary
-		PolygonShape wheelShape = new PolygonShape();
-		wheelShape.setAsBox(this.width/2, this.length/2);
-		fixtureDef.shape = wheelShape;
-		this.body.createFixture(fixtureDef);
-		wheelShape.dispose();
+				//init shape
+				FixtureDef fixtureDef = new FixtureDef();
+				fixtureDef.density = 1.0f;
+				fixtureDef.isSensor=true; //wheel does not participate in collision calculations: resulting complications are unnecessary
+				PolygonShape wheelShape = new PolygonShape();
+				wheelShape.setAsBox(this.width/2, this.length/2);
+				fixtureDef.shape = wheelShape;
+				this.body.createFixture(fixtureDef);
+				wheelShape.dispose();
 
-	    //create joint to connect wheel to body
-	    if(this.revolving){
-	    	RevoluteJointDef jointdef=new RevoluteJointDef();
-	        jointdef.initialize(this.vehcile.body, this.body, this.body.getWorldCenter());
-	        jointdef.enableMotor=false; //we'll be controlling the wheel's angle manually
-		    world.createJoint(jointdef);
-	    }else{
-//	    	PrismaticJointDef jointdef=new PrismaticJointDef();
-//	        jointdef.initialize(this.vehcile.body, this.body, this.body.getWorldCenter(), new Vector2(1, 0));
-//	        jointdef.enableMotor=false;
-//	        jointdef.enableLimit=true;
-//	        jointdef.lowerTranslation=jointdef.upperTranslation=0;
-//		    world.createJoint(jointdef);
-	    	
-	    	RevoluteJointDef jointdef=new RevoluteJointDef();
-	        jointdef.initialize(this.vehcile.body, this.body, this.body.getWorldCenter());
-	        jointdef.enableMotor=false; //we'll be controlling the wheel's angle manually
-		    world.createJoint(jointdef);
-	    }
+			    //create joint to connect wheel to body
+			    if(this.revolving){
+			    	RevoluteJointDef jointdef=new RevoluteJointDef();
+			        jointdef.initialize(this.vehcile.body, this.body, this.body.getWorldCenter());
+			        jointdef.enableMotor=false; //we'll be controlling the wheel's angle manually
+				    world.createJoint(jointdef);
+			    }else{
+//			    	PrismaticJointDef jointdef=new PrismaticJointDef();
+//			        jointdef.initialize(this.vehcile.body, this.body, this.body.getWorldCenter(), new Vector2(1, 0));
+//			        jointdef.enableMotor=false;
+//			        jointdef.enableLimit=true;
+//			        jointdef.lowerTranslation=jointdef.upperTranslation=0;
+//				    world.createJoint(jointdef);
+			    	
+			    	RevoluteJointDef jointdef=new RevoluteJointDef();
+			        jointdef.initialize(this.vehcile.body, this.body, this.body.getWorldCenter());
+			        jointdef.enableMotor=false; //we'll be controlling the wheel's angle manually
+				    world.createJoint(jointdef);
+			    }
 	}
 
 	public void setAngle (float angle){

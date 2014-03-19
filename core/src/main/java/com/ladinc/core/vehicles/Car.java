@@ -14,6 +14,8 @@ public class Car extends Vehicle {
 	public Car(PlayerInfo player, World world, StartingPosition position, Sprite carSprite, Sprite wheelSprite) 
 	{
 		super();
+		
+		this.world = world;
 
 		//TODO: Default Car Settings - Should be read from config?
 		//Size
@@ -25,8 +27,8 @@ public class Car extends Vehicle {
 		this.maxSpeed = 350f;
 		this.power = 500f;
 
-		float wheelWidth = 1f;
-		float wheelLength = 2f;
+		this.wheelWidth = 1f;
+		this.wheelLength = 2f;
 
 		this.player = player;
 		if(player != null)
@@ -56,14 +58,9 @@ public class Car extends Vehicle {
 //		this.body.setUserData(new CollisionInfo(collisionText, CollisionObjectType.car, team));
 
 		//initialize wheels
-		float wheelXPos = this.width/2;
-		float wheelYPos = (0.6f) * this.length/2;
-
-		this.wheels = new ArrayList<Wheel>();
-		this.wheels.add(new Wheel(world, this, -(wheelXPos), (-wheelYPos), wheelWidth, wheelLength, true,  true, wheelSprite)); //top left
-		this.wheels.add(new Wheel(world, this, (wheelXPos), (-wheelYPos), wheelWidth, wheelLength, true,  true, wheelSprite)); //top right
-		this.wheels.add(new Wheel(world, this, -(wheelXPos), wheelYPos, wheelWidth, wheelLength, false,  false, wheelSprite)); //back left
-		this.wheels.add(new Wheel(world, this, (wheelXPos), wheelYPos, wheelWidth, wheelLength, false,  false, wheelSprite)); //back right
+		this.wheelSprite = wheelSprite;
+		createWheels();
+		
 
 
 		this.sprite = carSprite;

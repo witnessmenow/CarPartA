@@ -41,8 +41,8 @@ public class CollisionHelper implements ContactListener
         	
         	Gdx.app.debug("beginContact", "between " + bodyAInfo.type.toString() + " and " + bodyBInfo.type.toString());
         	
-        	if((bodyAInfo.type == CollisionObjectType.ScoreZone && bodyBInfo.type == CollisionObjectType.Ball) || 
-        			(bodyAInfo.type == CollisionObjectType.Ball && bodyBInfo.type == CollisionObjectType.ScoreZone))
+        	
+        	if(CollisionHelper.checkIfCollisionIsOfCertainBodies(bodyAInfo, bodyBInfo, CollisionObjectType.ScoreZone, CollisionObjectType.Ball))
         	{
 
         		//Goal Scored
@@ -103,6 +103,11 @@ public class CollisionHelper implements ContactListener
 	public void postSolve(Contact contact, ContactImpulse impulse) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public static boolean checkIfCollisionIsOfCertainBodies(CollisionInfo bodyAInfo, CollisionInfo bodyBInfo, CollisionObjectType type1, CollisionObjectType type2)
+	{
+		return (bodyAInfo.type == type1 && bodyBInfo.type == type2) || (bodyAInfo.type == type2 && bodyBInfo.type == type1);
 	}
 
 }

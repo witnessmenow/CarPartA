@@ -25,7 +25,10 @@ public class Vehicle {
 
 	public Body body;
 	public Body sensorBody;
-	float width, length, angle, maxSteerAngle, maxSpeed, power;
+	
+	public World world;
+	
+	float width, length, angle, maxSteerAngle, maxSpeed, power, wheelWidth, wheelLength;
 	float wheelAngle;
 	public int steer, accelerate;
 	public Vector2 position;
@@ -45,12 +48,20 @@ public class Vehicle {
 	public static final int ACC_NONE = 0;
 	public static final int ACC_ACCELERATE = 1;
 	public static final int ACC_BRAKE = 2;
+	
+	public float respawnTimeRemaining = 0.0f;
 
+	private boolean vehicleDestroyed = false;
+	
 	public Sprite sprite;
+	public Sprite wheelSprite;
 
 	private boolean handBrake;
 
-	public void createBody(World world) {
+	public void createBody(World world) 
+	{
+		this.vehicleDestroyed = false;
+		
 		// init body
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -73,6 +84,18 @@ public class Vehicle {
 		
 		createSensorBody(world);
 		
+	}
+	
+	public void createWheels()
+	{
+		float wheelXPos = this.width/2;
+		float wheelYPos = (0.6f) * this.length/2;
+
+		this.wheels = new ArrayList<Wheel>();
+		this.wheels.add(new Wheel(world, this, -(wheelXPos), (-wheelYPos), wheelWidth, wheelLength, true,  true, wheelSprite)); //top left
+		this.wheels.add(new Wheel(world, this, (wheelXPos), (-wheelYPos), wheelWidth, wheelLength, true,  true, wheelSprite)); //top right
+		this.wheels.add(new Wheel(world, this, -(wheelXPos), wheelYPos, wheelWidth, wheelLength, false,  false, wheelSprite)); //back left
+		this.wheels.add(new Wheel(world, this, (wheelXPos), wheelYPos, wheelWidth, wheelLength, false,  false, wheelSprite)); //back right
 	}
 	
 	private void createSensorBody(World world)
@@ -99,7 +122,7 @@ public class Vehicle {
         jointdef.lowerTranslation=jointdef.upperTranslation=0;
 	    world.createJoint(jointdef);
 	    
-	    this.sensorBody.setUserData(new CollisionInfo("", CollisionObjectType.BallSensor, this));
+	    this.sensorBody.setUserData(new CollisionInfo("", CollisionObjectType.VehicleSensor, this));
 		
 	}
 	
@@ -186,8 +209,8 @@ public class Vehicle {
 		this.body.setLinearVelocity(velocity);
 	}
 
-	public void destroyVehicle() {
-		World world = this.body.getWorld();
+	public void destroyVehicle() 
+	{
 
 		// update revolving wheels
 		for (Wheel wheel : this.wheels) {
@@ -195,6 +218,9 @@ public class Vehicle {
 		}
 
 		world.destroyBody(this.body);
+		world.destroyBody(this.sensorBody);
+		
+		this.vehicleDestroyed = true;
 	}
 
 	private Vector2 handleAccelerationOld() {
@@ -290,8 +316,34 @@ public class Vehicle {
 
 	private float backWheelAngle;
 	
-	public void update(float deltaTime) {
-
+	public void update(float deltaTime) 
+	{
+		//check if the vehicle is respawning
+		if(respawnTimeRemaining > 0.0f)
+		{
+			respawnTimeRemaining = respawnTimeRemaining - deltaTime;
+			//The reason im doing the second check here is that car will be updated more often when active
+			//So it reduces the number of if statements checked on a regular render
+			if(respawnTimeRemaining > 0.0f)
+			{
+				if(!this.vehicleDestroyed)
+				{
+					destroyVehicle();
+				}
+				
+				return;
+			}
+			else
+			{
+				if(this.vehicleDestroyed)
+				{
+					createBody(world);
+					createWheels();
+				}
+			}
+			
+		}
+		
 		// 1. KILL SIDEWAYS VELOCITY
 
 		if (false) {
@@ -369,14 +421,19 @@ public class Vehicle {
 
 	}
 
-	public void updateSprite(SpriteBatch spriteBatch, int PIXELS_PER_METER) {
+	public void updateSprite(SpriteBatch spriteBatch, int PIXELS_PER_METER) 
+	{
+		if(!this.vehicleDestroyed)
+		{
 
-		// Update Wheels Sprites
-		for (Wheel wheel : wheels) {
-			wheel.updateSprite(spriteBatch, PIXELS_PER_METER);
+			// Update Wheels Sprites
+			for (Wheel wheel : wheels) 
+			{
+				wheel.updateSprite(spriteBatch, PIXELS_PER_METER);
+			}
+	
+			// Update Car Body Sprite
+			 Art.updateSprite(this.sprite, spriteBatch, PIXELS_PER_METER, this.body);
 		}
-
-		// Update Car Body Sprite
-		 Art.updateSprite(this.sprite, spriteBatch, PIXELS_PER_METER, this.body);
 	}
 }

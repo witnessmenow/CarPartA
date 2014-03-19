@@ -7,12 +7,15 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.ladinc.core.collision.CollisionHelper;
 import com.ladinc.core.collision.CollisionInfo;
 import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
 import com.ladinc.core.objects.balls.PoolBall;
+import com.ladinc.core.vehicles.Vehicle;
 
 public class CarPoolColisionHelper implements ContactListener
 {
+	public static final float RESPAWN_TIME = 5.0f;
 
 	@Override
 	public void beginContact(Contact contact) 
@@ -29,8 +32,7 @@ public class CarPoolColisionHelper implements ContactListener
         	
         	Gdx.app.debug("beginContact", "between " + bodyAInfo.type.toString() + " and " + bodyBInfo.type.toString());
         	
-        	if((bodyAInfo.type == CollisionObjectType.Pocket && bodyBInfo.type == CollisionObjectType.BallSensor) || 
-        			(bodyAInfo.type == CollisionObjectType.BallSensor && bodyBInfo.type == CollisionObjectType.Pocket))
+        	if(CollisionHelper.checkIfCollisionIsOfCertainBodies(bodyAInfo, bodyBInfo, CollisionObjectType.Pocket, CollisionObjectType.BallSensor))
         	{
         		
         		if(bodyAInfo.type == CollisionObjectType.BallSensor)
@@ -47,6 +49,21 @@ public class CarPoolColisionHelper implements ContactListener
 
         		
         	}
+        	else if(CollisionHelper.checkIfCollisionIsOfCertainBodies(bodyAInfo, bodyBInfo, CollisionObjectType.Pocket, CollisionObjectType.VehicleSensor))
+        	{
+        		if(bodyAInfo.type == CollisionObjectType.VehicleSensor)
+        		{
+        			Vehicle v = (Vehicle)bodyAInfo.object;
+        			v.respawnTimeRemaining = RESPAWN_TIME;
+        		}
+        		
+        		if(bodyBInfo.type == CollisionObjectType.VehicleSensor)
+        		{
+        			Vehicle v = (Vehicle)bodyBInfo.object;
+        			v.respawnTimeRemaining = RESPAWN_TIME;
+        		}
+        	}
+        	
         	//Check for collision of two Vehicles
         	if(bodyAInfo.type == CollisionObjectType.Vehicle && bodyBInfo.type == CollisionObjectType.Vehicle)
         	{
