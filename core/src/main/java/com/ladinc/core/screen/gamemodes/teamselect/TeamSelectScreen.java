@@ -10,6 +10,7 @@ import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.assets.CarsHelper;
+import com.ladinc.core.assets.Font;
 import com.ladinc.core.controllers.controls.IControls;
 import com.ladinc.core.player.PlayerInfo;
 import com.ladinc.core.screen.gamemodes.GenericLayout;
@@ -25,6 +26,9 @@ public class TeamSelectScreen extends GenericScreen
 	
 	private Sprite confirmSprite;
 	private Sprite controllsSprite;
+	
+	public int aIHomeTeam = 0;
+	public int aIAwayTeam = 0;
 	
 	//Need a better place for this!
 	private static final int MAX_PLAYERS = 8;
@@ -65,6 +69,8 @@ public class TeamSelectScreen extends GenericScreen
 	@Override
 	public void initGame() 
 	{
+		font = Font.fontTable.get(Font.CONST_50);
+		
 		this.game.controllerManager.resetActiveStateOfControllers();
 		
 		this.backgroundSprite = this.teamSelectLayout.getTeamAreaSprite();
@@ -85,14 +91,15 @@ public class TeamSelectScreen extends GenericScreen
 		this.confirmSprite.setPosition(0.0f, 0.0f);
 	}
 
-	private BitmapFont font = new BitmapFont();
+	private BitmapFont font;
+	
 	
 	@Override
 	protected void renderUpdates(float delta) {
 
 		this.controllsSprite.draw(spriteBatch);
 		
-		this.teamSelectLayout.teamSelectArea.displayNumbersInTeam(font, spriteBatch);
+		this.teamSelectLayout.teamSelectArea.displayNumbersInTeam(font, spriteBatch, this.aIHomeTeam, this.aIAwayTeam);
 		
 		if(menuMode)
 		{
@@ -205,11 +212,13 @@ public class TeamSelectScreen extends GenericScreen
 			{
 				//aiCoolDown = 0.2f;
 				createAIPlayer(Team.Home);
+				this.aIHomeTeam++;
 			}
 			else if (cont.getExtraButton2Status())
 			{
 				//aiCoolDown = 0.2f;
 				createAIPlayer(Team.Away);
+				this.aIAwayTeam++;
 			}
 		}
 
@@ -244,8 +253,16 @@ public class TeamSelectScreen extends GenericScreen
 	}
 
 	@Override
-	public void preCarRender(float delta) {
-		// TODO Auto-generated method stub
+	public void preCarRender(float delta) 
+	{
+		if(this.teamSelectLayout.teamSelectArea.carsInHomeArea + this.teamSelectLayout.teamSelectArea.carsInAwayArea == 0)
+		{
+			this.teamSelectLayout.teamSelectArea.displayMessageInSelectArea(font, spriteBatch, "Drive Into An Area To Join A Team!");
+		}
+		else
+		{
+			this.teamSelectLayout.teamSelectArea.displayMessageInSelectArea(font, spriteBatch, "Press Start When All Players Are Ready");
+		}
 		
 	}
 

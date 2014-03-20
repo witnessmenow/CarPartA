@@ -70,6 +70,7 @@ public class MyControllerManager {
 			KeyboardAndMouseListener keyboardAndMouseListener = new KeyboardAndMouseListener();
 			addNewController(keyboardAndMouseListener.controls);
 			Gdx.input.setInputProcessor(keyboardAndMouseListener);
+			
 		}
 		else if(Gdx.app.getType() == ApplicationType.Android && !Ouya.runningOnOuya)
 		{

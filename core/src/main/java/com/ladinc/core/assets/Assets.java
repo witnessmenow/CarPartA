@@ -6,5 +6,6 @@ public class Assets {
 		Art.load();
 		Audio.load();
 		Setting.load();
+		Font.load();
 	}
 }

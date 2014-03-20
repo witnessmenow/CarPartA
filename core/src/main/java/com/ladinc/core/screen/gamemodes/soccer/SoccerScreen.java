@@ -8,6 +8,7 @@ import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.assets.CarsHelper;
+import com.ladinc.core.assets.Font;
 import com.ladinc.core.collision.CollisionHelper;
 import com.ladinc.core.objects.balls.Ball;
 import com.ladinc.core.screen.gamemodes.GenericLayout;
@@ -29,7 +30,7 @@ public class SoccerScreen extends GenericScreen
 	
 	private static final float BALL_SIZE  = 2.5f;
 	
-	BitmapFont bitmapFont = new BitmapFont();
+	BitmapFont bitmapFont;
 	
 	public SoccerScreen(CarPartA game) {
 		super(game);
@@ -64,18 +65,22 @@ public class SoccerScreen extends GenericScreen
 		}
 	}
 	
+	private String timeLeft;
 	private void updateTimer(float delta)
 	{
 		bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-		bitmapFont.draw(spriteBatch, calculateTimeLeft(delta),
-				(screenWidth / 2) - 15, screenHeight - 10);
+		
+		timeLeft = calculateTimeLeft(delta);
+		
+		bitmapFont.draw(spriteBatch, timeLeft,
+				(screenWidth / 2) - bitmapFont.getBounds(timeLeft).width/2, screenHeight - 10);
 	}
 	
 	private void updateScore()
-	{
-		bitmapFont.draw(spriteBatch, "" + homeScore, (screenWidth / 2) - 50,
+	{	
+		bitmapFont.draw(spriteBatch, "" + homeScore, (screenWidth / 2) - 100 - bitmapFont.getBounds(String.valueOf(homeScore)).width/2,
 				screenHeight - 10);
-		bitmapFont.draw(spriteBatch, "" + awayScore, (screenWidth / 2) + 50,
+		bitmapFont.draw(spriteBatch, "" + awayScore, (screenWidth / 2) + 100 - bitmapFont.getBounds(String.valueOf(homeScore)).width/2,
 				screenHeight - 10);
 	}
 	
@@ -111,6 +116,8 @@ public class SoccerScreen extends GenericScreen
 	@Override
 	public void initGame()
 	{
+		bitmapFont = Font.fontTable.get(Font.CONST_50);
+		
 		this.colHelper = new CollisionHelper();
 		world.setContactListener(this.colHelper);
 		colh = (CollisionHelper)this.colHelper;

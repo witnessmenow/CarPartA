@@ -43,7 +43,9 @@ public class TeamSelectArea
 		this.homeTextX = (gapFromOuterEdge + ((worldWidth/4)-gapFromOuterEdge)/2)*10;
 		this.awayTextX = (worldWidth*10)-homeTextX;
 		
-		this.commonTextY = ((worldHeight/2)*10) + 50; 		
+		this.commonTextY = ((worldHeight/2)*10) + 50; 	
+		
+		this.aIYText = 60.0f;
 	}
 	
 	private void createOuterWalls(World world, float worldWidth, float worldHeight, Vector2 center, float gapFromOuterEdge)
@@ -114,17 +116,40 @@ public class TeamSelectArea
 		}
 	}
 	
-	public void displayNumbersInTeam(BitmapFont font, SpriteBatch spriteBatch)
+	private float aIYText;
+	public void displayNumbersInTeam(BitmapFont font, SpriteBatch spriteBatch, int aIHome, int aIAway)
 	{
 		String blueMessage = String.valueOf(this.carsInHomeArea) + " HOME";
 		//Set for blue
-		font.setColor(0f, 0f, 1f, 1.0f);
+		font.setColor(0.3f, 0.5f, 1f, 1.0f);
         font.draw(spriteBatch, blueMessage, homeTextX - font.getBounds(blueMessage).width/2, commonTextY);
         
       //Set for red
         String redMessage = String.valueOf(this.carsInAwayArea) + " AWAY";
       	font.setColor(1f, 0f, 0f, 1.0f);
         font.draw(spriteBatch, redMessage, awayTextX - font.getBounds(redMessage).width/2, commonTextY);
+        
+        if(aIHome> 0)
+        {
+        	blueMessage = String.valueOf(aIHome) + " AI";
+        	//Set for blue
+    		font.setColor(0.3f, 0.5f, 1f, 1.0f);
+            font.draw(spriteBatch, blueMessage, homeTextX - font.getBounds(blueMessage).width/2, aIYText);
+        }
+        
+        if(aIAway > 0 )
+        {
+        	redMessage = String.valueOf(aIAway) + " AI";
+        	//Set for red
+          	font.setColor(1f, 0f, 0f, 1.0f);
+            font.draw(spriteBatch, redMessage, awayTextX - font.getBounds(redMessage).width/2, aIYText);
+        }
+	}
+	
+	public void displayMessageInSelectArea(BitmapFont font, SpriteBatch spriteBatch, String message)
+	{
+		font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+        font.draw(spriteBatch, message, (worldWidth/2)*10 - font.getBounds(message).width/2, (worldHeight/5)*10);
 	}
 	
 	public boolean checkVehicleInHomeArea(Vehicle vehicle)
