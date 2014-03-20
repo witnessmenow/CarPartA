@@ -24,6 +24,7 @@ public class Art {
 	
 	public static final String TOUCH_OVERLAY = "TOUCH_OVERLAY";
 	public static final String FINISHED_OVERLAY= "FINISHED_OVERLAY";
+	public static final String DEMO_MESSAGE= "DEMO_MESSAGE";
 	
 	//Team Select
 	public static final String TEAM_SELECT_AREA = "TEAM_SELECT_AREA";
@@ -65,6 +66,7 @@ public class Art {
 		textureTable.put(GOAL_OVERLAY, new Texture(Gdx.files.internal("SocCar/GoalOverlay.png")));
 		
 		textureTable.put(FINISHED_OVERLAY, new Texture(Gdx.files.internal("FinishedOverlay.png")));
+		textureTable.put(DEMO_MESSAGE, new Texture(Gdx.files.internal("DemoWelcomeScreen.png")));
 		
 	}
 	

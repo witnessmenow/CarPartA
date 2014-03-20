@@ -86,7 +86,7 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		
 		for (Vehicle v : this.vehicles)
 		{
-			if(v.player != null)
+			if(v.player != null && !v.getDestroyedStatus())
 			{
 				v.player.drawIndentifier(spriteBatch, PIXELS_PER_METER, v.body);
 			}

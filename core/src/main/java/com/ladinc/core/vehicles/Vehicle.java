@@ -58,6 +58,11 @@ public class Vehicle {
 
 	private boolean handBrake;
 
+	public boolean getDestroyedStatus()
+	{
+		return this.vehicleDestroyed;
+	}
+	
 	public void createBody(World world) 
 	{
 		this.vehicleDestroyed = false;

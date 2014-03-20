@@ -18,6 +18,6 @@ public class CarPartA extends Game {
 		Gdx.app.setLogLevel(Application.LOG_ERROR);
 		Assets.load();
 		controllerManager = new MyControllerManager();
-		setScreen(new TeamSelectScreen(this));
+		setScreen(new MainMenuScreen(this));
 	}
 }

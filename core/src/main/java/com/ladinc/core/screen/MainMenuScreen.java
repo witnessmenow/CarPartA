@@ -6,53 +6,55 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ladinc.core.CarPartA;
+import com.ladinc.core.assets.Art;
 import com.ladinc.core.screen.gamemodes.mazes.MazeScreen;
 import com.ladinc.core.screen.gamemodes.soccer.SoccerScreen;
 import com.ladinc.core.screen.gamemodes.teamselect.TeamSelectScreen;
 
 public class MainMenuScreen implements Screen {
 	private final CarPartA game;
-	private final SpriteBatch batch;
-	private static final int PRESS_SPACEBAR_FOR_SOCCAR = 62;
-	BitmapFont font;
+	private final SpriteBatch spriteBatch;
 	OrthographicCamera camera;
+	Sprite messageSprite;
 	
 	public MainMenuScreen(CarPartA game) {
 		this.game = game;
-		batch = new SpriteBatch();
-		font = new BitmapFont();
+		spriteBatch = new SpriteBatch();
+		
+		messageSprite = Art.getSprite(Art.DEMO_MESSAGE);
+		messageSprite.setPosition(0, 0);
+		
+		this.camera = new OrthographicCamera();
+		this.camera.setToOrtho(false, 1920, 1080);
 	}
 	
 	@Override
 	public void render(float delta)
 	{
-		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+		Gdx.gl.glClearColor(0, 0, 0f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		batch.begin();
-		font.draw(batch, "Welcome to Car Part A!!! ", 100, 150);
-		font.draw(batch, "Click anywhere to begin!", 100, 100);
-		batch.end();
+		camera.update();
+		spriteBatch.setProjectionMatrix(camera.combined);
 		
-		this.game.controllerManager.checkForNewPlayer();
+		spriteBatch.begin();
+		messageSprite.draw(spriteBatch);
+		spriteBatch.end();
 		
-		if (Gdx.input.isTouched())
+		if((this.game.controllerManager.checkForNewPlayer() != null) || (Gdx.input.isTouched()))
 		{
-			game.setScreen(new MazeScreen(game));
-			dispose();
+			startNewScreen();
 		}
-		else if (Gdx.input.isKeyPressed(PRESS_SPACEBAR_FOR_SOCCAR))
-		{
-			game.setScreen(new SoccerScreen(game));
-			dispose();
-		}
-		else if (Gdx.input.isKeyPressed(Input.Keys.ENTER))
-		{
-			game.setScreen(new TeamSelectScreen(game));
-			dispose();
-		}
+
+	}
+	
+	private void startNewScreen()
+	{
+		game.setScreen(new TeamSelectScreen(game));
+		dispose();
 	}
 	
 	@Override
@@ -64,7 +66,7 @@ public class MainMenuScreen implements Screen {
 	@Override
 	public void show()
 	{
-		// TODO Auto-generated method stub
+		this.game.controllerManager.resetActiveStateOfControllers();
 	}
 	
 	@Override
@@ -89,6 +91,6 @@ public class MainMenuScreen implements Screen {
 	public void dispose()
 	{
 		// TODO: DISPOSE OF STUFF
-		// batch.dispose();
+		spriteBatch.dispose();
 	}
 }

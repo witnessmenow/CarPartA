@@ -8,6 +8,8 @@ import com.ladinc.core.CarPartA;
 public class CarPartADesktop {
 	public static void main (String[] args) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config.fullscreen = false;
+		config.title = "Car-Ni-Val!";
 		config.useGL20 = true;
 		config.width = 1920;
 		config.height = 1080;
