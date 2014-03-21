@@ -112,7 +112,7 @@ public class Vehicle {
 		this.sensorBody = world.createBody(bodyDef);
 
 		PolygonShape sensorShape = new PolygonShape();
-		sensorShape.setAsBox(this.width / 4, this.length / 4);
+		sensorShape.setAsBox(this.length / 4, this.width / 4);
 		
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.density = 1f;

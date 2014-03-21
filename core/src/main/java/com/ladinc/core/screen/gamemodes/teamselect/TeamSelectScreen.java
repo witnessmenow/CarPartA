@@ -16,6 +16,7 @@ import com.ladinc.core.player.PlayerInfo;
 import com.ladinc.core.screen.gamemodes.GenericLayout;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.carpool.CarPoolScreen;
+import com.ladinc.core.screen.gamemodes.mazes.MazeScreen;
 import com.ladinc.core.screen.gamemodes.soccer.SoccerScreen;
 import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.vehicles.Car;
@@ -193,8 +194,9 @@ public class TeamSelectScreen extends GenericScreen
 			}
 		}
 		
-		game.setScreen(new SoccerScreen(game));
+		//game.setScreen(new SoccerScreen(game));
 		//game.setScreen(new CarPoolScreen(game));
+		game.setScreen(new MazeScreen(game));
 		dispose();
 	}
 	

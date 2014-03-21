@@ -33,6 +33,11 @@ public class Art {
 	public static final String INSTRUCTIONS_CONTROLLER = "INSTRUCTIONS_CONTROLLER";
 	public static final String INSTRUCTIONS_TOUCH = "INSTRUCTIONS_TOUCH";
 	
+	
+	public static final String RACE_BACKGROUND_1 = "RACE_BACKGROUND_1";
+	
+	
+	
 	//Car Pool
 	
 	public static final String POOL_TABLE = "POOL_TABLE";
@@ -64,6 +69,8 @@ public class Art {
 		
 		textureTable.put(SOCCER_PITCH, new Texture(Gdx.files.internal("SocCar/GreenPitch.jpg")));
 		textureTable.put(GOAL_OVERLAY, new Texture(Gdx.files.internal("SocCar/GoalOverlay.png")));
+		
+		textureTable.put(RACE_BACKGROUND_1, new Texture(Gdx.files.internal("Maze/Maze1.png")));
 		
 		textureTable.put(FINISHED_OVERLAY, new Texture(Gdx.files.internal("FinishedOverlay.png")));
 		textureTable.put(DEMO_MESSAGE, new Texture(Gdx.files.internal("DemoWelcomeScreen.png")));
