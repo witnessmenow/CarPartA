@@ -4,6 +4,7 @@ import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
+import com.ladinc.core.screen.gamemodes.carpool.CarPoolScreen;
 
 public class MazeScreen extends GenericScreen {
 	
@@ -23,7 +24,10 @@ public class MazeScreen extends GenericScreen {
 	@Override
 	protected void renderUpdates(float delta)
 	{
-		// TODO Auto-generated method stub
+		if(this.proccessingGameOver)
+		{
+			this.finishMessage.draw(spriteBatch);
+		}
 	}
 	
 	@Override
@@ -34,6 +38,12 @@ public class MazeScreen extends GenericScreen {
 		this.backgroundSprite = Art.getSprite(Art.RACE_BACKGROUND_1);
 		this.backgroundSprite.setPosition(0, 0);
 		
+	}
+	
+	private void handleWin()
+	{
+    	this.gameOverCoolOffTimer = 5.0f;
+    	this.proccessingGameOver = true;
 	}
 	
 	@Override
@@ -48,9 +58,29 @@ public class MazeScreen extends GenericScreen {
 	}
 
 	@Override
-	public void customRender(float delta) {
-		// TODO Auto-generated method stub
+	public void customRender(float delta) 
+	{
+		if(!this.proccessingGameOver)
+		{
+			if (this.mazeLayout.checkForWinForAllCars(getVehicles()) != null)
+			{
+				handleWin();
+			}
+		}
+		else
+		{
+			if(processGameOverTimer(delta))
+			{
+				handleGameOver();
+			}
+		}
 		
+	}
+	
+	private void handleGameOver()
+	{
+		this.game.setScreen(new CarPoolScreen(game));
+		dispose();
 	}
 
 	@Override

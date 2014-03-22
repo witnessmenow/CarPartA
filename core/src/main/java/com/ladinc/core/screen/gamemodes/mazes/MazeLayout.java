@@ -1,11 +1,14 @@
 package com.ladinc.core.screen.gamemodes.mazes;
 
+import java.util.List;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.objects.BoxProp;
 import com.ladinc.core.objects.StartingPosition;
 import com.ladinc.core.screen.gamemodes.GenericLayout;
 import com.ladinc.core.utilities.Enums.Team;
+import com.ladinc.core.vehicles.Vehicle;
 
 public class MazeLayout extends GenericLayout {
 	private float winBoxSize;
@@ -13,6 +16,8 @@ public class MazeLayout extends GenericLayout {
 	public MazeLayout(World world, float worldWidth, float worldHeight,
 			Vector2 center, int numberOfInnerWalls) {
 		super(world, worldWidth, worldHeight, center, numberOfInnerWalls);
+		
+		this.winBoxSize = 16.7f;
 	}
 	
 	public StartingPosition getTopStartPoint()
@@ -158,6 +163,59 @@ public class MazeLayout extends GenericLayout {
 		
 		return getCenter();
 	}
+	
+	public Vehicle checkForWinForAllCars(List<Vehicle> vehicles)
+	{
+		for(Vehicle v : vehicles)
+		{
+			if(checkForWin(v))
+			{
+				return v;
+			}
+		}
+		
+		return null;
+	}
+	
+	
+	private Vector2 tempVector;
+	public boolean checkForWin(Vehicle vehicle)
+    {
+		
+		tempVector = vehicle.body.getWorldCenter();
+		
+		//TODO: this is completly based on the center of the car. More advanced things need to be done to notice when the car is actually in the win box, not just its center
+		
+		if(tempVector.x <= (getCenter().x - 1))
+    	{
+			//Car is too far left
+    		return false;
+    	}
+		
+		if(tempVector.x >= (getCenter().x + 1))
+    	{
+			//Car is too far right
+			
+    		return false;
+    	}
+		
+		
+    	if(tempVector.y >= (getCenter().y + winBoxSize/2))
+    	{
+    		//Car is too far up
+    		return false;
+    	}
+    	
+    	if(tempVector.y <= (getCenter().y - winBoxSize/2))
+    	{
+    		//Car is too far down
+    		return false;
+    	}
+    	
+
+		return true;
+
+    }
 	
 //	private void createInnerWalls(World world, float worldWidth,
 //			float worldHeight, Vector2 center, float gapFromOuterEdge,
