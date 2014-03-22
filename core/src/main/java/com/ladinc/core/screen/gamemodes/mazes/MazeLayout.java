@@ -109,6 +109,56 @@ public class MazeLayout extends GenericLayout {
 		
 	}
 	
+	public Vector2 calculateAiTarget(Vector2 position)
+	{
+		if(position.y < 24.3f)
+		{
+			if(position.x < getWorldWidth() - 65.0f)
+			{
+				return new Vector2(getWorldWidth() - 20.0f, 5.0f);
+			}
+			else
+			{
+				return new Vector2(getWorldWidth() - 20.0f, 30.0f);
+			}
+		}
+		else if(position.y < 45.1f)
+		{
+			if(position.x > 60.0f)
+			{
+				return new Vector2 (20.0f, 25.0f);
+			}
+			else
+			{
+				return new Vector2(20.0f, 60.0f);
+			}
+		}
+		else if(position.y >  getWorldHeight() - 24.3f)
+		{
+			if(position.x > 68.0f)
+			{
+				return new Vector2(20.0f,getWorldHeight() - 5.0f);
+			}
+			else
+			{
+				return new Vector2(20.0f, getWorldHeight() -  30.0f);
+			}
+		}
+		else if(position.y > getWorldHeight() - 45.1f)
+		{
+			if(position.x < getWorldWidth() - 60.0f)
+			{
+				return new Vector2 (getWorldWidth() - 20.0f,  getWorldHeight() -  25.0f);
+			}
+			else
+			{
+				return new Vector2(getWorldWidth() - 20.0f,  getWorldHeight() -  60.0f);
+			}
+		}
+		
+		return getCenter();
+	}
+	
 //	private void createInnerWalls(World world, float worldWidth,
 //			float worldHeight, Vector2 center, float gapFromOuterEdge,
 //			int numberOfInnerWalls)
