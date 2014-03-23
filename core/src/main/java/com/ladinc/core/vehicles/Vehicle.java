@@ -28,7 +28,8 @@ public class Vehicle {
 	
 	public World world;
 	
-	float width, length, angle, maxSteerAngle, maxSpeed, power, wheelWidth, wheelLength;
+	public float width, length;
+	float angle, maxSteerAngle, maxSpeed, power, wheelWidth, wheelLength;
 	float wheelAngle;
 	public int steer, accelerate;
 	public Vector2 position;
@@ -57,6 +58,8 @@ public class Vehicle {
 	public Sprite wheelSprite;
 
 	private boolean handBrake;
+	
+	public boolean slippyMode = false;
 
 	public boolean getDestroyedStatus()
 	{
@@ -86,6 +89,8 @@ public class Vehicle {
 		carShape.setAsBox(this.width / 2, this.length / 2);
 		fixtureDef.shape = carShape;
 		this.body.createFixture(fixtureDef);
+		
+		 this.body.setUserData(new CollisionInfo("", CollisionObjectType.Vehicle, this));
 		
 		createSensorBody(world);
 		
@@ -163,16 +168,23 @@ public class Vehicle {
 		return this.body.getLocalVector(this.body
 				.getLinearVelocityFromLocalPoint(new Vector2(0, 0)));
 	}
+	
+	public boolean disableSteering = false;
 
 	public void controlVehicle() {
 
 		if (this.controls != null) {
 			// Steering
-			if (this.controls.getSteering() > 0) {
+			if (this.controls.getSteering() > 0 && !disableSteering) 
+			{
 				this.steer = Vehicle.STEER_RIGHT;
-			} else if (this.controls.getSteering() < 0) {
+			} 
+			else if (this.controls.getSteering() < 0  && !disableSteering) 
+			{
 				this.steer = Vehicle.STEER_LEFT;
-			} else {
+			}
+			else 
+			{
 				this.steer = Vehicle.STEER_NONE;
 			}
 			//
@@ -351,13 +363,13 @@ public class Vehicle {
 		
 		// 1. KILL SIDEWAYS VELOCITY
 
-		if (false) {
+		if (slippyMode) {
 
 			for (Wheel wheel : wheels) {
 				if (wheel.powered)
 					wheel.killSidewaysVelocity();
-				// else
-				// wheel.dampSidewaysVelocity();
+//				 else
+//					 wheel.dampSidewaysVelocity();
 			}
 		} else {
 			for (Wheel wheel : wheels) {

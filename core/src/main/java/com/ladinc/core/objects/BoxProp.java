@@ -6,6 +6,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ladinc.core.collision.CollisionInfo;
+import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
 
 public class BoxProp {
 	public float width, height;
@@ -31,7 +33,7 @@ public class BoxProp {
 		fixtureDef.restitution=0.4f; //positively bouncy!
 	    this.body.createFixture(fixtureDef);
 	    
-	    //this.body.setUserData(new CollisionInfo("Wall", CollisionObjectType.wall));
+	    this.body.setUserData(new CollisionInfo("Wall", CollisionObjectType.Wall));
 	    
 	    boxShape.dispose();
 	}

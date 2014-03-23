@@ -133,9 +133,13 @@ public class Wheel {
 	    */
 	    Vector2 velocity = this.body.getLinearVelocity();
 	    Vector2 sidewaysAxis=this.getDirectionVector();
+	    //sidewaysAxis.x = sidewaysAxis.x/2;
+	    //sidewaysAxis.y = sidewaysAxis.y*1.2f;
+	    
 	    float dotprod = velocity.dot(sidewaysAxis);
+	    
 	    dotprod = dotprod - (dotprod/100);
-	    return new Vector2(sidewaysAxis.x*dotprod, sidewaysAxis.y*dotprod);
+	    return new Vector2(sidewaysAxis.x*dotprod/2, sidewaysAxis.y*dotprod/2);
 	};
 
 	public void killSidewaysVelocity (){
