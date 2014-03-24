@@ -133,23 +133,47 @@ public class SimpleAi implements IControls
 		return false;
 	}
 	
+	public boolean justAccelerateAndReverse = false;
+	
 	public void calculateMove(float delta)
 	{
 		if(this.aiVehicle != null)
 		{
-			calculateCarAngleInWorldTerms();
-			calculateRelativeAngle();
-		
-			
-			if(remaingOutOfStuckTime > 0)
+			if(!justAccelerateAndReverse)
 			{
-				escapeStuck(delta);
+				calculateCarAngleInWorldTerms();
+				calculateRelativeAngle();
+			
+				
+				if(remaingOutOfStuckTime > 0)
+				{
+					escapeStuck(delta);
+				}
+				else
+				{
+					checkForStuck(delta);
+					steer = steeringDirect(carAngle, relativeAngle);
+					accelerate = 1;
+				}
+				
+				return;
 			}
 			else
 			{
-				checkForStuck(delta);
-				steer = steeringDirect(carAngle, relativeAngle);
-				accelerate = 1;
+				steer = 0;
+				
+				if(this.desiredPos.position.y > this.aiVehicle.body.getWorldCenter().y + 5f)
+				{
+					accelerate = -1;
+				}
+				else if (this.desiredPos.position.y < this.aiVehicle.body.getWorldCenter().y - 5f)
+				{
+					accelerate = 1;
+				}
+				else
+				{
+					accelerate = 0;
+				}
 			}
 		}
 		else

@@ -14,6 +14,7 @@ import com.ladinc.core.objects.balls.Ball;
 import com.ladinc.core.screen.gamemodes.GenericLayout;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.carpool.CarPoolScreen;
+import com.ladinc.core.screen.gamemodes.pong.PongScreen;
 import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.vehicles.Vehicle;
 
@@ -211,7 +212,7 @@ public class SoccerScreen extends GenericScreen
 	
 	private void handleGameOver()
 	{
-		this.game.setScreen(new CarPoolScreen(game));
+		this.game.setScreen(new PongScreen(game));
 		dispose();
 	}
 	
@@ -223,6 +224,7 @@ public class SoccerScreen extends GenericScreen
 		for (SimpleAi ai : this.game.controllerManager.getAi())
 		{
 			ai.resetTimers();
+			ai.justAccelerateAndReverse = false;
 		}
 	}
 	

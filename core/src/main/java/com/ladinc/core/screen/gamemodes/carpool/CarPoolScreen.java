@@ -84,6 +84,12 @@ public class CarPoolScreen extends GenericScreen
 		
 		this.carPoolLayout.poolTable.createPoolBalls(world, this.carPoolLayout.poolTable.getTriangleStartingPos());
 		
+		for (SimpleAi ai : this.game.controllerManager.getAi())
+		{
+			ai.resetTimers();
+			ai.justAccelerateAndReverse = false;
+		}
+		
 	}
 	
 	private float shortestDistanceBetweenAiAndBall = 0.0f;

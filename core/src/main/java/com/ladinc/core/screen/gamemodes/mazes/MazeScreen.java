@@ -38,6 +38,12 @@ public class MazeScreen extends GenericScreen {
 		this.backgroundSprite = Art.getSprite(Art.RACE_BACKGROUND_1);
 		this.backgroundSprite.setPosition(0, 0);
 		
+		for (SimpleAi ai : this.game.controllerManager.getAi())
+		{
+			ai.resetTimers();
+			ai.justAccelerateAndReverse = false;
+		}
+		
 	}
 	
 	private void handleWin()

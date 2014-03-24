@@ -24,6 +24,7 @@ public class PongBall
 	
 	public PongBall(World world, float x, float y, Sprite ballSprite) 
 	{
+		this.sprite = ballSprite;
 		this.world = world;
 		createPongBody(world, x, y);
 	}
@@ -77,12 +78,19 @@ public class PongBall
 	
 	public void carHit()
 	{
-		body.setLinearVelocity(body.getLinearVelocity().x*(-1.1f), (body.getLinearVelocity().y)*(1.1f));
+		body.setLinearVelocity(body.getLinearVelocity().x*(-1.5f), (body.getLinearVelocity().y)*(1.5f));
 	}
 	
 	public void startBall()
 	{
-		body.setLinearVelocity(15f, 15f);
+		if(Math.random() >= 0.5f)
+		{
+			body.setLinearVelocity(15f, 15f);
+		}
+		else
+		{
+			body.setLinearVelocity(-15f, 15f);
+		}
 	}
 	
 	public void updateSprite(SpriteBatch spriteBatch, int PIXELS_PER_METER)

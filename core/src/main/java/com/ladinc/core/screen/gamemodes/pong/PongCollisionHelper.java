@@ -13,6 +13,7 @@ import com.ladinc.core.collision.CollisionInfo;
 import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
 import com.ladinc.core.objects.balls.PongBall;
 import com.ladinc.core.objects.balls.PoolBall;
+import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.vehicles.Vehicle;
 
 public class PongCollisionHelper implements ContactListener
@@ -23,6 +24,15 @@ public class PongCollisionHelper implements ContactListener
 		this.center = center;
 	}
 
+	private Team lastScore;
+	public boolean newScore = false;
+	
+	public Team getLastScored()
+	{
+		newScore = false;
+		return lastScore;
+	}
+	
 	@Override
 	public void beginContact(Contact contact) 
 	{
@@ -71,9 +81,9 @@ public class PongCollisionHelper implements ContactListener
         			pb = (PongBall)bodyBInfo.object;
         		}
         		
-        		if(pb.body.getWorldCenter().x < this.center.x)
+        		if(pb.body.getWorldCenter().y < v.body.getWorldCenter().y)
         		{
-        			if((pb.body.getWorldCenter().x - pb.ballSize/2) >= (v.body.getWorldCenter().x + v.width/2 -0.5f))
+        			if((pb.body.getWorldCenter().y + pb.ballSize/2) >= (v.body.getWorldCenter().y - v.length/2 - 0.5f))
         			{
         				pb.carHit();
         			}
@@ -84,10 +94,10 @@ public class PongCollisionHelper implements ContactListener
         		}
         		else
         		{
-        			float ballX = pb.body.getWorldCenter().x + pb.ballSize/2;
-        			float carX = v.body.getWorldCenter().x - v.width/2;
+        			float bally = pb.body.getWorldCenter().y + pb.ballSize/2;
+        			float cary = v.body.getWorldCenter().x - v.width/2;
         			
-        			if((pb.body.getWorldCenter().x + pb.ballSize/2) <= (v.body.getWorldCenter().x - v.width/2 + 0.5))
+        			if((pb.body.getWorldCenter().y - pb.ballSize/2) <= (v.body.getWorldCenter().y + v.length/2 + 0.5f))
         			{
         				pb.carHit();
         			}
@@ -96,6 +106,18 @@ public class PongCollisionHelper implements ContactListener
         				pb.wallHit();
         			}
         		}
+        	}
+        	else if(CollisionHelper.checkIfCollisionIsOfCertainBodies(bodyAInfo, bodyBInfo, CollisionObjectType.ScoreZone, CollisionObjectType.BallSensor))
+        	{
+        		//Goal Scored
+        		Gdx.app.log("beginContact", "Goal Scored!");
+        		
+        		if(bodyAInfo.type == CollisionObjectType.ScoreZone)
+        			lastScore = bodyAInfo.team;
+        		else
+        			lastScore = bodyBInfo.team;
+        		
+        		newScore = true;
         	}
         	
         	//Check for collision of two Vehicles

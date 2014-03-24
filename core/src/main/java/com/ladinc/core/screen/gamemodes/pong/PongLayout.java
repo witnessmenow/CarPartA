@@ -3,6 +3,7 @@ package com.ladinc.core.screen.gamemodes.pong;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.objects.BoxProp;
+import com.ladinc.core.objects.SensorBox;
 import com.ladinc.core.objects.StartingPosition;
 import com.ladinc.core.screen.gamemodes.GenericLayout;
 import com.ladinc.core.utilities.Enums.Team;
@@ -19,7 +20,8 @@ public class PongLayout extends GenericLayout
 		// TODO Auto-generated constructor stub
 	}
 
-	
+	SensorBox homeScoreArea;
+	SensorBox awayScoreArea;
 	
 	@Override
 	public void createWorld(World world) {
@@ -27,6 +29,9 @@ public class PongLayout extends GenericLayout
 		
 		new BoxProp(world, getWorldWidth(), 1, new Vector2 (getWorldWidth()/2, 5f));//left
 		new BoxProp(world, getWorldWidth(), 1, new Vector2 (getWorldWidth()/2, getWorldHeight() - 5f));
+		
+		homeScoreArea = new SensorBox(world, 1, getWorldHeight(), new Vector2 (4f, getWorldHeight()/2), Team.Home);//left
+		awayScoreArea = new SensorBox(world, 1, getWorldHeight(), new Vector2 (getWorldWidth() - 4f, getWorldHeight()/2), Team.Away);
 		
 	}
 	
