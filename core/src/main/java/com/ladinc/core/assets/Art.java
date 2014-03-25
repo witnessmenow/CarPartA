@@ -40,6 +40,10 @@ public class Art {
 	public static final String PONG_BACKGROUND = "PONG_BACKGROUND";
 	public static final String PONG_BALL = "PONG_BALL";
 	
+	//Painter
+	public static final String PAINTER_BACKGROUND = "PAINTER_BACKGROUND";
+	//public static final String PONG_BALL = "PONG_BALL";
+	
 	
 	
 	//Car Pool
@@ -78,6 +82,8 @@ public class Art {
 		
 		textureTable.put(PONG_BACKGROUND, new Texture(Gdx.files.internal("Pong/PongBackground.png")));
 		textureTable.put(PONG_BALL, new Texture(Gdx.files.internal("Pong/pongBall.png")));
+		
+		textureTable.put(PAINTER_BACKGROUND, new Texture(Gdx.files.internal("Painter/PainterBackground.png")));
 		
 		textureTable.put(FINISHED_OVERLAY, new Texture(Gdx.files.internal("FinishedOverlay.png")));
 		textureTable.put(DEMO_MESSAGE, new Texture(Gdx.files.internal("DemoWelcomeScreen.png")));
