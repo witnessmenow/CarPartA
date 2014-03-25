@@ -1,7 +1,6 @@
 package com.ladinc.core.assets;
 
-import java.util.Hashtable;
-
+import java.util.HashMap;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -10,7 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
 
 public class Art {
-	public static Hashtable<String, Texture> textureTable = new Hashtable<String, Texture>();
+	public static HashMap<String, Texture> textureTable = new HashMap<String, Texture>();
 	public static final String LOGO = "LOGO";
 	public static final String BALLS = "BALLS";
 	public static final String CARS = "CARS";
@@ -47,7 +46,7 @@ public class Art {
 	
 	public static final String POOL_TABLE = "POOL_TABLE";
 	
-	public static Hashtable<String, Sprite> spriteTable = new Hashtable<String, Sprite>();
+	public static HashMap<String, Sprite> spriteTable = new HashMap<String, Sprite>();
 	
 	public static void load()
 	{

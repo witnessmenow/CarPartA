@@ -32,6 +32,13 @@ target/
 android/gen/
 android/libs/
 
+html/target/
+html/src/main/webapp/com.ladinc.CarPartA/
+html/src/main/webapp/assets/
+html/src/main/webapp/CarPartA/
+html/src/main/webapp/war/
+html/src/main/gwt-unitCache/
+
 #################
 ## Visual Studio
 #################

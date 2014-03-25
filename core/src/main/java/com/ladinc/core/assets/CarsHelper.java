@@ -1,7 +1,6 @@
 package com.ladinc.core.assets;
 
-import java.util.Hashtable;
-
+import java.util.HashMap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.ladinc.core.utilities.Enums.Team;
@@ -15,7 +14,7 @@ public class CarsHelper
 	public static final String IRELAND_CAR_ID = "IRELAND";
 	public static final String SPAIN_CAR_ID = "SPAIN";
 	
-	public static Hashtable<String, Sprite> carTable = new Hashtable<String, Sprite>();
+	public static HashMap<String, Sprite> carTable = new HashMap<String, Sprite>();
 	
 	public static Sprite getDefaultCar()
 	{

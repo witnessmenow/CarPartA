@@ -67,7 +67,7 @@ pause
 GOTO start
 
 :buildHtml
-call %M2%/mvn -Phtml package > output.txt
+call %M2%/mvn -Phtml package
 pause
 GOTO start
 
