@@ -24,7 +24,7 @@ public class FloorTileSensor
 		{
 			if(!Art.spriteTable.containsKey(HOME_FLOOR_TILE))
 			{
-				Art.spriteTable.put(HOME_FLOOR_TILE, new Sprite(Art.textureTable.get(Art.PAINT_TILES), 0,0, 99,99));
+				Art.spriteTable.put(HOME_FLOOR_TILE, new Sprite(Art.textureTable.get(Art.PAINT_TILES), 0,0, 100,100));
 			}
 			
 			return Art.spriteTable.get(HOME_FLOOR_TILE);
@@ -33,7 +33,7 @@ public class FloorTileSensor
 		{
 			if(!Art.spriteTable.containsKey(AWAY_FLOOR_TILE))
 			{
-				Art.spriteTable.put(AWAY_FLOOR_TILE, new Sprite(Art.textureTable.get(Art.PAINT_TILES), 99,0, 99,99));
+				Art.spriteTable.put(AWAY_FLOOR_TILE, new Sprite(Art.textureTable.get(Art.PAINT_TILES), 100,0, 100,100));
 			}
 			
 			return Art.spriteTable.get(AWAY_FLOOR_TILE);
