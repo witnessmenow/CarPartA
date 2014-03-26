@@ -19,7 +19,7 @@ public class PongScreen extends GenericScreen{
 	private PongLayout pongLayout;
 	private PongBall pongBall;
 	
-	private float secondsLeft = 120;
+	private float secondsLeft = 60;
 	private int homeScore = 0;
 	private int awayScore = 0;
 	
@@ -42,6 +42,8 @@ public class PongScreen extends GenericScreen{
 	private String tempScore = "";
 	private void updateScore()
 	{	
+		scoreFont.setColor(0.75f, 0.75f, 0.75f, 1.0f);
+		
 		if(homeScore < 10)
 		{
 			tempScore = "0" + homeScore;

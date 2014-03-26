@@ -104,7 +104,7 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 			this.touchOverlaySprite.draw(spriteBatch);
 		}
 		spriteBatch.end();
-		debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,PIXELS_PER_METER, PIXELS_PER_METER));
+		//debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,PIXELS_PER_METER, PIXELS_PER_METER));
 	}
 	public StartingPosition aiMove = new StartingPosition(new Vector2(0, 0), 0);
 	

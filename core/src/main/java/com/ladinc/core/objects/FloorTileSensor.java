@@ -1,17 +1,46 @@
 package com.ladinc.core.objects;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ladinc.core.assets.Art;
 import com.ladinc.core.collision.CollisionInfo;
 import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
 import com.ladinc.core.utilities.Enums.Team;
 
 public class FloorTileSensor 
 {
+	public static final String HOME_FLOOR_TILE = "HOME_FLOOR_TILE";
+	public static final String AWAY_FLOOR_TILE = "AWAY_FLOOR_TILE";
+	
+	public static Sprite getSprite(Team team)
+	{
+		if(team ==Team.Home)
+		{
+			if(!Art.spriteTable.containsKey(HOME_FLOOR_TILE))
+			{
+				Art.spriteTable.put(HOME_FLOOR_TILE, new Sprite(Art.textureTable.get(Art.PAINT_TILES), 0,0, 99,99));
+			}
+			
+			return Art.spriteTable.get(HOME_FLOOR_TILE);
+		}
+		else
+		{
+			if(!Art.spriteTable.containsKey(AWAY_FLOOR_TILE))
+			{
+				Art.spriteTable.put(AWAY_FLOOR_TILE, new Sprite(Art.textureTable.get(Art.PAINT_TILES), 99,0, 99,99));
+			}
+			
+			return Art.spriteTable.get(AWAY_FLOOR_TILE);
+		}
+		
+	}
+	
 	public float width, height;
 	public Body body;
 	
@@ -54,6 +83,11 @@ public class FloorTileSensor
 	    this.body.setUserData(new CollisionInfo("FloorSensor", CollisionObjectType.FloorSensor, this));
 	    
 	    boxShape.dispose();
+	}
+	
+	public void updateSprite(Sprite sprite, SpriteBatch spriteBatch, int PIXELS_PER_METER)
+	{
+		Art.updateSprite(sprite, spriteBatch, PIXELS_PER_METER, this.body);
 	}
 
 }

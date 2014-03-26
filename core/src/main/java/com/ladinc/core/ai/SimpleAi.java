@@ -236,7 +236,7 @@ public class SimpleAi implements IControls
 	
 	private void calculateRelativeAngle()
 	{
-		if(this.aiVehicle != null)
+		if(this.aiVehicle != null && relativeVector != null)
 		{
 			relativeVector.x = this.desiredPos.position.x - this.aiVehicle.body.getWorldCenter().x;
 			relativeVector.y = this.desiredPos.position.y - this.aiVehicle.body.getWorldCenter().y;
