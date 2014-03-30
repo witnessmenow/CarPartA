@@ -70,6 +70,7 @@ public class Art {
 		textureTable.put(POOL_TABLE, new Texture(Gdx.files.internal("CarPool/carsnu.png")));
 		
 		textureTable.put(TEAM_SELECT_AREA, new Texture(Gdx.files.internal("TeamSelect/teamSelect.png")));
+		//textureTable.put(TEAM_SELECT_AREA, new Texture(Gdx.files.internal("TeamSelect/carselect screen.jpg")));
 		textureTable.put(START_GAME_CONFIRM, new Texture(Gdx.files.internal("TeamSelect/StartGameConfirmDialog.png")));
 		textureTable.put(START_GAME_CONFIRM_TOUCH, new Texture(Gdx.files.internal("TeamSelect/StartGameConfirmDialogTouch.png")));
 		textureTable.put(INSTRUCTIONS_CONTROLLER, new Texture(Gdx.files.internal("TeamSelect/teamSelectControls.png")));
