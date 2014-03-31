@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.ladinc.core.controllers.controls.IControls;
+import com.ladinc.core.objects.FloorTileSensor;
 import com.ladinc.core.objects.StartingPosition;
 import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.vehicles.Vehicle;
@@ -18,6 +19,8 @@ public class SimpleAi implements IControls
 	
 	private float steer;
 	private int accelerate;
+	
+	public FloorTileSensor assignedTile;
 	
 	public Vehicle getVehicle()
 	{
@@ -78,10 +81,22 @@ public class SimpleAi implements IControls
 		
 	}
 	
+	public float timeOnTile = 0.0f;
+	
+	public void setFloorTileSensor(FloorTileSensor fts)
+	{
+		if(this.assignedTile != fts)
+		{
+			this.assignedTile = fts;
+			timeOnTile = 0.0f;
+		}
+	}
+	
 	public void resetTimers()
 	{
 		remaingOutOfStuckTime = 0.0f;
 		timeAtLowSpeed = 0.0f;
+		timeOnTile = 0.0f;
 		
 	}
 	
@@ -130,6 +145,14 @@ public class SimpleAi implements IControls
 			}
 		}
 		
+		if(timeOnTile > 4f)
+		{
+			remaingOutOfStuckTime = 1.0f;
+			
+			lastUsedSteer = lastUsedSteer * (-1);
+			timeOnTile = 0f;
+		}
+		
 		return false;
 	}
 	
@@ -137,8 +160,15 @@ public class SimpleAi implements IControls
 	
 	public void calculateMove(float delta)
 	{
+		
 		if(this.aiVehicle != null)
 		{
+			if(this.assignedTile != null)
+			{
+				this.timeOnTile += delta;
+			}
+			
+			
 			if(!justAccelerateAndReverse)
 			{
 				calculateCarAngleInWorldTerms();

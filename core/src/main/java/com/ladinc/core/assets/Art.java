@@ -44,7 +44,8 @@ public class Art {
 	public static final String PAINTER_BACKGROUND = "PAINTER_BACKGROUND";
 	public static final String PAINT_TILES = "PAINT_TILES";
 	
-	
+	//Mower
+	public static final String MOWER_BACKGROUND = "MOWER_BACKGROUND";
 	
 	//Car Pool
 	
@@ -86,6 +87,8 @@ public class Art {
 		
 		textureTable.put(PAINTER_BACKGROUND, new Texture(Gdx.files.internal("Painter/PainterBackground.png")));
 		textureTable.put(PAINT_TILES, new Texture(Gdx.files.internal("Painter/PaintTiles.png")));
+		
+		textureTable.put(MOWER_BACKGROUND, new Texture(Gdx.files.internal("Mower/MowerBackground.png")));
 		
 		textureTable.put(FINISHED_OVERLAY, new Texture(Gdx.files.internal("FinishedOverlay.png")));
 		textureTable.put(DEMO_MESSAGE, new Texture(Gdx.files.internal("DemoWelcomeScreen.png")));

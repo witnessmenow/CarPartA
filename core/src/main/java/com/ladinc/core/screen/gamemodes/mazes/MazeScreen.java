@@ -5,6 +5,7 @@ import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.carpool.CarPoolScreen;
+import com.ladinc.core.screen.gamemodes.painter.PainterScreen;
 
 public class MazeScreen extends GenericScreen {
 	
@@ -85,7 +86,7 @@ public class MazeScreen extends GenericScreen {
 	
 	private void handleGameOver()
 	{
-		this.game.setScreen(new CarPoolScreen(game));
+		this.game.setScreen(new PainterScreen(game));
 		dispose();
 	}
 

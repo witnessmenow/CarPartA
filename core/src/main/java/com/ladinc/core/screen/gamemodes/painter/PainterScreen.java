@@ -9,6 +9,7 @@ import com.ladinc.core.assets.Font;
 import com.ladinc.core.player.PlayerInfo;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.IGenericLayout;
+import com.ladinc.core.screen.gamemodes.carpool.CarPoolScreen;
 import com.ladinc.core.screen.gamemodes.mazes.MazeScreen;
 import com.ladinc.core.screen.gamemodes.pong.PongScreen;
 import com.ladinc.core.utilities.Enums.Team;
@@ -50,7 +51,7 @@ public class PainterScreen extends GenericScreen
 	
 	private void handleGameOver()
 	{
-		this.game.setScreen(new PongScreen(game));
+		this.game.setScreen(new CarPoolScreen(game));
 		dispose();
 	}
 

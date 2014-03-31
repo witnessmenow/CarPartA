@@ -30,8 +30,8 @@ public class PongLayout extends GenericLayout
 		new BoxProp(world, getWorldWidth(), 1, new Vector2 (getWorldWidth()/2, 5f));//left
 		new BoxProp(world, getWorldWidth(), 1, new Vector2 (getWorldWidth()/2, getWorldHeight() - 5f));
 		
-		homeScoreArea = new SensorBox(world, 1, getWorldHeight(), new Vector2 (4f, getWorldHeight()/2), Team.Home);//left
-		awayScoreArea = new SensorBox(world, 1, getWorldHeight(), new Vector2 (getWorldWidth() - 4f, getWorldHeight()/2), Team.Away);
+		homeScoreArea = new SensorBox(world, 1, getWorldHeight(), new Vector2 (1f, getWorldHeight()/2), Team.Home);//left
+		awayScoreArea = new SensorBox(world, 1, getWorldHeight(), new Vector2 (getWorldWidth() - 1f, getWorldHeight()/2), Team.Away);
 		
 	}
 	
