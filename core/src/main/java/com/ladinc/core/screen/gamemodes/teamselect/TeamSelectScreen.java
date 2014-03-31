@@ -219,14 +219,20 @@ public class TeamSelectScreen extends GenericScreen
 			if(cont.getExtraButton1Status())
 			{
 				//aiCoolDown = 0.2f;
-				createAIPlayer(Team.Home);
-				this.aIHomeTeam++;
+				if(this.aIHomeTeam < 4)
+				{
+					createAIPlayer(Team.Home);
+					this.aIHomeTeam++;
+				}
 			}
 			else if (cont.getExtraButton2Status())
 			{
 				//aiCoolDown = 0.2f;
-				createAIPlayer(Team.Away);
-				this.aIAwayTeam++;
+				if(this.aIAwayTeam < 4)
+				{
+					createAIPlayer(Team.Away);
+					this.aIAwayTeam++;
+				}
 			}
 		}
 
