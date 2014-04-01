@@ -14,6 +14,7 @@ import com.ladinc.core.objects.balls.Ball;
 import com.ladinc.core.screen.gamemodes.GenericLayout;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.carpool.CarPoolScreen;
+import com.ladinc.core.screen.gamemodes.king.KingScreen;
 import com.ladinc.core.screen.gamemodes.mower.MowerScreen;
 import com.ladinc.core.screen.gamemodes.painter.PainterScreen;
 import com.ladinc.core.screen.gamemodes.pong.PongScreen;
@@ -214,7 +215,7 @@ public class SoccerScreen extends GenericScreen
 	
 	private void handleGameOver()
 	{
-		this.game.setScreen(new MowerScreen(game));
+		this.game.setScreen(new KingScreen(game));
 		dispose();
 	}
 	

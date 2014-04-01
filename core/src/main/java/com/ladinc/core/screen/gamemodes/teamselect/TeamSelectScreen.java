@@ -16,6 +16,7 @@ import com.ladinc.core.player.PlayerInfo;
 import com.ladinc.core.screen.gamemodes.GenericLayout;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.carpool.CarPoolScreen;
+import com.ladinc.core.screen.gamemodes.king.KingScreen;
 import com.ladinc.core.screen.gamemodes.mazes.MazeScreen;
 import com.ladinc.core.screen.gamemodes.mower.MowerScreen;
 import com.ladinc.core.screen.gamemodes.painter.PainterScreen;
@@ -197,7 +198,8 @@ public class TeamSelectScreen extends GenericScreen
 			}
 		}
 		
-		game.setScreen(new MowerScreen(game));
+		game.setScreen(new KingScreen(game));
+		//game.setScreen(new MowerScreen(game));
 		//game.setScreen(new PainterScreen(game));
 		//game.setScreen(new PongScreen(game));
 		//game.setScreen(new SoccerScreen(game));

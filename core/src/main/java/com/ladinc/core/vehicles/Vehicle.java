@@ -39,6 +39,8 @@ public class Vehicle {
 	public PlayerInfo player;
 	
 	public Sprite identifier;
+	
+	public boolean king = false;
 
 	private float acceleration = 0f;
 
