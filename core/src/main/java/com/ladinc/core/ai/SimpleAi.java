@@ -12,7 +12,7 @@ import com.ladinc.core.vehicles.Vehicle;
 public class SimpleAi implements IControls
 {
 
-	private StartingPosition desiredPos;
+	public StartingPosition desiredPos;
 	private Vehicle aiVehicle;
 	
 	public Team team;
@@ -113,6 +113,13 @@ public class SimpleAi implements IControls
 				desiredPos.position = coOrd;
 			}
 		}
+	}
+	
+	public void resetAiBetweenLevels()
+	{
+		resetTimers();
+		this.assignedTile = null;
+		justAccelerateAndReverse = false;
 	}
 	
 //	public void setDesiredPosition(StartingPosition pos)

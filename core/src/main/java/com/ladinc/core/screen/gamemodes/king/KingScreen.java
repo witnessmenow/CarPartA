@@ -3,6 +3,7 @@ package com.ladinc.core.screen.gamemodes.king;
 import java.util.Random;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.math.Vector2;
 import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
@@ -87,8 +88,7 @@ public class KingScreen extends GenericScreen
 		
 		for (SimpleAi ai : this.game.controllerManager.getAi())
 		{
-			ai.resetTimers();
-			ai.justAccelerateAndReverse = false;
+			ai.resetAiBetweenLevels();
 		}
 	}
 
@@ -101,6 +101,98 @@ public class KingScreen extends GenericScreen
 			this.finishMessage.draw(spriteBatch);
 		}
 		
+	}
+	
+	@Override
+	public void calculateAiMovements(float delta)
+	{
+		Vector2 desiredCoOrd = null;
+		
+		for (SimpleAi ai : this.game.controllerManager.getAi())
+		{
+			if(ai.getVehicle().king)
+			{
+				Vector2 temp = ai.getVehicle().body.getWorldCenter();
+				
+				desiredCoOrd = new Vector2();
+				
+				if(temp.x < worldWidth/4)
+				{
+					//Over on the left
+					desiredCoOrd.x = worldWidth;
+					
+				}
+				else if(temp.x > (worldWidth/4) * 3)
+				{
+					desiredCoOrd.x = 0f;
+				}
+				else
+				{
+					if(ai.desiredPos != null && ai.desiredPos.position != null)
+					{
+						desiredCoOrd.x = ai.desiredPos.position.x;
+					}
+					else
+					{
+						desiredCoOrd.x = 0;
+					}
+						
+				}
+				
+				if(temp.y < worldHeight/4)
+				{
+					desiredCoOrd.y = worldHeight;
+				}
+				else if(temp.y > (worldHeight/4)*3)
+				{
+					desiredCoOrd.y = 0f;
+				}
+				else
+				{
+					if(ai.desiredPos != null && ai.desiredPos.position != null)
+					{
+						desiredCoOrd.y = ai.desiredPos.position.y;
+					}
+					else
+					{
+						desiredCoOrd.y = 0;
+					}
+						
+				}
+			}
+			else if(ai.getVehicle().player.team != colHelper.currentKingSide)
+			{
+				desiredCoOrd = colHelper.currentKingVehicle.body.getWorldCenter();
+			}
+			else if(ai.getVehicle().player.team == Team.Home)
+			{
+				for(Vehicle v : getVehicles())
+				{
+					if(!v.player.controls.isAi() && (v.player.team == Team.Away))
+					{
+						desiredCoOrd = v.body.getWorldCenter();
+						break;
+					}
+				}
+			}
+			else
+			{
+				for(Vehicle v : getVehicles())
+				{
+					if(!v.player.controls.isAi() && (v.player.team == Team.Home))
+					{
+						desiredCoOrd = v.body.getWorldCenter();
+						break;
+					}
+				}
+			}
+			
+			if(desiredCoOrd != null)
+			{
+				ai.setDesiredCoOrd(desiredCoOrd);
+				ai.calculateMove(delta);
+			}
+		}
 	}
 	
 	private void handleWin() 

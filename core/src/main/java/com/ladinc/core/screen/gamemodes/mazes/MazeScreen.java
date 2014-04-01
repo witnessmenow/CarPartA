@@ -41,8 +41,7 @@ public class MazeScreen extends GenericScreen {
 		
 		for (SimpleAi ai : this.game.controllerManager.getAi())
 		{
-			ai.resetTimers();
-			ai.justAccelerateAndReverse = false;
+			ai.resetAiBetweenLevels();
 		}
 		
 	}

@@ -202,7 +202,7 @@ public class PongScreen extends GenericScreen{
 		
 		for (SimpleAi ai : this.game.controllerManager.getAi())
 		{
-			ai.resetTimers();
+			ai.resetAiBetweenLevels();
 			ai.justAccelerateAndReverse = true;
 		}
 		
