@@ -43,6 +43,8 @@ public class Vehicle {
 	public boolean king = false;
 
 	private float acceleration = 0f;
+	
+	public static Sprite crownSprite = null;
 
 	public static final int STEER_NONE = 0;
 	public static final int STEER_RIGHT = 1;
@@ -53,6 +55,7 @@ public class Vehicle {
 	public static final int ACC_BRAKE = 2;
 	
 	public float respawnTimeRemaining = 0.0f;
+	public float spinoutTimeRemaining = 0.0f;
 
 	private boolean vehicleDestroyed = false;
 	
@@ -363,6 +366,12 @@ public class Vehicle {
 			
 		}
 		
+		if(spinoutTimeRemaining > 0.0f)
+		{
+			spinoutTimeRemaining = spinoutTimeRemaining - deltaTime;
+			return;
+		}
+		
 		// 1. KILL SIDEWAYS VELOCITY
 
 		if (slippyMode) {
@@ -453,6 +462,16 @@ public class Vehicle {
 	
 			// Update Car Body Sprite
 			 Art.updateSprite(this.sprite, spriteBatch, PIXELS_PER_METER, this.body);
+			 
+			 if(king)
+			 {
+				 if(Vehicle.crownSprite == null)
+				 {
+					 Vehicle.crownSprite = Art.getSprite(Art.CROWN);
+				 }
+				 
+				 Art.updateSprite(Vehicle.crownSprite, spriteBatch, PIXELS_PER_METER, this.body);
+			 }
 		}
 	}
 }

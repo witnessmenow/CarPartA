@@ -17,6 +17,8 @@ public class KingColisionHelper implements ContactListener
 	public Team currentKingSide;
 	public Vehicle currentKingVehicle;
 	
+	public boolean enableChange = true;
+	
 	@Override
 	public void beginContact(Contact contact) 
 	{
@@ -35,21 +37,23 @@ public class KingColisionHelper implements ContactListener
         		Vehicle v1 = (Vehicle)bodyAInfo.object;
         		Vehicle v2 = (Vehicle)bodyBInfo.object;
         		
-        		if(v1.king)
+        		if(v1.king && v2.spinoutTimeRemaining <= 0f && enableChange)
         		{
         			v1.king = false;
         			v2.king = true;
         			
         			currentKingSide = v2.player.team;
         			currentKingVehicle = v2;
+        			v1.spinoutTimeRemaining = 1.5f;
         		}
-        		else if(v2.king)
+        		else if(v2.king && v1.spinoutTimeRemaining <= 0f && enableChange)
         		{
         			v2.king = false;
         			v1.king = true;
         			
         			currentKingSide = v1.player.team;
         			currentKingVehicle = v1;
+        			v2.spinoutTimeRemaining = 1.5f;
         		}
         		
         	}	

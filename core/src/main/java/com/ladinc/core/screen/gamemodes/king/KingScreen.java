@@ -199,7 +199,7 @@ public class KingScreen extends GenericScreen
 	{
 		this.gameOverCoolOffTimer = 5.0f;
     	this.proccessingGameOver = true;
-		
+		this.colHelper.enableChange = false;
 	}
 	
 	
