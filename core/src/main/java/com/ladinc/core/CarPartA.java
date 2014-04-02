@@ -7,7 +7,6 @@ import com.badlogic.gdx.Screen;
 import com.ladinc.core.assets.Assets;
 import com.ladinc.core.controllers.MyControllerManager;
 import com.ladinc.core.screen.MainMenuScreen;
-import com.ladinc.core.screen.gamemodes.teamselect.TeamSelectScreen;
 
 public class CarPartA extends Game {
 	

@@ -11,39 +11,37 @@ import com.ladinc.core.assets.Font;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.IGenericLayout;
 import com.ladinc.core.screen.gamemodes.mower.MowerScreen;
-import com.ladinc.core.screen.gamemodes.pong.PongScreen;
 import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.vehicles.Vehicle;
 
-public class KingScreen extends GenericScreen
-{
+public class KingScreen extends GenericScreen {
 	private static final float START_TIME = 30;
 	
 	private float awaySecondsLeft = START_TIME;
 	private float homeSecondsLeft = START_TIME;
 	private BitmapFont bitmapFont;
-
-	private KingLayout kingLayout;
-	private KingColisionHelper colHelper;
 	
-	public KingScreen(CarPartA game) 
-	{
+	private KingLayout kingLayout;
+	private KingCollisionHelper colHelper;
+	
+	public KingScreen(CarPartA game) {
 		super(game);
 		// TODO Auto-generated constructor stub
 	}
-
+	
 	@Override
-	public void preCarRender(float delta) {
+	public void preCarRender(float delta)
+	{
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
-	public void customRender(float delta) 
+	public void customRender(float delta)
 	{
-		if(this.proccessingGameOver)
+		if (this.proccessingGameOver)
 		{
-			if(processGameOverTimer(delta))
+			if (processGameOverTimer(delta))
 			{
 				handleGameOver();
 			}
@@ -56,24 +54,24 @@ public class KingScreen extends GenericScreen
 		this.game.setScreen(new MowerScreen(game));
 		dispose();
 	}
-
+	
 	@Override
-	public IGenericLayout resetLayout() 
+	public IGenericLayout resetLayout()
 	{
 		kingLayout = new KingLayout(world, worldWidth, worldHeight, center, 0);
 		return kingLayout;
 	}
-
+	
 	@Override
-	public void initGame() 
+	public void initGame()
 	{
 		assignTeamSpritesToCars();
-
+		
 		this.backgroundSprite = Art.getSprite(Art.PAINTER_BACKGROUND);
 		
 		bitmapFont = Font.fontTable.get(Font.CONST_50);
 		
-		colHelper =  new KingColisionHelper();
+		colHelper = new KingCollisionHelper();
 		
 		this.world.setContactListener(colHelper);
 		
@@ -91,12 +89,12 @@ public class KingScreen extends GenericScreen
 			ai.resetAiBetweenLevels();
 		}
 	}
-
+	
 	@Override
-	protected void renderUpdates(float delta) 
+	protected void renderUpdates(float delta)
 	{
 		updateTimer(delta);
-		if(this.proccessingGameOver)
+		if (this.proccessingGameOver)
 		{
 			this.finishMessage.draw(spriteBatch);
 		}
@@ -110,25 +108,25 @@ public class KingScreen extends GenericScreen
 		
 		for (SimpleAi ai : this.game.controllerManager.getAi())
 		{
-			if(ai.getVehicle().king)
+			if (ai.getVehicle().king)
 			{
 				Vector2 temp = ai.getVehicle().body.getWorldCenter();
 				
 				desiredCoOrd = new Vector2();
 				
-				if(temp.x < worldWidth/4)
+				if (temp.x < worldWidth / 4)
 				{
-					//Over on the left
+					// Over on the left
 					desiredCoOrd.x = worldWidth;
 					
 				}
-				else if(temp.x > (worldWidth/4) * 3)
+				else if (temp.x > (worldWidth / 4) * 3)
 				{
 					desiredCoOrd.x = 0f;
 				}
 				else
 				{
-					if(ai.desiredPos != null && ai.desiredPos.position != null)
+					if (ai.desiredPos != null && ai.desiredPos.position != null)
 					{
 						desiredCoOrd.x = ai.desiredPos.position.x;
 					}
@@ -136,20 +134,20 @@ public class KingScreen extends GenericScreen
 					{
 						desiredCoOrd.x = 0;
 					}
-						
+					
 				}
 				
-				if(temp.y < worldHeight/4)
+				if (temp.y < worldHeight / 4)
 				{
 					desiredCoOrd.y = worldHeight;
 				}
-				else if(temp.y > (worldHeight/4)*3)
+				else if (temp.y > (worldHeight / 4) * 3)
 				{
 					desiredCoOrd.y = 0f;
 				}
 				else
 				{
-					if(ai.desiredPos != null && ai.desiredPos.position != null)
+					if (ai.desiredPos != null && ai.desiredPos.position != null)
 					{
 						desiredCoOrd.y = ai.desiredPos.position.y;
 					}
@@ -157,18 +155,20 @@ public class KingScreen extends GenericScreen
 					{
 						desiredCoOrd.y = 0;
 					}
-						
+					
 				}
 			}
-			else if(ai.getVehicle().player.team != colHelper.currentKingSide)
+			else if (ai.getVehicle().player.team != colHelper.currentKingSide)
 			{
-				desiredCoOrd = colHelper.currentKingVehicle.body.getWorldCenter();
+				desiredCoOrd = colHelper.currentKingVehicle.body
+						.getWorldCenter();
 			}
-			else if(ai.getVehicle().player.team == Team.Home)
+			else if (ai.getVehicle().player.team == Team.Home)
 			{
-				for(Vehicle v : getVehicles())
+				for (Vehicle v : getVehicles())
 				{
-					if(!v.player.controls.isAi() && (v.player.team == Team.Away))
+					if (!v.player.controls.isAi()
+							&& (v.player.team == Team.Away))
 					{
 						desiredCoOrd = v.body.getWorldCenter();
 						break;
@@ -177,9 +177,10 @@ public class KingScreen extends GenericScreen
 			}
 			else
 			{
-				for(Vehicle v : getVehicles())
+				for (Vehicle v : getVehicles())
 				{
-					if(!v.player.controls.isAi() && (v.player.team == Team.Home))
+					if (!v.player.controls.isAi()
+							&& (v.player.team == Team.Home))
 					{
 						desiredCoOrd = v.body.getWorldCenter();
 						break;
@@ -187,7 +188,7 @@ public class KingScreen extends GenericScreen
 				}
 			}
 			
-			if(desiredCoOrd != null)
+			if (desiredCoOrd != null)
 			{
 				ai.setDesiredCoOrd(desiredCoOrd);
 				ai.calculateMove(delta);
@@ -195,41 +196,43 @@ public class KingScreen extends GenericScreen
 		}
 	}
 	
-	private void handleWin() 
+	private void handleWin()
 	{
 		this.gameOverCoolOffTimer = 5.0f;
-    	this.proccessingGameOver = true;
+		this.proccessingGameOver = true;
 		this.colHelper.enableChange = false;
 	}
 	
-	
 	private String timeLeft;
+	
 	private void updateTimer(float delta)
 	{
-		//Set for blue
+		// Set for blue
 		bitmapFont.setColor(0.3f, 0.5f, 1f, 1.0f);
 		
-		timeLeft = calculateHomeTimeLeft(delta, (colHelper.currentKingSide == Team.Home));
+		timeLeft = calculateHomeTimeLeft(delta,
+				(colHelper.currentKingSide == Team.Home));
 		
 		bitmapFont.draw(spriteBatch, timeLeft,
-				(screenWidth / 4) - bitmapFont.getBounds(timeLeft).width/2, screenHeight - 10);
+				(screenWidth / 4) - bitmapFont.getBounds(timeLeft).width / 2,
+				screenHeight - 10);
 		
-		//Set for blue
+		// Set for blue
 		bitmapFont.setColor(1f, 0.3f, 0.3f, 1.0f);
 		
-		timeLeft = calculateAwayTimeLeft(delta, (colHelper.currentKingSide == Team.Away));
+		timeLeft = calculateAwayTimeLeft(delta,
+				(colHelper.currentKingSide == Team.Away));
 		
-		bitmapFont.draw(spriteBatch, timeLeft,
-				(screenWidth / 4)*3 - bitmapFont.getBounds(timeLeft).width/4, screenHeight - 10);
+		bitmapFont.draw(spriteBatch, timeLeft, (screenWidth / 4) * 3
+				- bitmapFont.getBounds(timeLeft).width / 4, screenHeight - 10);
 	}
 	
 	private String calculateHomeTimeLeft(float secondsPast, boolean countDown)
 	{
-		if(!this.proccessingGameOver && countDown)
+		if (!this.proccessingGameOver && countDown)
 		{
-
+			
 			homeSecondsLeft -= secondsPast;
-
 			
 			if (homeSecondsLeft < 0)
 			{
@@ -238,20 +241,19 @@ public class KingScreen extends GenericScreen
 			}
 		}
 		
-		int seconds = (int) homeSecondsLeft ;
+		int seconds = (int) homeSecondsLeft;
 		
-		String secondPrepend =  (seconds< 10)?"0":"";
+		String secondPrepend = (seconds < 10) ? "0" : "";
 		
 		return secondPrepend + seconds;
 	}
 	
 	private String calculateAwayTimeLeft(float secondsPast, boolean countDown)
 	{
-		if(!this.proccessingGameOver && countDown)
+		if (!this.proccessingGameOver && countDown)
 		{
-
+			
 			awaySecondsLeft -= secondsPast;
-
 			
 			if (awaySecondsLeft < 0)
 			{
@@ -260,11 +262,11 @@ public class KingScreen extends GenericScreen
 			}
 		}
 		
-		int seconds = (int) awaySecondsLeft ;
+		int seconds = (int) awaySecondsLeft;
 		
-		String secondPrepend =  (seconds< 10)?"0":"";
+		String secondPrepend = (seconds < 10) ? "0" : "";
 		
 		return secondPrepend + seconds;
 	}
-
+	
 }

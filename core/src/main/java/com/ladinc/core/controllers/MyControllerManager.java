@@ -20,8 +20,8 @@ public class MyControllerManager {
 	
 	public ArrayList<IControls> inActiveControls;
 	public ArrayList<IControls> allControls;
-	private ArrayList<PlayerInfo> players;
-	private ArrayList<SimpleAi> ai;
+	private final ArrayList<PlayerInfo> players;
+	private final ArrayList<SimpleAi> ai;
 	
 	public Boolean hasTouchControls = false;
 	
@@ -72,7 +72,8 @@ public class MyControllerManager {
 			Gdx.input.setInputProcessor(keyboardAndMouseListener);
 			
 		}
-		else if(Gdx.app.getType() == ApplicationType.Android && !Ouya.runningOnOuya)
+		else if (Gdx.app.getType() == ApplicationType.Android
+				&& !Ouya.runningOnOuya)
 		{
 			TouchScreenListener tsl = new TouchScreenListener();
 			addNewController(tsl.controls);
@@ -109,27 +110,31 @@ public class MyControllerManager {
 						"addControllerToList - Android");
 				if (Ouya.runningOnOuya)
 				{
-					 Gdx.app.debug("ControllerManager", "Added Listener for Ouya Controller");
+					Gdx.app.debug("ControllerManager",
+							"Added Listener for Ouya Controller");
 					
-					 OuyaListener ouyaListener = new OuyaListener();
-					 controller.addListener(ouyaListener);
-					 addNewController(ouyaListener.controls);
+					OuyaListener ouyaListener = new OuyaListener();
+					controller.addListener(ouyaListener);
+					addNewController(ouyaListener.controls);
 				}
 				break;
 			case WebGL:
 				Gdx.app.debug("ControllerManager",
 						"addControllerToList - WebGL/HTML5");
 				break;
+			default:
+				Gdx.app.debug("ControllerManager", "Format not supported");
+				break;
 		}
 	}
 	
 	private boolean checkIsControllerAlreadyActive(IControls cont)
 	{
-		if(this.players != null)
+		if (this.players != null)
 		{
-			for(PlayerInfo player : this.players)
+			for (PlayerInfo player : this.players)
 			{
-				if(player.controls == cont)
+				if (player.controls == cont)
 					return true;
 			}
 		}
@@ -145,7 +150,7 @@ public class MyControllerManager {
 		{
 			tempCont = player.controls;
 			tempCont.setActive(false);
-			if(!player.controls.isAi())
+			if (!player.controls.isAi())
 			{
 				this.inActiveControls.add(tempCont);
 			}
@@ -161,10 +166,10 @@ public class MyControllerManager {
 	
 	public void resetStateOfPlayer(PlayerInfo player)
 	{
-		if(player != null && players.contains(player))
+		if (player != null && players.contains(player))
 		{
 			player.controls.setActive(false);
-			if(!player.controls.isAi())
+			if (!player.controls.isAi())
 			{
 				this.inActiveControls.add(player.controls);
 			}
@@ -173,11 +178,11 @@ public class MyControllerManager {
 		
 	}
 	
-	
-	
 	public PlayerInfo checkForNewPlayer()
 	{
-		ArrayList<IControls> tempControllers = (ArrayList<IControls>) inActiveControls.clone();
+		@SuppressWarnings("unchecked")
+		ArrayList<IControls> tempControllers = (ArrayList<IControls>) inActiveControls
+				.clone();
 		
 		for (IControls cont : tempControllers)
 		{
@@ -187,7 +192,8 @@ public class MyControllerManager {
 				{
 					// cont.setIdentifier(getNextAvailableIdentifer());
 					
-					//Setting new player is mutating the object that is passed as a reference
+					// Setting new player is mutating the object that is passed
+					// as a reference
 					PlayerInfo newPlayer = new PlayerInfo(cont, Team.Home);
 					this.players.add(newPlayer);
 					this.inActiveControls.remove(cont);
@@ -203,7 +209,7 @@ public class MyControllerManager {
 	{
 		for (PlayerInfo player : players)
 		{
-			if(player.controls.getStartStatus())
+			if (player.controls.getStartStatus())
 				return player;
 		}
 		

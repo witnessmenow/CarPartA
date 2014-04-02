@@ -9,6 +9,8 @@ import com.ladinc.core.CarPartA;
 
 public class GameScreen {
 	
+	public static final int MAX_PLAYERS = 8;
+	
 	protected OrthographicCamera camera;
 	protected SpriteBatch spriteBatch;
 	

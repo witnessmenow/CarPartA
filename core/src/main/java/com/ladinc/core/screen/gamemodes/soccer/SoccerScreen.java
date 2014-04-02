@@ -2,27 +2,18 @@ package com.ladinc.core.screen.gamemodes.soccer;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.JsonValue.ValueType;
 import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
-import com.ladinc.core.assets.CarsHelper;
 import com.ladinc.core.assets.Font;
 import com.ladinc.core.collision.CollisionHelper;
 import com.ladinc.core.objects.balls.Ball;
 import com.ladinc.core.screen.gamemodes.GenericLayout;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
-import com.ladinc.core.screen.gamemodes.carpool.CarPoolScreen;
 import com.ladinc.core.screen.gamemodes.king.KingScreen;
-import com.ladinc.core.screen.gamemodes.mower.MowerScreen;
-import com.ladinc.core.screen.gamemodes.painter.PainterScreen;
-import com.ladinc.core.screen.gamemodes.pong.PongScreen;
 import com.ladinc.core.utilities.Enums.Team;
-import com.ladinc.core.vehicles.Vehicle;
 
-public class SoccerScreen extends GenericScreen 
-{
+public class SoccerScreen extends GenericScreen {
 	private float secondsLeft = 120;
 	private int homeScore = 0;
 	private int awayScore = 0;
@@ -32,7 +23,7 @@ public class SoccerScreen extends GenericScreen
 	
 	private SoccerLayout soccerLayout;
 	
-	private static final float BALL_SIZE  = 2.5f;
+	private static final float BALL_SIZE = 2.5f;
 	
 	BitmapFont bitmapFont;
 	
@@ -43,12 +34,13 @@ public class SoccerScreen extends GenericScreen
 	@Override
 	public GenericLayout resetLayout()
 	{
-		soccerLayout = new SoccerLayout(world, worldWidth, worldHeight, center, 4);
+		soccerLayout = new SoccerLayout(world, worldWidth, worldHeight, center,
+				4);
 		return soccerLayout;
 	}
 	
 	@Override
-	public void preCarRender(float delta) 
+	public void preCarRender(float delta)
 	{
 		
 	}
@@ -56,20 +48,22 @@ public class SoccerScreen extends GenericScreen
 	@Override
 	protected void renderUpdates(float delta)
 	{
-		Art.updateSprite(this.ball.sprite, spriteBatch, PIXELS_PER_METER, this.ball.body);
+		Art.updateSprite(this.ball.sprite, spriteBatch, PIXELS_PER_METER,
+				this.ball.body);
 		updateTimer(delta);
 		updateScore();
-		if(this.proccessingGameOver)
+		if (this.proccessingGameOver)
 		{
 			this.finishMessage.draw(spriteBatch);
 		}
-		else if(processingGoal)
+		else if (processingGoal)
 		{
 			this.goalMessageSprite.draw(spriteBatch);
 		}
 	}
 	
 	private String timeLeft;
+	
 	private void updateTimer(float delta)
 	{
 		bitmapFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -77,21 +71,24 @@ public class SoccerScreen extends GenericScreen
 		timeLeft = calculateTimeLeft(delta);
 		
 		bitmapFont.draw(spriteBatch, timeLeft,
-				(screenWidth / 2) - bitmapFont.getBounds(timeLeft).width/2, screenHeight - 10);
+				(screenWidth / 2) - bitmapFont.getBounds(timeLeft).width / 2,
+				screenHeight - 10);
 	}
 	
 	private void updateScore()
-	{	
-		bitmapFont.draw(spriteBatch, "" + homeScore, (screenWidth / 2) - 100 - bitmapFont.getBounds(String.valueOf(homeScore)).width/2,
+	{
+		bitmapFont.draw(spriteBatch, "" + homeScore, (screenWidth / 2) - 100
+				- bitmapFont.getBounds(String.valueOf(homeScore)).width / 2,
 				screenHeight - 10);
-		bitmapFont.draw(spriteBatch, "" + awayScore, (screenWidth / 2) + 100 - bitmapFont.getBounds(String.valueOf(homeScore)).width/2,
+		bitmapFont.draw(spriteBatch, "" + awayScore, (screenWidth / 2) + 100
+				- bitmapFont.getBounds(String.valueOf(homeScore)).width / 2,
 				screenHeight - 10);
 	}
 	
 	private void handleWin()
 	{
-    	this.gameOverCoolOffTimer = 5.0f;
-    	this.proccessingGameOver = true;
+		this.gameOverCoolOffTimer = 5.0f;
+		this.proccessingGameOver = true;
 	}
 	
 	private String calculateTimeLeft(float secondsPast)
@@ -104,7 +101,7 @@ public class SoccerScreen extends GenericScreen
 				secondsLeft = 0;
 			}
 		}
-		else if(!this.proccessingGameOver)
+		else if (!this.proccessingGameOver)
 		{
 			handleWin();
 		}
@@ -112,7 +109,7 @@ public class SoccerScreen extends GenericScreen
 		int minutes = (int) secondsLeft / 60;
 		int seconds = (int) secondsLeft % 60;
 		
-		String secondPrepend =  (seconds< 10)?"0":"";
+		String secondPrepend = (seconds < 10) ? "0" : "";
 		
 		return minutes + ":" + secondPrepend + seconds;
 	}
@@ -124,9 +121,9 @@ public class SoccerScreen extends GenericScreen
 		
 		this.colHelper = new CollisionHelper();
 		world.setContactListener(this.colHelper);
-		colh = (CollisionHelper)this.colHelper;
+		colh = (CollisionHelper) this.colHelper;
 		
-		this.soccerLayout.createGoals(world, BALL_SIZE*2);
+		this.soccerLayout.createGoals(world, BALL_SIZE * 2);
 		
 		this.backgroundSprite = this.soccerLayout.getPitchSprite();
 		this.backgroundSprite.setPosition(0.0f, 0.0f);
@@ -147,40 +144,41 @@ public class SoccerScreen extends GenericScreen
 	
 	private void recreateBall()
 	{
-		if(ball != null)
+		if (ball != null)
 		{
 			world.destroyBody(ball.body);
 		}
 		
 		ball = new Ball(world, center.x + Ball.ballOffsetX, center.y,
-				getSoccerBallSrpite(),
-				BALL_SIZE);
+				getSoccerBallSrpite(), BALL_SIZE);
 	}
 	
 	private Sprite ballSprite;
+	
 	private Sprite getSoccerBallSrpite()
 	{
-		if(ballSprite == null)
+		if (ballSprite == null)
 		{
-			ballSprite = new Sprite(Art.textureTable.get(Art.BALLS), 0, 0, 53, 52);
+			ballSprite = new Sprite(Art.textureTable.get(Art.BALLS), 0, 0, 53,
+					52);
 		}
 		return ballSprite;
 	}
-
+	
 	CollisionHelper colh;
 	
 	@Override
-	public void customRender(float delta) 
+	public void customRender(float delta)
 	{
 		this.ball.update();
 		
-		if(!this.proccessingGameOver)
+		if (!this.proccessingGameOver)
 		{
-			if(colh.newScore)
+			if (colh.newScore)
 			{
-				if(processingGoal)
+				if (processingGoal)
 				{
-					//not interested in goals scored during processing goals
+					// not interested in goals scored during processing goals
 					colh.newScore = false;
 				}
 				else
@@ -192,15 +190,15 @@ public class SoccerScreen extends GenericScreen
 		}
 		else
 		{
-			if(processGameOverTimer(delta))
+			if (processGameOverTimer(delta))
 			{
 				handleGameOver();
 			}
 		}
 		
-		if(processingGoal)
+		if (processingGoal)
 		{
-			if(goalCoolOffTimer > 0)
+			if (goalCoolOffTimer > 0)
 			{
 				goalCoolOffTimer = goalCoolOffTimer - delta;
 			}
@@ -237,31 +235,31 @@ public class SoccerScreen extends GenericScreen
 		
 		for (SimpleAi ai : this.game.controllerManager.getAi())
 		{
-			//ai.setDesiredPosition(aiMove);
+			// ai.setDesiredPosition(aiMove);
 			ai.setDesiredCoOrd(this.aiMove.position);
 			ai.calculateMove(delta);
 		}
 	}
 	
 	private float goalCoolOffTimer = 0f;
-    private boolean processingGoal = false;
-    private void handleGoalScored()
-    {
-    	if(colh.getLastScored() == Team.Home)
-    	{
-    		//Goal was in home's new, goal for away team
-    		awayScore ++;
-    		//lastSideToScore = Side.Away;
-    	}
-    	else
-    	{
-    		homeScore ++;
-    		//lastSideToScore = Side.Home;
-    	}
-    	
-    	goalCoolOffTimer = 5.0f;
-    	processingGoal = true;
-    }
-
-
+	private boolean processingGoal = false;
+	
+	private void handleGoalScored()
+	{
+		if (colh.getLastScored() == Team.Home)
+		{
+			// Goal was in home's new, goal for away team
+			awayScore++;
+			// lastSideToScore = Side.Away;
+		}
+		else
+		{
+			homeScore++;
+			// lastSideToScore = Side.Home;
+		}
+		
+		goalCoolOffTimer = 5.0f;
+		processingGoal = true;
+	}
+	
 }

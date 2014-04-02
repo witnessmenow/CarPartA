@@ -4,7 +4,6 @@ import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
-import com.ladinc.core.screen.gamemodes.carpool.CarPoolScreen;
 import com.ladinc.core.screen.gamemodes.painter.PainterScreen;
 
 public class MazeScreen extends GenericScreen {
@@ -25,7 +24,7 @@ public class MazeScreen extends GenericScreen {
 	@Override
 	protected void renderUpdates(float delta)
 	{
-		if(this.proccessingGameOver)
+		if (this.proccessingGameOver)
 		{
 			this.finishMessage.draw(spriteBatch);
 		}
@@ -48,25 +47,26 @@ public class MazeScreen extends GenericScreen {
 	
 	private void handleWin()
 	{
-    	this.gameOverCoolOffTimer = 5.0f;
-    	this.proccessingGameOver = true;
+		this.gameOverCoolOffTimer = 5.0f;
+		this.proccessingGameOver = true;
 	}
 	
 	@Override
 	public void calculateAiMovements(float delta)
-	{	
+	{
 		for (SimpleAi ai : this.game.controllerManager.getAi())
 		{
-			//ai.setDesiredPosition(aiMove);
-			ai.setDesiredCoOrd(this.mazeLayout.calculateAiTarget(ai.getVehicle().body.getWorldCenter()));
+			// ai.setDesiredPosition(aiMove);
+			ai.setDesiredCoOrd(this.mazeLayout.calculateAiTarget(ai
+					.getVehicle().body.getWorldCenter()));
 			ai.calculateMove(delta);
 		}
 	}
-
+	
 	@Override
-	public void customRender(float delta) 
+	public void customRender(float delta)
 	{
-		if(!this.proccessingGameOver)
+		if (!this.proccessingGameOver)
 		{
 			if (this.mazeLayout.checkForWinForAllCars(getVehicles()) != null)
 			{
@@ -75,7 +75,7 @@ public class MazeScreen extends GenericScreen {
 		}
 		else
 		{
-			if(processGameOverTimer(delta))
+			if (processGameOverTimer(delta))
 			{
 				handleGameOver();
 			}
@@ -88,9 +88,10 @@ public class MazeScreen extends GenericScreen {
 		this.game.setScreen(new PainterScreen(game));
 		dispose();
 	}
-
+	
 	@Override
-	public void preCarRender(float delta) {
+	public void preCarRender(float delta)
+	{
 		// TODO Auto-generated method stub
 		
 	}

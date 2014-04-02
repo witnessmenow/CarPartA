@@ -1,7 +1,5 @@
 package com.ladinc.core.controllers.mapping;
 
-import java.awt.RenderingHints.Key;
-
 import com.badlogic.gdx.Input.Keys;
 
 public class KeyboardMapper {
@@ -34,7 +32,7 @@ public class KeyboardMapper {
 	
 	public static boolean isStartButton(int keyCode)
 	{
-		return  keyCode == Keys.ESCAPE;
+		return keyCode == Keys.ESCAPE;
 	}
 	
 	public static boolean isConfirmButton(int keyCode)

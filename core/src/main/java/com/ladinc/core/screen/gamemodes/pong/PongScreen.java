@@ -1,7 +1,6 @@
 package com.ladinc.core.screen.gamemodes.pong;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.math.Vector2;
 import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
@@ -9,13 +8,12 @@ import com.ladinc.core.assets.Font;
 import com.ladinc.core.objects.balls.PongBall;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.IGenericLayout;
-import com.ladinc.core.screen.gamemodes.carpool.CarPoolScreen;
 import com.ladinc.core.screen.gamemodes.mazes.MazeScreen;
 import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.vehicles.Vehicle;
 
-public class PongScreen extends GenericScreen{
-
+public class PongScreen extends GenericScreen {
+	
 	private PongLayout pongLayout;
 	private PongBall pongBall;
 	
@@ -32,19 +30,21 @@ public class PongScreen extends GenericScreen{
 		super(game);
 		// TODO Auto-generated constructor stub
 	}
-
+	
 	@Override
-	public void preCarRender(float delta) {
+	public void preCarRender(float delta)
+	{
 		// TODO Auto-generated method stub
 		
 	}
 	
 	private String tempScore = "";
+	
 	private void updateScore()
-	{	
+	{
 		scoreFont.setColor(0.75f, 0.75f, 0.75f, 1.0f);
 		
-		if(homeScore < 10)
+		if (homeScore < 10)
 		{
 			tempScore = "0" + homeScore;
 		}
@@ -52,10 +52,10 @@ public class PongScreen extends GenericScreen{
 		{
 			tempScore = String.valueOf(homeScore);
 		}
-		scoreFont.draw(spriteBatch, tempScore, (screenWidth / 2) - 150 - scoreFont.getBounds(tempScore).width/2,
-				screenHeight - 60);
+		scoreFont.draw(spriteBatch, tempScore, (screenWidth / 2) - 150
+				- scoreFont.getBounds(tempScore).width / 2, screenHeight - 60);
 		
-		if(awayScore < 10)
+		if (awayScore < 10)
 		{
 			tempScore = "0" + awayScore;
 		}
@@ -64,18 +64,18 @@ public class PongScreen extends GenericScreen{
 			tempScore = String.valueOf(awayScore);
 		}
 		
-		scoreFont.draw(spriteBatch, tempScore, (screenWidth / 2) + 150 - scoreFont.getBounds(tempScore).width/2,
-				screenHeight - 60);
+		scoreFont.draw(spriteBatch, tempScore, (screenWidth / 2) + 150
+				- scoreFont.getBounds(tempScore).width / 2, screenHeight - 60);
 	}
-
+	
 	private boolean pongBallMoving = false;
 	
 	@Override
-	public void customRender(float delta) 
-	{	
-		if(!pongBallMoving)
+	public void customRender(float delta)
+	{
+		if (!pongBallMoving)
 		{
-			if(resetCoolOffTimer > 0)
+			if (resetCoolOffTimer > 0)
 			{
 				resetCoolOffTimer = resetCoolOffTimer - delta;
 			}
@@ -86,13 +86,13 @@ public class PongScreen extends GenericScreen{
 			}
 		}
 		
-		if(!this.proccessingGameOver)
+		if (!this.proccessingGameOver)
 		{
-			if(colHelper.newScore)
+			if (colHelper.newScore)
 			{
-				if(processingGoal)
+				if (processingGoal)
 				{
-					//not interested in goals scored during processing goals
+					// not interested in goals scored during processing goals
 					colHelper.newScore = false;
 				}
 				else
@@ -104,15 +104,15 @@ public class PongScreen extends GenericScreen{
 		}
 		else
 		{
-			if(processGameOverTimer(delta))
+			if (processGameOverTimer(delta))
 			{
 				handleGameOver();
 			}
 		}
 		
-		if(processingGoal)
+		if (processingGoal)
 		{
-			if(goalCoolOffTimer > 0)
+			if (goalCoolOffTimer > 0)
 			{
 				goalCoolOffTimer = goalCoolOffTimer - delta;
 			}
@@ -126,7 +126,8 @@ public class PongScreen extends GenericScreen{
 	}
 	
 	private float resetCoolOffTimer = 0f;
-	private void resetBall() 
+	
+	private void resetBall()
 	{
 		this.pongBall.destroyBody();
 		this.pongBall.createPongBody(world, center.x, getY());
@@ -139,7 +140,7 @@ public class PongScreen extends GenericScreen{
 	{
 		return center.y;
 	}
-
+	
 	private void handleGameOver()
 	{
 		this.game.setScreen(new MazeScreen(game));
@@ -147,39 +148,40 @@ public class PongScreen extends GenericScreen{
 	}
 	
 	private float goalCoolOffTimer = 0f;
-    private boolean processingGoal = false;
-    private void handleGoalScored()
-    {
-    	if(colHelper.getLastScored() == Team.Home)
-    	{
-    		//Goal was in home's new, goal for away team
-    		awayScore ++;
-    		//lastSideToScore = Side.Away;
-    	}
-    	else
-    	{
-    		homeScore ++;
-    		//lastSideToScore = Side.Home;
-    	}
-    	
-    	goalCoolOffTimer = 3.0f;
-    	processingGoal = true;
-    }
-
-	@Override
-	public IGenericLayout resetLayout() 
+	private boolean processingGoal = false;
+	
+	private void handleGoalScored()
 	{
-		pongLayout =  new PongLayout(world, worldWidth, worldHeight, center, 0);
+		if (colHelper.getLastScored() == Team.Home)
+		{
+			// Goal was in home's new, goal for away team
+			awayScore++;
+			// lastSideToScore = Side.Away;
+		}
+		else
+		{
+			homeScore++;
+			// lastSideToScore = Side.Home;
+		}
+		
+		goalCoolOffTimer = 3.0f;
+		processingGoal = true;
+	}
+	
+	@Override
+	public IGenericLayout resetLayout()
+	{
+		pongLayout = new PongLayout(world, worldWidth, worldHeight, center, 0);
 		return pongLayout;
 	}
-
+	
 	@Override
-	public void initGame() 
+	public void initGame()
 	{
 		assignTeamSpritesToCars();
 		bitmapFont = Font.fontTable.get(Font.CONST_50);
 		
-		colHelper =  new PongCollisionHelper(center);
+		colHelper = new PongCollisionHelper(center);
 		
 		scoreFont = Font.fontTable.get(Font.OCRA_80);
 		scoreFont.setColor(0.75f, 0.75f, 0.75f, 1.0f);
@@ -191,10 +193,11 @@ public class PongScreen extends GenericScreen{
 		this.backgroundSprite = Art.getSprite(Art.PONG_BACKGROUND);
 		this.backgroundSprite.setPosition(0, 0);
 		
-		pongBall = new PongBall(world, this.center.x, this.center.y, Art.getSprite(Art.PONG_BALL));
+		pongBall = new PongBall(world, this.center.x, this.center.y,
+				Art.getSprite(Art.PONG_BALL));
 		resetCoolOffTimer = 1f;
 		
-		for(Vehicle v : getVehicles())
+		for (Vehicle v : getVehicles())
 		{
 			v.disableSteering = true;
 			v.body.setFixedRotation(true);
@@ -214,22 +217,22 @@ public class PongScreen extends GenericScreen{
 		this.aiMove.position = this.pongBall.body.getWorldCenter();
 		
 		for (SimpleAi ai : this.game.controllerManager.getAi())
-		{	
-			//ai.setDesiredPosition(aiMove);
+		{
+			// ai.setDesiredPosition(aiMove);
 			ai.setDesiredCoOrd(this.aiMove.position);
 			ai.calculateMove(delta);
 		}
 	}
-
+	
 	@Override
-	protected void renderUpdates(float delta) 
+	protected void renderUpdates(float delta)
 	{
 		updateScore();
 		updateTimer(delta);
 		
 		pongBall.updateSprite(spriteBatch, PIXELS_PER_METER);
 		
-		if(this.proccessingGameOver)
+		if (this.proccessingGameOver)
 		{
 			this.finishMessage.draw(spriteBatch);
 		}
@@ -237,6 +240,7 @@ public class PongScreen extends GenericScreen{
 	}
 	
 	private String timeLeft;
+	
 	private void updateTimer(float delta)
 	{
 		bitmapFont.setColor(0.75f, 0.75f, 0.75f, 1.0f);
@@ -244,7 +248,8 @@ public class PongScreen extends GenericScreen{
 		timeLeft = calculateTimeLeft(delta);
 		
 		bitmapFont.draw(spriteBatch, timeLeft,
-				(screenWidth / 2) - bitmapFont.getBounds(timeLeft).width/2, screenHeight - 60);
+				(screenWidth / 2) - bitmapFont.getBounds(timeLeft).width / 2,
+				screenHeight - 60);
 	}
 	
 	private String calculateTimeLeft(float secondsPast)
@@ -257,23 +262,23 @@ public class PongScreen extends GenericScreen{
 				secondsLeft = 0;
 			}
 		}
-		else if(!this.proccessingGameOver)
+		else if (!this.proccessingGameOver)
 		{
 			handleWin();
 		}
 		
-		int seconds = (int) secondsLeft ;
+		int seconds = (int) secondsLeft;
 		
-		String secondPrepend =  (seconds< 10)?"0":"";
+		String secondPrepend = (seconds < 10) ? "0" : "";
 		
 		return secondPrepend + seconds;
 	}
-
-	private void handleWin() 
+	
+	private void handleWin()
 	{
 		this.gameOverCoolOffTimer = 5.0f;
-    	this.proccessingGameOver = true;
+		this.proccessingGameOver = true;
 		
 	}
-
+	
 }

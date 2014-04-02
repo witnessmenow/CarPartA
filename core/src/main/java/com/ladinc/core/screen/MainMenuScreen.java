@@ -1,17 +1,13 @@
 package com.ladinc.core.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ladinc.core.CarPartA;
 import com.ladinc.core.assets.Art;
-import com.ladinc.core.screen.gamemodes.mazes.MazeScreen;
-import com.ladinc.core.screen.gamemodes.soccer.SoccerScreen;
 import com.ladinc.core.screen.gamemodes.teamselect.TeamSelectScreen;
 
 public class MainMenuScreen implements Screen {
@@ -44,11 +40,12 @@ public class MainMenuScreen implements Screen {
 		messageSprite.draw(spriteBatch);
 		spriteBatch.end();
 		
-		if((this.game.controllerManager.checkForNewPlayer() != null) || (Gdx.input.isTouched()))
+		if ((this.game.controllerManager.checkForNewPlayer() != null)
+				|| (Gdx.input.isTouched()))
 		{
 			startNewScreen();
 		}
-
+		
 	}
 	
 	private void startNewScreen()

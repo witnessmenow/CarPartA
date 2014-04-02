@@ -17,7 +17,6 @@ import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.assets.CarsHelper;
-import com.ladinc.core.collision.CollisionHelper;
 import com.ladinc.core.objects.StartingPosition;
 import com.ladinc.core.player.PlayerInfo;
 import com.ladinc.core.screen.GameScreen;
@@ -36,7 +35,7 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	public Sprite finishMessage;
 	
 	protected float gameOverCoolOffTimer = 0f;
-    protected boolean proccessingGameOver = false;
+	protected boolean proccessingGameOver = false;
 	
 	public GenericScreen(CarPartA game) {
 		this.game = game;
@@ -86,7 +85,7 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		
 		for (Vehicle v : this.vehicles)
 		{
-			if(v.player != null && !v.getDestroyedStatus())
+			if (v.player != null && !v.getDestroyedStatus())
 			{
 				v.player.drawIndentifier(spriteBatch, PIXELS_PER_METER, v.body);
 			}
@@ -99,13 +98,16 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		
 		renderUpdates(delta);
 		
-		if(this.game.controllerManager.hasTouchControls)
+		if (this.game.controllerManager.hasTouchControls)
 		{
 			this.touchOverlaySprite.draw(spriteBatch);
 		}
 		spriteBatch.end();
-		//debugRenderer.render(world, camera.combined.scale(PIXELS_PER_METER,PIXELS_PER_METER, PIXELS_PER_METER));
+		// debugRenderer.render(world,
+		// camera.combined.scale(PIXELS_PER_METER,PIXELS_PER_METER,
+		// PIXELS_PER_METER));
 	}
+	
 	public StartingPosition aiMove = new StartingPosition(new Vector2(0, 0), 0);
 	
 	public void calculateAiMovements(float delta)
@@ -115,7 +117,7 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	
 	public void calculateMovements(float delta)
 	{
-		if(allowVehicleControl)
+		if (allowVehicleControl)
 		{
 			
 			calculateAiMovements(delta);
@@ -128,10 +130,10 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		
 		customRender(delta);
 		
-		if(allowWorldPhyics)
+		if (allowWorldPhyics)
 		{
 			world.step(Gdx.app.getGraphics().getDeltaTime(), 6, 6);
-			//world.step(1/60f, 6, 6);
+			// world.step(1/60f, 6, 6);
 			world.clearForces();
 		}
 	}
@@ -165,8 +167,8 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	
 	protected boolean processGameOverTimer(float delta)
 	{
-
-		if(gameOverCoolOffTimer > 0)
+		
+		if (gameOverCoolOffTimer > 0)
 		{
 			gameOverCoolOffTimer = gameOverCoolOffTimer - delta;
 		}
@@ -202,26 +204,26 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 			
 			int teamId = 0;
 			
-			if(tempPlayer.team == Team.Home)
+			if (tempPlayer.team == Team.Home)
 			{
 				teamId = this.homePlayerCount;
-				this.homePlayerCount ++;
+				this.homePlayerCount++;
 			}
-			else if(tempPlayer.team == Team.Away)
+			else if (tempPlayer.team == Team.Away)
 			{
 				teamId = this.awayPlayerCount;
-				this.awayPlayerCount ++;
+				this.awayPlayerCount++;
 			}
 			
 			tempCar = new Car(tempPlayer, this.world,
-					this.layout.getPlayerStartPoint(tempPlayer.team, teamId), null,
-					null);
+					this.layout.getPlayerStartPoint(tempPlayer.team, teamId),
+					null, null);
 			
 			this.vehicles.add(tempCar);
 			
-			if(tempPlayer.controls != null && tempPlayer.controls.isAi())
+			if (tempPlayer.controls != null && tempPlayer.controls.isAi())
 			{
-				SimpleAi ai = (SimpleAi)tempPlayer.controls;
+				SimpleAi ai = (SimpleAi) tempPlayer.controls;
 				ai.setVehicle(tempCar);
 			}
 		}
@@ -273,14 +275,13 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	
 	public void assignTeamSpritesToCars()
 	{
-		for(Vehicle v : getVehicles())
+		for (Vehicle v : getVehicles())
 		{
-			if(v.player != null)
+			if (v.player != null)
 			{
 				v.sprite = CarsHelper.getTeamCar(v.player.team);
 			}
 		}
 	}
-	
 	
 }
