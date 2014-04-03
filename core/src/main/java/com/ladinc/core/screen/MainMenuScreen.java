@@ -63,7 +63,7 @@ public class MainMenuScreen implements Screen {
 	@Override
 	public void show()
 	{
-		this.game.controllerManager.resetActiveStateOfControllers();
+		this.game.controllerManager.resetControllers();
 	}
 	
 	@Override

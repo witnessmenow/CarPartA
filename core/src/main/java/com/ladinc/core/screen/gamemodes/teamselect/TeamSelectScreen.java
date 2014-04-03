@@ -61,7 +61,7 @@ public class TeamSelectScreen extends GenericScreen {
 	{
 		font = Font.fontTable.get(Font.CONST_50);
 		
-		this.game.controllerManager.resetActiveStateOfControllers();
+		this.game.controllerManager.resetControllers();
 		
 		this.backgroundSprite = this.teamSelectLayout.getTeamAreaSprite();
 		this.backgroundSprite.setPosition(0.0f, 0.0f);

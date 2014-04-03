@@ -144,6 +144,31 @@ public class MyControllerManager {
 	
 	public void resetActiveStateOfControllers()
 	{
+		IControls tempCont;
+		for (PlayerInfo player : players)
+		{
+			tempCont = player.controls;
+			tempCont.setActive(false);
+		}
+	}
+	
+	public boolean checkForActiveControllers()
+	{
+		IControls tempCont;
+		for (PlayerInfo player : players)
+		{
+			tempCont = player.controls;
+			if(tempCont.isActive())
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public void resetControllers()
+	{
 		ArrayList<PlayerInfo> tempPlayersToRemove = new ArrayList<PlayerInfo>();
 		IControls tempCont;
 		for (PlayerInfo player : players)

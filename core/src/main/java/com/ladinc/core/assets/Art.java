@@ -14,6 +14,8 @@ public class Art {
 	public static final String BALLS = "BALLS";
 	public static final String CARS = "CARS";
 	
+	public static final String GAME_DESCRIPTION_WINDOW = "GAME_DESCRIPTION_WINDOW";
+	
 	public static final String CROWN = "CROWN";
 	
 	public static final String WHEELS = "WHEELS";
@@ -66,6 +68,8 @@ public class Art {
 				new Texture(Gdx.files.internal("libgdx-logo.png")));
 		textureTable.put(BALLS, new Texture(Gdx.files.internal("balls.png")));
 		textureTable.put(CARS, new Texture(Gdx.files.internal("Vehicles/CarSpritesheet.png")));
+		
+		textureTable.put(GAME_DESCRIPTION_WINDOW, new Texture(Gdx.files.internal("UI/GameDescriptionWindow.png")));
 		
 		textureTable.put(CROWN, new Texture(Gdx.files.internal("Vehicles/Crown.png")));
 	
