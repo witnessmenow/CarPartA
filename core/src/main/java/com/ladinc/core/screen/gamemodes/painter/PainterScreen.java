@@ -1,5 +1,7 @@
 package com.ladinc.core.screen.gamemodes.painter;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.ladinc.core.CarPartA;
@@ -10,9 +12,11 @@ import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.IGenericLayout;
 import com.ladinc.core.screen.gamemodes.carpool.CarPoolScreen;
 import com.ladinc.core.utilities.Enums.Team;
+import com.ladinc.core.ux.DescriptionScreenInfo;
 import com.ladinc.core.vehicles.Vehicle;
 
-public class PainterScreen extends GenericScreen {
+public class PainterScreen extends GenericScreen 
+{
 	private float secondsLeft = 30;
 	private BitmapFont bitmapFont;
 	private BitmapFont scoreFont;
@@ -97,17 +101,21 @@ public class PainterScreen extends GenericScreen {
 	
 	private String calculateTimeLeft(float secondsPast)
 	{
-		if (secondsLeft != 0)
+		if(!this.showDescriptionScreen)
 		{
-			secondsLeft -= secondsPast;
-			if (secondsLeft < 0)
+			if (secondsLeft != 0)
 			{
-				secondsLeft = 0;
+				secondsLeft -= secondsPast;
+				if (secondsLeft < 0)
+				{
+					secondsLeft = 0;
+				}
 			}
-		}
-		else if (!this.proccessingGameOver)
-		{
-			handleWin();
+			else if (!this.proccessingGameOver)
+			{
+				handleWin();
+			}
+			
 		}
 		
 		int seconds = (int) secondsLeft;
@@ -217,6 +225,22 @@ public class PainterScreen extends GenericScreen {
 			this.finishMessage.draw(spriteBatch);
 		}
 		
+	}
+
+	@Override
+	public DescriptionScreenInfo generateScreenInfo() 
+	{
+		DescriptionScreenInfo info = new DescriptionScreenInfo();
+		
+		info.title = "Pi-Car-So";
+		info.descriptionText = "What is modern art anyways?";
+		
+		info.howToWinText = new ArrayList<String>();
+		info.howToWinText.add("Paint squares your team's colour by dirivng over them.");
+		info.howToWinText.add("Teams may paint tiles already painted by the other team.");
+		info.howToWinText.add("When the timer runs out, the team with the most painted tiles wins.");
+		// TODO Auto-generated method stub
+		return info;
 	}
 	
 }

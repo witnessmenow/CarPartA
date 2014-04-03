@@ -9,6 +9,7 @@ import com.ladinc.core.assets.Font;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.IGenericLayout;
 import com.ladinc.core.screen.gamemodes.mower.MowerScreen;
+import com.ladinc.core.ux.DescriptionScreenInfo;
 
 public class HillScreen extends GenericScreen {
 	private static final float START_TIME = 30;
@@ -220,5 +221,11 @@ public class HillScreen extends GenericScreen {
 		int seconds = (int) awaySecondsLeft;
 		String secondPrepend = (seconds < 10) ? "0" : "";
 		return secondPrepend + seconds;
+	}
+
+	@Override
+	public DescriptionScreenInfo generateScreenInfo() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

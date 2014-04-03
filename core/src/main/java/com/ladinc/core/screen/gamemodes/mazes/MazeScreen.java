@@ -1,12 +1,16 @@
 package com.ladinc.core.screen.gamemodes.mazes;
 
+import java.util.ArrayList;
+
 import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.painter.PainterScreen;
+import com.ladinc.core.ux.DescriptionScreenInfo;
 
-public class MazeScreen extends GenericScreen {
+public class MazeScreen extends GenericScreen 
+{
 	
 	private MazeLayout mazeLayout;
 	
@@ -94,5 +98,19 @@ public class MazeScreen extends GenericScreen {
 	{
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public DescriptionScreenInfo generateScreenInfo() 
+	{
+		DescriptionScreenInfo info = new DescriptionScreenInfo();
+		
+		info.title = "A-Maze-ing";
+		info.descriptionText = "The worst \"maze\" ever.";
+		
+		info.howToWinText = new ArrayList<String>();
+		info.howToWinText.add("First team with a member to reache the center wins.");
+		// TODO Auto-generated method stub
+		return info;
 	}
 }

@@ -517,6 +517,7 @@ public class Vehicle {
 				if (Vehicle.crownSprite == null)
 				{
 					Vehicle.crownSprite = Art.getSprite(Art.CROWN);
+					Vehicle.crownSprite.setScale(1.5f);
 				}
 				
 				Art.updateSprite(Vehicle.crownSprite, spriteBatch,

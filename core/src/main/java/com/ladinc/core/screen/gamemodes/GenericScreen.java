@@ -21,6 +21,8 @@ import com.ladinc.core.objects.StartingPosition;
 import com.ladinc.core.player.PlayerInfo;
 import com.ladinc.core.screen.GameScreen;
 import com.ladinc.core.utilities.Enums.Team;
+import com.ladinc.core.ux.DescriptionScreen;
+import com.ladinc.core.ux.DescriptionScreenInfo;
 import com.ladinc.core.vehicles.Car;
 import com.ladinc.core.vehicles.Vehicle;
 
@@ -36,6 +38,9 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	
 	protected float gameOverCoolOffTimer = 0f;
 	protected boolean proccessingGameOver = false;
+	
+	protected DescriptionScreen descriptionScreen = null;
+	protected boolean showDescriptionScreen = false;
 	
 	public GenericScreen(CarPartA game) {
 		this.game = game;
@@ -62,6 +67,8 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	
 	protected boolean allowVehicleControl = true;
 	protected boolean allowWorldPhyics = true;
+	
+	private boolean previousSkipDescriptionValue;
 	
 	@Override
 	public void render(float delta)
@@ -98,6 +105,22 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		
 		renderUpdates(delta);
 		
+		if(showDescriptionScreen && descriptionScreen != null)
+		{
+			descriptionScreen.drawDescriptionScreen(spriteBatch, delta);
+			if(descriptionScreen.allowSkip && !previousSkipDescriptionValue)
+			{
+				this.game.controllerManager.resetActiveStateOfControllers();
+			}
+			
+			if(this.game.controllerManager.checkForActiveControllers() && descriptionScreen.allowSkip)
+			{
+				skipDescriptionScreen();
+			}
+			
+			previousSkipDescriptionValue = this.descriptionScreen.allowSkip;
+		}
+		
 		if (this.game.controllerManager.hasTouchControls)
 		{
 			this.touchOverlaySprite.draw(spriteBatch);
@@ -106,6 +129,23 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		// debugRenderer.render(world,
 		// camera.combined.scale(PIXELS_PER_METER,PIXELS_PER_METER,
 		// PIXELS_PER_METER));
+	}
+	
+	public void enableDescriptionScreen()
+	{
+		//This is so we can detect a button press to skip the description screen
+		this.game.controllerManager.resetActiveStateOfControllers();
+		previousSkipDescriptionValue = this.descriptionScreen.allowSkip;
+		showDescriptionScreen = true;
+		allowVehicleControl = false;
+		allowWorldPhyics = false;
+	}
+	
+	public void skipDescriptionScreen()
+	{
+		showDescriptionScreen = false;
+		allowVehicleControl = true;
+		allowWorldPhyics = true;
 	}
 	
 	public StartingPosition aiMove = new StartingPosition(new Vector2(0, 0), 0);
@@ -161,6 +201,13 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		this.world = new World(new Vector2(0.0f, 0.0f), true);
 		
 		this.touchOverlaySprite.setPosition(0, 0);
+		
+		DescriptionScreenInfo tempInfo = generateScreenInfo();
+		if(tempInfo != null)
+		{
+			this.descriptionScreen = new DescriptionScreen(new Vector2(screenWidth/2, screenHeight/2), tempInfo);
+			enableDescriptionScreen();
+		}
 		
 		resetGame();
 	}
@@ -283,5 +330,7 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 			}
 		}
 	}
+	
+	public abstract DescriptionScreenInfo generateScreenInfo();
 	
 }

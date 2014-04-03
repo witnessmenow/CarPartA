@@ -1,5 +1,7 @@
 package com.ladinc.core.screen.gamemodes.pong;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
@@ -10,9 +12,11 @@ import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.IGenericLayout;
 import com.ladinc.core.screen.gamemodes.mazes.MazeScreen;
 import com.ladinc.core.utilities.Enums.Team;
+import com.ladinc.core.ux.DescriptionScreenInfo;
 import com.ladinc.core.vehicles.Vehicle;
 
-public class PongScreen extends GenericScreen {
+public class PongScreen extends GenericScreen 
+{
 	
 	private PongLayout pongLayout;
 	private PongBall pongBall;
@@ -254,17 +258,20 @@ public class PongScreen extends GenericScreen {
 	
 	private String calculateTimeLeft(float secondsPast)
 	{
-		if (secondsLeft != 0)
+		if(!this.showDescriptionScreen)
 		{
-			secondsLeft -= secondsPast;
-			if (secondsLeft < 0)
+			if (secondsLeft != 0)
 			{
-				secondsLeft = 0;
+				secondsLeft -= secondsPast;
+				if (secondsLeft < 0)
+				{
+					secondsLeft = 0;
+				}
 			}
-		}
-		else if (!this.proccessingGameOver)
-		{
-			handleWin();
+			else if (!this.proccessingGameOver)
+			{
+				handleWin();
+			}
 		}
 		
 		int seconds = (int) secondsLeft;
@@ -279,6 +286,21 @@ public class PongScreen extends GenericScreen {
 		this.gameOverCoolOffTimer = 5.0f;
 		this.proccessingGameOver = true;
 		
+	}
+
+	@Override
+	public DescriptionScreenInfo generateScreenInfo() 
+	{
+		DescriptionScreenInfo info = new DescriptionScreenInfo();
+		
+		info.title = "Pong-Cars";
+		info.descriptionText = "Pong with cars.";
+		
+		info.howToWinText = new ArrayList<String>();
+		info.howToWinText.add("Only accelerate and reverse are enabled (no steering).");
+		info.howToWinText.add("Score more points than the oposition before the timer runs out to win");
+		// TODO Auto-generated method stub
+		return info;
 	}
 	
 }

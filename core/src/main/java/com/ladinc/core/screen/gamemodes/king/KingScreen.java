@@ -1,5 +1,6 @@
 package com.ladinc.core.screen.gamemodes.king;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -12,9 +13,11 @@ import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.IGenericLayout;
 import com.ladinc.core.screen.gamemodes.mower.MowerScreen;
 import com.ladinc.core.utilities.Enums.Team;
+import com.ladinc.core.ux.DescriptionScreenInfo;
 import com.ladinc.core.vehicles.Vehicle;
 
-public class KingScreen extends GenericScreen {
+public class KingScreen extends GenericScreen 
+{
 	private static final float START_TIME = 30;
 	
 	private float awaySecondsLeft = START_TIME;
@@ -93,7 +96,9 @@ public class KingScreen extends GenericScreen {
 	@Override
 	protected void renderUpdates(float delta)
 	{
+
 		updateTimer(delta);
+
 		if (this.proccessingGameOver)
 		{
 			this.finishMessage.draw(spriteBatch);
@@ -229,7 +234,7 @@ public class KingScreen extends GenericScreen {
 	
 	private String calculateHomeTimeLeft(float secondsPast, boolean countDown)
 	{
-		if (!this.proccessingGameOver && countDown)
+		if (!this.proccessingGameOver && countDown && !this.showDescriptionScreen)
 		{
 			
 			homeSecondsLeft -= secondsPast;
@@ -250,7 +255,7 @@ public class KingScreen extends GenericScreen {
 	
 	private String calculateAwayTimeLeft(float secondsPast, boolean countDown)
 	{
-		if (!this.proccessingGameOver && countDown)
+		if (!this.proccessingGameOver && countDown && !this.showDescriptionScreen)
 		{
 			
 			awaySecondsLeft -= secondsPast;
@@ -267,6 +272,22 @@ public class KingScreen extends GenericScreen {
 		String secondPrepend = (seconds < 10) ? "0" : "";
 		
 		return secondPrepend + seconds;
+	}
+
+	@Override
+	public DescriptionScreenInfo generateScreenInfo() 
+	{
+		DescriptionScreenInfo info = new DescriptionScreenInfo();
+		
+		info.title = "Car King";
+		info.descriptionText = "It is good to be the king!";
+		
+		info.howToWinText = new ArrayList<String>();
+		info.howToWinText.add("Take the crown by hitting into the car with it.");
+		info.howToWinText.add("Each team's timer will only count when they have the crown.");
+		info.howToWinText.add("The first team who's timer reaches 0 wins.");
+		// TODO Auto-generated method stub
+		return info;
 	}
 	
 }

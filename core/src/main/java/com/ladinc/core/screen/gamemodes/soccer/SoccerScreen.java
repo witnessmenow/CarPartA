@@ -1,5 +1,7 @@
 package com.ladinc.core.screen.gamemodes.soccer;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.ladinc.core.CarPartA;
@@ -12,8 +14,10 @@ import com.ladinc.core.screen.gamemodes.GenericLayout;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.king.KingScreen;
 import com.ladinc.core.utilities.Enums.Team;
+import com.ladinc.core.ux.DescriptionScreenInfo;
 
-public class SoccerScreen extends GenericScreen {
+public class SoccerScreen extends GenericScreen 
+{
 	private float secondsLeft = 120;
 	private int homeScore = 0;
 	private int awayScore = 0;
@@ -93,17 +97,20 @@ public class SoccerScreen extends GenericScreen {
 	
 	private String calculateTimeLeft(float secondsPast)
 	{
-		if (secondsLeft != 0)
+		if(!this.showDescriptionScreen)
 		{
-			secondsLeft -= secondsPast;
-			if (secondsLeft < 0)
+			if (secondsLeft != 0)
 			{
-				secondsLeft = 0;
+				secondsLeft -= secondsPast;
+				if (secondsLeft < 0)
+				{
+					secondsLeft = 0;
+				}
 			}
-		}
-		else if (!this.proccessingGameOver)
-		{
-			handleWin();
+			else if (!this.proccessingGameOver)
+			{
+				handleWin();
+			}
 		}
 		
 		int minutes = (int) secondsLeft / 60;
@@ -260,6 +267,20 @@ public class SoccerScreen extends GenericScreen {
 		
 		goalCoolOffTimer = 5.0f;
 		processingGoal = true;
+	}
+
+	@Override
+	public DescriptionScreenInfo generateScreenInfo() 
+	{
+		DescriptionScreenInfo info = new DescriptionScreenInfo();
+		
+		info.title = "Soc-Car";
+		info.descriptionText = "Soccer with cars.";
+		
+		info.howToWinText = new ArrayList<String>();
+		info.howToWinText.add("Score more goals that opposition before the timer runs out to win.");
+		// TODO Auto-generated method stub
+		return info;
 	}
 	
 }

@@ -1,5 +1,6 @@
 package com.ladinc.core.screen.gamemodes.mower;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.math.Vector2;
@@ -11,8 +12,10 @@ import com.ladinc.core.screen.gamemodes.IGenericLayout;
 import com.ladinc.core.screen.gamemodes.painter.PainterCollisionHelper;
 import com.ladinc.core.screen.gamemodes.pong.PongScreen;
 import com.ladinc.core.utilities.Enums.Team;
+import com.ladinc.core.ux.DescriptionScreenInfo;
 
-public class MowerScreen extends GenericScreen {
+public class MowerScreen extends GenericScreen 
+{
 	private MowerLayout mowerLayout;
 	private PainterCollisionHelper colHelper;
 	
@@ -148,6 +151,21 @@ public class MowerScreen extends GenericScreen {
 			this.finishMessage.draw(spriteBatch);
 		}
 		
+	}
+
+	@Override
+	public DescriptionScreenInfo generateScreenInfo() 
+	{
+		DescriptionScreenInfo info = new DescriptionScreenInfo();
+		
+		info.title = "Motor Mower";
+		info.descriptionText = "Lawn Mowing. (WIP - some imagination needed!)";
+		
+		info.howToWinText = new ArrayList<String>();
+		info.howToWinText.add("Cut each section of grass on your teams side by driving over it.");
+		info.howToWinText.add("The first team to cut all their grass wins.");
+		// TODO Auto-generated method stub
+		return info;
 	}
 	
 }

@@ -2,6 +2,7 @@ package com.ladinc.core.screen.gamemodes;
 
 import com.ladinc.core.CarPartA;
 import com.ladinc.core.screen.gamemodes.mazes.MazeLayout;
+import com.ladinc.core.ux.DescriptionScreenInfo;
 
 public class SimpleRaceScreen extends GenericScreen {
 	
@@ -39,5 +40,11 @@ public class SimpleRaceScreen extends GenericScreen {
 	public void preCarRender(float delta) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public DescriptionScreenInfo generateScreenInfo() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

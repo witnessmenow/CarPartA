@@ -1,5 +1,7 @@
 package com.ladinc.core.screen.gamemodes.carpool;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.math.Vector2;
 import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
@@ -9,8 +11,10 @@ import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.IGenericLayout;
 import com.ladinc.core.screen.gamemodes.soccer.SoccerScreen;
 import com.ladinc.core.utilities.Enums.Team;
+import com.ladinc.core.ux.DescriptionScreenInfo;
 
-public class CarPoolScreen extends GenericScreen {
+public class CarPoolScreen extends GenericScreen 
+{
 	private CarPoolLayout carPoolLayout;
 	private ColourBall colourIntertedIn;
 	private float shortestDistanceBetweenAiAndBall = 0.0f;
@@ -149,5 +153,23 @@ public class CarPoolScreen extends GenericScreen {
 	{
 		this.game.setScreen(new SoccerScreen(game));
 		dispose();
+	}
+
+	@Override
+	public DescriptionScreenInfo generateScreenInfo() 
+	{
+		DescriptionScreenInfo info = new DescriptionScreenInfo();
+		
+		info.title = "Car-Pool";
+		info.descriptionText = "Pool/Billards with cars.";
+		
+		info.howToWinText = new ArrayList<String>();
+		info.howToWinText.add("Pot your team's colour balls, as shown on the top of the screen.)");
+		info.howToWinText.add("The first team to pot all their balls wins.");
+		info.howToWinText.add("Cars that are potted will respawn.");
+		info.howToWinText.add("");
+		info.howToWinText.add("Black ball is mysterious .... tbh it currently does nothing.");
+		// TODO Auto-generated method stub
+		return info;
 	}
 }
