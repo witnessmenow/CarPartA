@@ -45,9 +45,13 @@ public class PainterLayout extends GenericLayout {
 		int direction;
 		
 		if (team == Team.Away)
+		{
 			direction = -1;
+		}
 		else
+		{
 			direction = 1;
+		}
 		
 		if (playerTeamNumber % 2 == 0)
 		{
@@ -66,7 +70,6 @@ public class PainterLayout extends GenericLayout {
 	@Override
 	public void createWorld(World world)
 	{
-		
 		new BoxProp(world, getWorldWidth(), 1, new Vector2(getWorldWidth() / 2,
 				GAP_BETWEEN_TOPBOTTOMWALL_AND_EDGE));// left
 		new BoxProp(world, getWorldWidth(), 1, new Vector2(getWorldWidth() / 2,
@@ -106,7 +109,6 @@ public class PainterLayout extends GenericLayout {
 						TILE_SIZE, new Vector2(tempX, tempY)));
 			}
 		}
-		
 	}
 	
 	public void drawSpritesForTiles(SpriteBatch sp, int pixPerMeter)
@@ -144,5 +146,4 @@ public class PainterLayout extends GenericLayout {
 			}
 		}
 	}
-	
 }
