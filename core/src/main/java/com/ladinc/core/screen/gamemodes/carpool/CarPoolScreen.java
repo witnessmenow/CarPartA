@@ -164,7 +164,7 @@ public class CarPoolScreen extends GenericScreen
 		info.descriptionText = "Pool/Billards with cars.";
 		
 		info.howToWinText = new ArrayList<String>();
-		info.howToWinText.add("Pot your team's colour balls, as shown on the top of the screen.)");
+		info.howToWinText.add("Pot your team's colour balls, as shown on the top of the screen.");
 		info.howToWinText.add("The first team to pot all their balls wins.");
 		info.howToWinText.add("Cars that are potted will respawn.");
 		info.howToWinText.add("");
