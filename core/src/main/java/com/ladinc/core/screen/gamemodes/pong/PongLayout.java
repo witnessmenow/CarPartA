@@ -40,11 +40,11 @@ public class PongLayout extends GenericLayout
 	{
 		if(team == Team.Away)
 		{
-			return new StartingPosition(new Vector2((getWorldWidth() - GAP_FROM_EDGE) - (PLAYER_GAP_X*playerTeamNumber), getCenter().y), 0);
+			return new StartingPosition(new Vector2((getWorldWidth() - GAP_FROM_EDGE) - (PLAYER_GAP_X*playerTeamNumber), getCenter().y), (float)Math.PI);
 		}
 		else
 		{
-			return new StartingPosition(new Vector2((0 + GAP_FROM_EDGE) + (PLAYER_GAP_X*playerTeamNumber), getCenter().y), 0);
+			return new StartingPosition(new Vector2((0 + GAP_FROM_EDGE) + (PLAYER_GAP_X*playerTeamNumber), getCenter().y), (float)Math.PI);
 		}
 	}
 
