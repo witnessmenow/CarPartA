@@ -19,6 +19,7 @@ import com.ladinc.core.collision.CollisionInfo;
 import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
 import com.ladinc.core.controllers.controls.IControls;
 import com.ladinc.core.player.PlayerInfo;
+import com.ladinc.core.utilities.Enums.Team;
 
 public class Vehicle {
 	
@@ -64,6 +65,9 @@ public class Vehicle {
 	private boolean handBrake;
 	
 	public boolean slippyMode = false;
+	public boolean parked = false;
+	
+	public Team team;
 	
 	public boolean getDestroyedStatus()
 	{
@@ -374,6 +378,98 @@ public class Vehicle {
 	
 	private float backWheelAngle;
 	
+	protected void killSideWaysVelocity()
+	{
+		if (slippyMode)
+		{
+			
+			for (Wheel wheel : wheels)
+			{
+				if (wheel.powered)
+					wheel.killSidewaysVelocity();
+				// else
+				// wheel.dampSidewaysVelocity();
+			}
+		}
+		else
+		{
+			for (Wheel wheel : wheels)
+			{
+				wheel.killSidewaysVelocity();
+			}
+			
+		}
+	}
+	
+	protected void calculateWheelAngle(float deltaTime)
+	{
+		// calculate the change in wheel's angle for this update
+		float incr = (this.maxSteerAngle) * deltaTime * 5;
+		
+		if (this.steer == Vehicle.STEER_LEFT)
+		{
+			this.wheelAngle = Math.min(Math.max(this.wheelAngle, 0) + incr,
+					this.maxSteerAngle); // increment angle without going over
+											// max steer
+		}
+		else if (this.steer == Vehicle.STEER_RIGHT)
+		{
+			this.wheelAngle = Math.max(Math.min(this.wheelAngle, 0) - incr,
+					-this.maxSteerAngle); // decrement angle without going over
+											// max steer
+		}
+		else
+		{
+			this.wheelAngle = 0;
+		}
+		
+		Gdx.app.debug("Vehicle", "update: WheelAngle=" + this.wheelAngle);
+	}
+	
+	protected void setAngleOfWheels()
+	{
+		for (Wheel wheel : this.getWheels(true))
+		{
+			wheel.setAngle(this.wheelAngle);
+		}
+		
+		if (this.handBrake)
+		{
+			this.backWheelAngle = (float) (((-1) * this.wheelAngle) / (1.5));
+		}
+		else
+		{
+			this.backWheelAngle = 0f;
+		}
+		
+		for (Wheel wheel : this.getWheels(false))
+		{
+			wheel.setAngle(this.backWheelAngle);
+		}
+	}
+	
+	protected boolean checkForSpinout(float deltaTime)
+	{
+		if (spinoutTimeRemaining > 0.0f)
+		{
+			spinoutTimeRemaining = spinoutTimeRemaining - deltaTime;
+			return true;
+		}
+		
+		//Not spinning out
+		return false;
+	}
+	
+	protected void applyForceToWheels(Vector2 forceVector)
+	{
+		for (Wheel wheel : this.getPoweredWheels())
+		{
+			Vector2 position = wheel.body.getWorldCenter();
+			wheel.body.applyForce(wheel.body.getWorldVector(new Vector2(
+					forceVector.x, forceVector.y)), position, true);
+		}
+	}
+	
 	public void update(float deltaTime)
 	{
 		// check if the vehicle is respawning
@@ -404,96 +500,35 @@ public class Vehicle {
 			
 		}
 		
-		if (spinoutTimeRemaining > 0.0f)
+		if (checkForSpinout(deltaTime))
 		{
-			spinoutTimeRemaining = spinoutTimeRemaining - deltaTime;
+			//car is still spinning out
 			return;
 		}
 		
 		// 1. KILL SIDEWAYS VELOCITY
-		
-		if (slippyMode)
-		{
-			
-			for (Wheel wheel : wheels)
-			{
-				if (wheel.powered)
-					wheel.killSidewaysVelocity();
-				// else
-				// wheel.dampSidewaysVelocity();
-			}
-		}
-		else
-		{
-			for (Wheel wheel : wheels)
-			{
-				wheel.killSidewaysVelocity();
-			}
-			
-		}
+		killSideWaysVelocity();
 		
 		// 2. SET WHEEL ANGLE
+		calculateWheelAngle(deltaTime);
 		
-		// calculate the change in wheel's angle for this update
-		float incr = (this.maxSteerAngle) * deltaTime * 5;
-		
-		if (this.steer == Vehicle.STEER_LEFT)
-		{
-			this.wheelAngle = Math.min(Math.max(this.wheelAngle, 0) + incr,
-					this.maxSteerAngle); // increment angle without going over
-											// max steer
-		}
-		else if (this.steer == Vehicle.STEER_RIGHT)
-		{
-			this.wheelAngle = Math.max(Math.min(this.wheelAngle, 0) - incr,
-					-this.maxSteerAngle); // decrement angle without going over
-											// max steer
-		}
-		else
-		{
-			this.wheelAngle = 0;
-		}
-		
-		Gdx.app.debug("Vehicle", "update: WheelAngle=" + this.wheelAngle);
 		
 		// update revolving wheels
-		for (Wheel wheel : this.getWheels(true))
-		{
-			wheel.setAngle(this.wheelAngle);
-		}
-		
-		if (this.handBrake)
-		{
-			this.backWheelAngle = (float) (((-1) * this.wheelAngle) / (1.5));
-		}
-		else
-		{
-			this.backWheelAngle = 0f;
-		}
-		
-		for (Wheel wheel : this.getWheels(false))
-		{
-			wheel.setAngle(this.backWheelAngle);
-		}
+		setAngleOfWheels();
+
 		
 		Vector2 baseVector = handleAcceleration();
+		
 		
 		// multiply by engine power, which gives us a force vector relative to
 		// the wheel
 		Vector2 forceVector = new Vector2(this.power * baseVector.x, this.power
 				* baseVector.y);
 		
-		// apply force to each wheel
-		for (Wheel wheel : this.getPoweredWheels())
-		{
-			Vector2 position = wheel.body.getWorldCenter();
-			wheel.body.applyForce(wheel.body.getWorldVector(new Vector2(
-					forceVector.x, forceVector.y)), position, true);
-		}
 		
-		// System.out.println(this.playerName + "'s Car Speed: " +
-		// this.getSpeedKMH());
-		// if going very slow, stop - to prevent endless sliding
+		// apply force to each wheel
+		applyForceToWheels(forceVector);
+		
 		
 	}
 	

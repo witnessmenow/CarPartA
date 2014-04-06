@@ -233,8 +233,8 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	
 	protected abstract void renderUpdates(float delta);
 	
-	private int homePlayerCount = 0;
-	private int awayPlayerCount = 0;
+	protected int homePlayerCount = 0;
+	protected int awayPlayerCount = 0;
 	
 	protected void createCarsForPlayers()
 	{
