@@ -189,9 +189,9 @@ public class TeamSelectScreen extends GenericScreen {
 			}
 		}
 		
-		//game.setScreen(new NoBrakesScreen(game));
+		game.setScreen(new NoBrakesScreen(game));
 		//game.setScreen(new HillScreen(game));
-		 game.setScreen(new KingScreen(game));
+		 //game.setScreen(new KingScreen(game));
 		// game.setScreen(new MowerScreen(game));
 		// game.setScreen(new PainterScreen(game));
 		// game.setScreen(new PongScreen(game));

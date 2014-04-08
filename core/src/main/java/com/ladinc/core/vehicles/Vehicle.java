@@ -42,7 +42,7 @@ public class Vehicle {
 	
 	public boolean king = false;
 	
-	private float acceleration = 0f;
+	protected float acceleration = 0f;
 	
 	public static Sprite crownSprite = null;
 	
@@ -62,7 +62,7 @@ public class Vehicle {
 	public Sprite sprite;
 	public Sprite wheelSprite;
 	
-	private boolean handBrake;
+	protected boolean handBrake;
 	
 	public boolean slippyMode = false;
 	public boolean parked = false;
@@ -309,9 +309,9 @@ public class Vehicle {
 		return baseVector;
 	}
 	
-	private float currentMaxSpeed;
+	protected float currentMaxSpeed;
 	
-	private Vector2 handleAcceleration()
+	protected Vector2 handleAcceleration()
 	{
 		Vector2 baseVector = new Vector2(0, 0);
 		;
