@@ -23,7 +23,7 @@ public class NoBrakesValetCar extends Vehicle
 		
 		// Handling
 		this.maxSteerAngle = 20f;
-		this.maxSpeed = 350f;
+		this.maxSpeed = 500f;
 		this.power = 500f;
 		
 		this.wheelWidth = 1f;
@@ -52,7 +52,7 @@ public class NoBrakesValetCar extends Vehicle
 		
 		this.sprite = carSprite;
 		
-		startCar(-500f);
+		startCar(-250f);
 		
 		
 		this.body.setLinearDamping(0.2f);
@@ -86,11 +86,82 @@ public class NoBrakesValetCar extends Vehicle
 		// update revolving wheels
 		setAngleOfWheels();
 	
+		float curSpeed = this.getSpeedKMH();
+		
 		if(Math.abs(steer) > 0)
 		{
-			applyForceToWheels(new Vector2(0, -this.getSpeedKMH()));
+			Gdx.app.error("NBV Update","Steer: " + curSpeed);
+			applyForceToWheels(new Vector2(0, -curSpeed*(curSpeed/18f)));
 		}
 		
-		Gdx.app.error("NBV Update","Car Speed: " + this.getSpeedKMH());
+		//applyForceToWheels(handleAcceleration());
+		
+		Gdx.app.error("NBV Update","Car Speed: " + curSpeed);
+	}
+	
+	@Override
+	protected Vector2 handleAcceleration()
+	{
+		Vector2 baseVector = new Vector2(0, 0);
+		;
+		
+		Gdx.app.debug("Vehicle",
+				"handleAcceleration: GetSpeedKMH=" + this.getSpeedKMH()
+						+ ", getLocalVelocity.y=" + this.getLocalVelocity().y);
+		
+		if (!this.handBrake)
+			currentMaxSpeed = this.maxSpeed;
+		else
+			currentMaxSpeed = this.maxSpeed / 2;
+		
+		if (this.acceleration > 0)
+		{
+			// Player is pressing the button to accelerate
+			
+			// Car is going backwards, apply a large force to go forward (break)
+			if (this.getLocalVelocity().y > 0)
+			{
+				baseVector = new Vector2(0f, -4.5f);
+			}
+			else if (this.getSpeedKMH() < (currentMaxSpeed * this.acceleration))
+			{
+				// User needs to be going faster for how hard they are pressing
+				if (this.getLocalVelocity().y < 20)
+					baseVector = new Vector2(0, -2.2f);
+				else
+					baseVector = new Vector2(0, -1.1f);
+			}
+			
+		}
+		else if (this.acceleration < 0)
+		{
+			// Player is pressing the button to reverse
+			
+			// Car is going forward, apply breaks
+			if (this.getLocalVelocity().y < 0)
+			{
+				baseVector = new Vector2(0f, 4.5f);
+			}
+			else if (this.getSpeedKMH() < (currentMaxSpeed * (-1) * this.acceleration))
+			{
+				
+				if (this.getLocalVelocity().y > (-20))
+					baseVector = new Vector2(0, 2.2f);
+				else
+					baseVector = new Vector2(0, 1.1f);
+			}
+		}
+		else
+		{
+			
+			if (this.getSpeedKMH() < 7)
+				this.setSpeed(0);
+			else if (this.getLocalVelocity().y < 0)
+				baseVector = new Vector2(0, 0.7f);
+			else if (this.getLocalVelocity().y > 0)
+				baseVector = new Vector2(0, -0.7f);
+		}
+		
+		return baseVector;
 	}
 }
