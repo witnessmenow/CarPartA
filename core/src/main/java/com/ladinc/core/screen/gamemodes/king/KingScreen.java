@@ -3,27 +3,19 @@ package com.ladinc.core.screen.gamemodes.king;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.assets.Font;
-import com.ladinc.core.screen.gamemodes.GenericScreen;
+import com.ladinc.core.screen.gamemodes.GenericKingScreen;
 import com.ladinc.core.screen.gamemodes.IGenericLayout;
 import com.ladinc.core.screen.gamemodes.mower.MowerScreen;
 import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.ux.DescriptionScreenInfo;
 import com.ladinc.core.vehicles.Vehicle;
 
-public class KingScreen extends GenericScreen 
-{
-	private static final float START_TIME = 30;
-	
-	private float awaySecondsLeft = START_TIME;
-	private float homeSecondsLeft = START_TIME;
-	private BitmapFont bitmapFont;
-	
+public class KingScreen extends GenericKingScreen {
 	private KingLayout kingLayout;
 	private KingCollisionHelper colHelper;
 	
@@ -49,13 +41,6 @@ public class KingScreen extends GenericScreen
 				handleGameOver();
 			}
 		}
-		
-	}
-	
-	private void handleGameOver()
-	{
-		this.game.setScreen(new MowerScreen(game));
-		dispose();
 	}
 	
 	@Override
@@ -94,16 +79,20 @@ public class KingScreen extends GenericScreen
 	}
 	
 	@Override
-	protected void renderUpdates(float delta)
+	public DescriptionScreenInfo generateScreenInfo()
 	{
-
-		updateTimer(delta);
-
-		if (this.proccessingGameOver)
-		{
-			this.finishMessage.draw(spriteBatch);
-		}
+		DescriptionScreenInfo info = new DescriptionScreenInfo();
 		
+		info.title = "Car King";
+		info.descriptionText = "It is good to be the king!";
+		
+		info.howToWinText = new ArrayList<String>();
+		info.howToWinText
+				.add("Take the crown by hitting into the car with it.");
+		info.howToWinText
+				.add("Each team's timer will only count when they have the crown.");
+		info.howToWinText.add("The first team who's timer reaches 0 wins.");
+		return info;
 	}
 	
 	@Override
@@ -116,14 +105,12 @@ public class KingScreen extends GenericScreen
 			if (ai.getVehicle().king)
 			{
 				Vector2 temp = ai.getVehicle().body.getWorldCenter();
-				
 				desiredCoOrd = new Vector2();
 				
 				if (temp.x < worldWidth / 4)
 				{
 					// Over on the left
 					desiredCoOrd.x = worldWidth;
-					
 				}
 				else if (temp.x > (worldWidth / 4) * 3)
 				{
@@ -139,7 +126,6 @@ public class KingScreen extends GenericScreen
 					{
 						desiredCoOrd.x = 0;
 					}
-					
 				}
 				
 				if (temp.y < worldHeight / 4)
@@ -160,7 +146,6 @@ public class KingScreen extends GenericScreen
 					{
 						desiredCoOrd.y = 0;
 					}
-					
 				}
 			}
 			else if (ai.getVehicle().player.team != colHelper.currentKingSide)
@@ -201,93 +186,28 @@ public class KingScreen extends GenericScreen
 		}
 	}
 	
-	private void handleWin()
+	@Override
+	protected void renderUpdates(float delta)
+	{
+		updateTimer(delta, colHelper.currentKingSide);
+		
+		if (this.proccessingGameOver)
+		{
+			this.finishMessage.draw(spriteBatch);
+		}
+	}
+	
+	private void handleGameOver()
+	{
+		this.game.setScreen(new MowerScreen(game));
+		dispose();
+	}
+	
+	@Override
+	protected void handleWin()
 	{
 		this.gameOverCoolOffTimer = 5.0f;
 		this.proccessingGameOver = true;
 		this.colHelper.enableChange = false;
 	}
-	
-	private String timeLeft;
-	
-	private void updateTimer(float delta)
-	{
-		// Set for blue
-		bitmapFont.setColor(0.3f, 0.5f, 1f, 1.0f);
-		
-		timeLeft = calculateHomeTimeLeft(delta,
-				(colHelper.currentKingSide == Team.Home));
-		
-		bitmapFont.draw(spriteBatch, timeLeft,
-				(screenWidth / 4) - bitmapFont.getBounds(timeLeft).width / 2,
-				screenHeight - 10);
-		
-		// Set for blue
-		bitmapFont.setColor(1f, 0.3f, 0.3f, 1.0f);
-		
-		timeLeft = calculateAwayTimeLeft(delta,
-				(colHelper.currentKingSide == Team.Away));
-		
-		bitmapFont.draw(spriteBatch, timeLeft, (screenWidth / 4) * 3
-				- bitmapFont.getBounds(timeLeft).width / 4, screenHeight - 10);
-	}
-	
-	private String calculateHomeTimeLeft(float secondsPast, boolean countDown)
-	{
-		if (!this.proccessingGameOver && countDown && !this.showDescriptionScreen)
-		{
-			
-			homeSecondsLeft -= secondsPast;
-			
-			if (homeSecondsLeft < 0)
-			{
-				homeSecondsLeft = 0;
-				handleWin();
-			}
-		}
-		
-		int seconds = (int) homeSecondsLeft;
-		
-		String secondPrepend = (seconds < 10) ? "0" : "";
-		
-		return secondPrepend + seconds;
-	}
-	
-	private String calculateAwayTimeLeft(float secondsPast, boolean countDown)
-	{
-		if (!this.proccessingGameOver && countDown && !this.showDescriptionScreen)
-		{
-			
-			awaySecondsLeft -= secondsPast;
-			
-			if (awaySecondsLeft < 0)
-			{
-				awaySecondsLeft = 0;
-				handleWin();
-			}
-		}
-		
-		int seconds = (int) awaySecondsLeft;
-		
-		String secondPrepend = (seconds < 10) ? "0" : "";
-		
-		return secondPrepend + seconds;
-	}
-
-	@Override
-	public DescriptionScreenInfo generateScreenInfo() 
-	{
-		DescriptionScreenInfo info = new DescriptionScreenInfo();
-		
-		info.title = "Car King";
-		info.descriptionText = "It is good to be the king!";
-		
-		info.howToWinText = new ArrayList<String>();
-		info.howToWinText.add("Take the crown by hitting into the car with it.");
-		info.howToWinText.add("Each team's timer will only count when they have the crown.");
-		info.howToWinText.add("The first team who's timer reaches 0 wins.");
-		// TODO Auto-generated method stub
-		return info;
-	}
-	
 }

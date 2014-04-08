@@ -1,66 +1,235 @@
 package com.ladinc.core.screen.gamemodes.hill;
 
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.ladinc.core.collision.CollisionInfo;
 import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
+import com.ladinc.core.objects.FloorTileSensor;
+import com.ladinc.core.player.PlayerInfo;
 import com.ladinc.core.screen.gamemodes.AbstractCollisionHelper;
 import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.vehicles.Vehicle;
 
 public class HillCollisionHelper extends AbstractCollisionHelper {
 	
+	/*
+	 * Bug:
+	 * 
+	 * If the hill switches and there is a person in the hill, it won't count
+	 * down for that player or switch colour.
+	 * 
+	 * Bug:
+	 * 
+	 * If the hill switches and there is two+ people in it and one player
+	 * leaves, the other players won't be recorded -> Very small chance of
+	 * occuring.
+	 * 
+	 * Bug:
+	 * 
+	 * The currentHillSide isn't being set to null when switched.
+	 * 
+	 * Bug:
+	 * 
+	 * The hill sometimes doesn't flip to team's colour, but the countdown
+	 * continues.
+	 * 
+	 * Bug:
+	 * 
+	 * The AI is bad. It just goes for the player.
+	 * 
+	 * Bug:
+	 * 
+	 * Refactor/Redesign how some things are implemented
+	 */
 	public Team currentHillSide;
 	
-	public boolean enableChange = true;
+	public LinkedHashSet<PlayerInfo> carsOnHill = new LinkedHashSet<PlayerInfo>();
 	
 	@Override
 	public void beginContact(Contact contact)
 	{
-		Fixture fixtureA = contact.getFixtureA();
-		Fixture fixtureB = contact.getFixtureB();
-		
-		CollisionInfo bodyAInfo = getCollisionInfoFromFixture(fixtureA);
-		CollisionInfo bodyBInfo = getCollisionInfoFromFixture(fixtureB);
+		CollisionInfo bodyAInfo = getCollisionInfoFromFixture(contact
+				.getFixtureA());
+		CollisionInfo bodyBInfo = getCollisionInfoFromFixture(contact
+				.getFixtureB());
 		
 		if (bodyAInfo != null && bodyBInfo != null)
 		{
-			// Check for collision of two Vehicles
-			if (bodyAInfo.type == CollisionObjectType.Vehicle
-					&& bodyBInfo.type == CollisionObjectType.Vehicle)
+			if (isTwoVehilesColliding(bodyAInfo, bodyBInfo))
 			{
-				Vehicle v1 = (Vehicle) bodyAInfo.object;
-				Vehicle v2 = (Vehicle) bodyBInfo.object;
-				
-				currentHillSide = v2.player.team;
-				if (v1.getSpeedKMH() > v2.getSpeedKMH())
-				{
-					spinVehicle(v2);
-				}
-				else
-				{
-					spinVehicle(v1);
-				}
+				collideCars(bodyAInfo, bodyBInfo);
 			}
-			else if (currentHillSide == null)
+			else
 			{
-				if (bodyAInfo.type == CollisionObjectType.FloorSensor
-						&& bodyBInfo.type == CollisionObjectType.Vehicle)
-				{
-					Vehicle v2 = (Vehicle) bodyBInfo.object;
-					currentHillSide = v2.player.team;
-				}
-				else if (bodyBInfo.type == CollisionObjectType.FloorSensor
-						&& bodyAInfo.type == CollisionObjectType.Vehicle)
-				{
-					Vehicle v1 = (Vehicle) bodyAInfo.object;
-					currentHillSide = v1.player.team;
-				}
+				assignHillToTeam(bodyAInfo, bodyBInfo);
 			}
 		}
 	}
 	
-	private void spinVehicle(Vehicle vehicle)
+	@Override
+	public void endContact(Contact contact)
+	{
+		removeHillIfLastPersonOnHill(contact);
+	}
+	
+	public Team retrieveTeamOnHill()
+	{
+		if (currentHillSide != null)
+		{
+			Iterator<PlayerInfo> itr = carsOnHill.iterator();
+			
+			if (!itr.hasNext())
+			{
+				currentHillSide = null;
+			}
+			else
+			{
+				while (itr.hasNext())
+				{
+					PlayerInfo playerInfoOnHill = itr.next();
+					if (currentHillSide.equals(playerInfoOnHill.team))
+					{
+						// Don't need to switch Hill team
+						break;
+					}
+					if (!itr.hasNext())
+					{
+						currentHillSide = playerInfoOnHill.team;
+					}
+				}
+			}
+		}
+		
+		return currentHillSide;
+	}
+	
+	private void removeHillIfLastPersonOnHill(Contact contact)
+	{
+		Fixture fixtureA = contact.getFixtureA();
+		Fixture fixtureB = contact.getFixtureB();
+		CollisionInfo bodyAInfo = getCollisionInfoFromFixture(fixtureA);
+		CollisionInfo bodyBInfo = getCollisionInfoFromFixture(fixtureB);
+		if (bodyAInfo != null && bodyBInfo != null)
+		{
+			if (isVehicleAndFloorSensor(bodyAInfo, bodyBInfo))
+			{
+				unassignFloorTileSensors((FloorTileSensor) bodyAInfo.object,
+						(Vehicle) bodyBInfo.object);
+			}
+			else if (isVehicleAndFloorSensor(bodyBInfo, bodyAInfo))
+			{
+				unassignFloorTileSensors((FloorTileSensor) bodyBInfo.object,
+						(Vehicle) bodyAInfo.object);
+			}
+		}
+	}
+	
+	private void assignHillToTeam(CollisionInfo bodyAInfo,
+			CollisionInfo bodyBInfo)
+	{
+		if (isVehicleAndFloorSensor(bodyAInfo, bodyBInfo))
+		{
+			assignFloorTileSensors((Vehicle) bodyBInfo.object,
+					(FloorTileSensor) bodyAInfo.object);
+		}
+		else if (isVehicleAndFloorSensor(bodyBInfo, bodyAInfo))
+		{
+			assignFloorTileSensors((Vehicle) bodyAInfo.object,
+					(FloorTileSensor) bodyBInfo.object);
+		}
+	}
+	
+	private void assignFloorTileSensors(Vehicle vehicle,
+			FloorTileSensor floorTileSensor)
+	{
+		if (floorTileSensor.assigned)
+		{
+			if (currentHillSide == null)
+			{
+				setTeamForHillTile(vehicle, floorTileSensor);
+			}
+			addCarToCarsOnHill(vehicle);
+		}
+		else
+		{
+			// assignFloorTileSensor(floorTileSensor, vehicle.player);
+		}
+	}
+	
+	private boolean isVehicleAndFloorSensor(CollisionInfo bodyAInfo,
+			CollisionInfo bodyBInfo)
+	{
+		return bodyAInfo.type == CollisionObjectType.FloorSensor
+				&& bodyBInfo.type == CollisionObjectType.Vehicle;
+	}
+	
+	private void addCarToCarsOnHill(Vehicle vehicle)
+	{
+		carsOnHill.add(vehicle.player);
+	}
+	
+	private void removeCarFromCarsOnHill(PlayerInfo player)
+	{
+		carsOnHill.remove(player);
+	}
+	
+	private void setTeamForHillTile(Vehicle vehicle,
+			FloorTileSensor floorTileSensor)
+	{
+		floorTileSensor.setTeam(vehicle.player.team);
+		currentHillSide = vehicle.player.team;
+	}
+	
+	private void unassignFloorTileSensors(FloorTileSensor floorTileSensor,
+			Vehicle vehicle)
+	{
+		unassignHill(floorTileSensor, vehicle.player);
+	}
+	
+	private void assignFloorTileSensor(FloorTileSensor floorTileSensor,
+			PlayerInfo playerInfo)
+	{
+		floorTileSensor.setTeam(playerInfo.team);
+	}
+	
+	private void unassignFloorTileSensor(FloorTileSensor floorTileSensor)
+	{
+		floorTileSensor.setTeam(null);
+	}
+	
+	private void unassignHill(FloorTileSensor floorTileSensor,
+			PlayerInfo playerInfo)
+	{
+		if (floorTileSensor.assigned)
+		{
+			removeCarFromCarsOnHill(playerInfo);
+			floorTileSensor.setTeam(retrieveTeamOnHill());
+		}
+		else
+		{
+			// unassignFloorTileSensor(floorTileSensor);
+		}
+	}
+	
+	private void collideCars(CollisionInfo bodyAInfo, CollisionInfo bodyBInfo)
+	{
+		Vehicle v1 = (Vehicle) bodyAInfo.object;
+		Vehicle v2 = (Vehicle) bodyBInfo.object;
+		
+		if (v1.getSpeedKMH() > v2.getSpeedKMH())
+		{
+			spinAndMoveBackVehicle(v2);
+		}
+		else
+		{
+			spinAndMoveBackVehicle(v1);
+		}
+	}
+	
+	private void spinAndMoveBackVehicle(Vehicle vehicle)
 	{
 		if (vehicle.spinoutTimeRemaining <= 0f)
 		{

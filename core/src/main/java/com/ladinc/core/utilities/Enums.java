@@ -6,7 +6,7 @@ public class Enums {
 	};
 	
 	public static enum Team {
-		Home, Away
+		Home, Away, Neutral
 	};
 	
 }

@@ -1,24 +1,69 @@
 package com.ladinc.core.screen.gamemodes.hill;
 
+import java.util.ArrayList;
+import java.util.Random;
+
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ladinc.core.objects.BoxProp;
+import com.ladinc.core.objects.FloorTileSensor;
 import com.ladinc.core.objects.StartingPosition;
 import com.ladinc.core.screen.gamemodes.GenericLayout;
 import com.ladinc.core.utilities.Enums.Team;
 
 public class HillLayout extends GenericLayout {
-	
-	private static final float GAP_BETWEEN_CARS = 12f;
-	private static final float CAR_START_GAP_FROM_EDGE = 35f;
+	public ArrayList<FloorTileSensor> floorSensors;
 	
 	private static final float GAP_BETWEEN_SIDEWALL_AND_EDGE = 10.5f;
 	private static final float GAP_BETWEEN_TOPBOTTOMWALL_AND_EDGE = 8.5f;
+	private static final float TILE_SIZE = 10f;
+	private static final float PLAYER_GAP_X = 8f;
+	
+	private final Sprite homeTile;
+	private final Sprite awayTile;
+	private final Sprite hillTile;
+	public float timeLeft = 0f;
 	
 	public HillLayout(World world, float worldWidth, float worldHeight,
 			Vector2 center, int numberOfInnerWalls) {
 		super(world, worldWidth, worldHeight, center, numberOfInnerWalls);
-		// TODO Auto-generated constructor stub
+		
+		homeTile = FloorTileSensor.getSprite(Team.Home);
+		awayTile = FloorTileSensor.getSprite(Team.Away);
+		hillTile = FloorTileSensor.getSprite(Team.Neutral);
+	}
+	
+	@Override
+	public StartingPosition getPlayerStartPoint(Team team, int playerTeamNumber)
+	{
+		float carPosX;
+		float carPosY = getWorldHeight() / 2;
+		
+		int direction;
+		
+		if (team == Team.Away)
+		{
+			direction = -1;
+		}
+		else
+		{
+			direction = 1;
+		}
+		
+		if (playerTeamNumber % 2 == 0)
+		{
+			carPosX = getWorldWidth() / 2 - (direction)
+					* (((playerTeamNumber) + 1) * PLAYER_GAP_X);
+		}
+		else
+		{
+			carPosX = getWorldWidth() / 2 + (direction)
+					* (((playerTeamNumber) + 1) * PLAYER_GAP_X);
+		}
+		
+		return new StartingPosition(new Vector2(carPosX, carPosY), 0);
 	}
 	
 	@Override
@@ -34,78 +79,73 @@ public class HillLayout extends GenericLayout {
 		new BoxProp(world, 1, getWorldHeight(), new Vector2(getWorldWidth()
 				- GAP_BETWEEN_SIDEWALL_AND_EDGE, getWorldHeight() / 2));
 		
+		createTiles(world);
 	}
 	
-	@Override
-	public StartingPosition getPlayerStartPoint(Team team, int playerTeamNumber)
+	public void drawSpritesForTiles(SpriteBatch sp, int pixPerMeter)
 	{
-		if (team == Team.Away)
+		if (timeLeft <= 0)
 		{
-			return getAwayStartingPosisiton(playerTeamNumber);
+			for (FloorTileSensor fts : floorSensors)
+			{
+				fts.assigned = false;
+				fts.team = null;
+			}
+			setHill();
+			timeLeft = 7f;
+		}
+		
+		for (FloorTileSensor fts : floorSensors)
+		{
+			if (fts.assigned)
+			{
+				if (fts.getTeam() == Team.Home)
+				{
+					fts.updateSprite(homeTile, sp, pixPerMeter);
+				}
+				else if (fts.getTeam() == Team.Away)
+				{
+					fts.updateSprite(awayTile, sp, pixPerMeter);
+				}
+				else
+				{
+					fts.updateSprite(hillTile, sp, pixPerMeter);
+				}
+			}
+		}
+	}
+	
+	private void createTiles(World world)
+	{
+		if (floorSensors == null)
+		{
+			floorSensors = new ArrayList<FloorTileSensor>();
 		}
 		else
 		{
-			return getHomeStartingPosition(playerTeamNumber);
+			floorSensors.clear();
+		}
+		
+		for (int i = 0; i < 17; i++)
+		{
+			float tempX = i * TILE_SIZE + TILE_SIZE / 2
+					+ GAP_BETWEEN_SIDEWALL_AND_EDGE + 0.5f;
+			for (int j = 0; j < 9; j++)
+			{
+				float tempY = j * TILE_SIZE + TILE_SIZE / 2
+						+ GAP_BETWEEN_TOPBOTTOMWALL_AND_EDGE + 0.5f;
+				floorSensors.add(new FloorTileSensor(world, TILE_SIZE,
+						TILE_SIZE, new Vector2(tempX, tempY)));
+			}
 		}
 	}
 	
-	private StartingPosition getHomeStartingPosition(int playerTeamNumber)
+	private void setHill()
 	{
-		// Face Right
-		float direction = (float) Math.PI / 2;
-		float x = CAR_START_GAP_FROM_EDGE;
-		float y = this.getCenter().y;
-		
-		// 0 is ok with defaults
-		if (playerTeamNumber != 0)
-		{
-			// because we are ingoring 0, we need to offset the rest of the
-			// values
-			playerTeamNumber -= 1;
-			
-			int dir = 0;
-			if (playerTeamNumber % 2 == 0)
-			{
-				dir = 1;
-			}
-			else
-			{
-				dir = -1;
-			}
-			
-			y = y + ((dir) * (((playerTeamNumber / 2) + 1) * GAP_BETWEEN_CARS));
-		}
-		
-		return new StartingPosition(new Vector2(x, y), direction);
-	}
-	
-	private StartingPosition getAwayStartingPosisiton(int playerTeamNumber)
-	{
-		// Face Left
-		float direction = (float) (Math.PI + Math.PI / 2);
-		float x = this.getWorldWidth() - CAR_START_GAP_FROM_EDGE;
-		float y = this.getCenter().y;
-		
-		// 0 is ok with defaults
-		if (playerTeamNumber != 0)
-		{
-			// because we are ingoring 0, we need to offset the rest of the
-			// values
-			playerTeamNumber -= 1;
-			
-			int dir = 0;
-			if (playerTeamNumber % 2 == 0)
-			{
-				dir = -1;
-			}
-			else
-			{
-				dir = +1;
-			}
-			
-			y = y + ((dir) * (((playerTeamNumber / 2) + 1) * GAP_BETWEEN_CARS));
-		}
-		
-		return new StartingPosition(new Vector2(x, y), direction);
+		Random r = new Random();
+		FloorTileSensor hillSensor = floorSensors.get(r.nextInt(floorSensors
+				.size()));
+		hillSensor.team = null;
+		hillSensor.assigned = true;
 	}
 }

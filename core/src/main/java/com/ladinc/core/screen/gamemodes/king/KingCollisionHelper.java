@@ -13,8 +13,6 @@ public class KingCollisionHelper extends AbstractCollisionHelper {
 	public Team currentKingSide;
 	public Vehicle currentKingVehicle;
 	
-	public boolean enableChange = true;
-	
 	@Override
 	public void beginContact(Contact contact)
 	{

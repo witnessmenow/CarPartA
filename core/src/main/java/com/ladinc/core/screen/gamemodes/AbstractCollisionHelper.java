@@ -7,8 +7,10 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.ladinc.core.collision.CollisionInfo;
+import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
 
 public abstract class AbstractCollisionHelper implements ContactListener {
+	public boolean enableChange = true;
 	
 	protected CollisionInfo getCollisionInfoFromFixture(Fixture fix)
 	{
@@ -25,6 +27,13 @@ public abstract class AbstractCollisionHelper implements ContactListener {
 		}
 		
 		return colInfo;
+	}
+	
+	protected boolean isTwoVehilesColliding(CollisionInfo bodyAInfo,
+			CollisionInfo bodyBInfo)
+	{
+		return bodyAInfo.type == CollisionObjectType.Vehicle
+				&& bodyBInfo.type == CollisionObjectType.Vehicle;
 	}
 	
 	@Override
