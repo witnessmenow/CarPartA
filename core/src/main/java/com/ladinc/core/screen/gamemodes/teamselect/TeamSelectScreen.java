@@ -13,6 +13,7 @@ import com.ladinc.core.screen.gamemodes.GenericLayout;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.hill.HillScreen;
 import com.ladinc.core.screen.gamemodes.king.KingScreen;
+import com.ladinc.core.screen.gamemodes.nobrakes.NoBrakesScreen;
 import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.ux.DescriptionScreenInfo;
 import com.ladinc.core.vehicles.Car;
@@ -187,8 +188,8 @@ public class TeamSelectScreen extends GenericScreen {
 				}
 			}
 		}
-		game.setScreen(new NoBrakesScreen(game));
-		// game.setScreen(new HillScreen(game));
+		//game.setScreen(new NoBrakesScreen(game));
+		 game.setScreen(new HillScreen(game));
 		// game.setScreen(new KingScreen(game));
 		// game.setScreen(new MowerScreen(game));
 		// game.setScreen(new PainterScreen(game));

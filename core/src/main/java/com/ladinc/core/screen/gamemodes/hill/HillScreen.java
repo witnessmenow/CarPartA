@@ -38,6 +38,8 @@ public class HillScreen extends GenericKingScreen {
 		colHelper = new HillCollisionHelper();
 		world.setContactListener(colHelper);
 		
+		this.hillLayout.colHelper = colHelper;
+		
 		this.backgroundSprite = Art.getSprite(Art.PAINTER_BACKGROUND);
 		
 		for (SimpleAi ai : this.game.controllerManager.getAi())
@@ -49,7 +51,11 @@ public class HillScreen extends GenericKingScreen {
 	@Override
 	public void preCarRender(float delta)
 	{
-		hillLayout.timeLeft -= delta;
+		//this stops the hill change timer from counting while description is displayed. 
+		if(!this.showDescriptionScreen)
+		{
+			hillLayout.timeLeft -= delta;
+		}
 		hillLayout.drawSpritesForTiles(spriteBatch, PIXELS_PER_METER);
 	}
 	

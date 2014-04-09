@@ -26,6 +26,8 @@ public class HillLayout extends GenericLayout {
 	private final Sprite hillTile;
 	public float timeLeft = 0f;
 	
+	public HillCollisionHelper colHelper;
+	
 	public HillLayout(World world, float worldWidth, float worldHeight,
 			Vector2 center, int numberOfInnerWalls) {
 		super(world, worldWidth, worldHeight, center, numberOfInnerWalls);
@@ -147,5 +149,7 @@ public class HillLayout extends GenericLayout {
 				.size()));
 		hillSensor.team = null;
 		hillSensor.assigned = true;
+		
+		this.colHelper.handleHillMove();
 	}
 }

@@ -75,6 +75,12 @@ public class HillCollisionHelper extends AbstractCollisionHelper {
 		removeHillIfLastPersonOnHill(contact);
 	}
 	
+	public void handleHillMove()
+	{
+		this.carsOnHill.clear();
+		this.currentHillSide = null;
+	}
+	
 	public Team retrieveTeamOnHill()
 	{
 		if (currentHillSide != null)
@@ -145,6 +151,7 @@ public class HillCollisionHelper extends AbstractCollisionHelper {
 	private void assignFloorTileSensors(Vehicle vehicle,
 			FloorTileSensor floorTileSensor)
 	{
+		//the assigned floor till is the hill
 		if (floorTileSensor.assigned)
 		{
 			if (currentHillSide == null)
