@@ -37,8 +37,8 @@ public class MowerLayout extends GenericLayout {
 			Vector2 center, int numberOfInnerWalls) {
 		super(world, worldWidth, worldHeight, center, numberOfInnerWalls);
 		
-		unCutSprite = FloorTileSensor.getSprite(Team.Home);
-		cutSprite = FloorTileSensor.getSprite(Team.Away);
+		unCutSprite = FloorTileSensor.getTeamSprite(Team.Home);
+		cutSprite = FloorTileSensor.getTeamSprite(Team.Away);
 	}
 	
 	@Override

@@ -22,6 +22,7 @@ public class PainterLayout extends GenericLayout {
 	
 	private final Sprite homeTile;
 	private final Sprite awayTile;
+	private final Sprite neutralTile;
 	
 	public int homeScore = 0;
 	public int awayScore = 0;
@@ -32,8 +33,9 @@ public class PainterLayout extends GenericLayout {
 			Vector2 center, int numberOfInnerWalls) {
 		super(world, worldWidth, worldHeight, center, numberOfInnerWalls);
 		
-		homeTile = FloorTileSensor.getSprite(Team.Home);
-		awayTile = FloorTileSensor.getSprite(Team.Away);
+		homeTile = FloorTileSensor.getTeamSprite(Team.Home);
+		awayTile = FloorTileSensor.getTeamSprite(Team.Away);
+		neutralTile = FloorTileSensor.retrieveFloorArtFromSprite(FloorTileSensor.WHITE_FLOOR_TILE, 200);
 	}
 	
 	@Override
@@ -125,6 +127,10 @@ public class PainterLayout extends GenericLayout {
 				{
 					fts.updateSprite(awayTile, sp, pixPerMeter);
 				}
+			}
+			else
+			{
+				fts.updateSprite(neutralTile, sp, pixPerMeter);
 			}
 		}
 	}

@@ -17,6 +17,7 @@ public class FloorTileSensor {
 	public static final String HOME_FLOOR_TILE = "HOME_FLOOR_TILE";
 	public static final String AWAY_FLOOR_TILE = "AWAY_FLOOR_TILE";
 	public static final String NEUTRAL_FLOOR_TILE = "NEUTRAL_FLOOR_TILE";
+	public static final String WHITE_FLOOR_TILE = "WHITE_FLOOR_TILE";
 	
 	public float width, height;
 	public Body body;
@@ -52,7 +53,7 @@ public class FloorTileSensor {
 		boxShape.dispose();
 	}
 	
-	public static Sprite getSprite(Team team)
+	public static Sprite getTeamSprite(Team team)
 	{
 		if (team == Team.Home)
 		{
@@ -74,7 +75,7 @@ public class FloorTileSensor {
 		Art.updateSprite(sprite, spriteBatch, PIXELS_PER_METER, this.body);
 	}
 	
-	private static Sprite retrieveFloorArtFromSprite(String key, int srcX)
+	public static Sprite retrieveFloorArtFromSprite(String key, int srcX)
 	{
 		if (!Art.spriteTable.containsKey(key))
 		{

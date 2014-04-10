@@ -32,9 +32,9 @@ public class HillLayout extends GenericLayout {
 			Vector2 center, int numberOfInnerWalls) {
 		super(world, worldWidth, worldHeight, center, numberOfInnerWalls);
 		
-		homeTile = FloorTileSensor.getSprite(Team.Home);
-		awayTile = FloorTileSensor.getSprite(Team.Away);
-		hillTile = FloorTileSensor.getSprite(Team.Neutral);
+		homeTile = FloorTileSensor.getTeamSprite(Team.Home);
+		awayTile = FloorTileSensor.getTeamSprite(Team.Away);
+		hillTile = FloorTileSensor.getTeamSprite(Team.Neutral);
 	}
 	
 	@Override
