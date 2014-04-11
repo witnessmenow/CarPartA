@@ -29,16 +29,8 @@ public class HillCollisionHelper extends AbstractCollisionHelper {
 	 * 
 	 * Bug:
 	 * 
-	 * The currentHillSide isn't being set to null when switched.
-	 * 
-	 * Bug:
-	 * 
-	 * The hill sometimes doesn't flip to team's colour, but the countdown
-	 * continues.
-	 * 
-	 * Bug:
-	 * 
-	 * The AI is bad. It just goes for the player.
+	 * The AI is bad. It goes for the hill but doesn't slow down for it. If a
+	 * player is in the hill the computer will attack the other players
 	 * 
 	 * Bug:
 	 * 
@@ -60,7 +52,7 @@ public class HillCollisionHelper extends AbstractCollisionHelper {
 		{
 			if (isTwoVehilesColliding(bodyAInfo, bodyBInfo))
 			{
-				collideCars(bodyAInfo, bodyBInfo);
+				// collideCars(bodyAInfo, bodyBInfo);
 			}
 			else
 			{
@@ -151,7 +143,7 @@ public class HillCollisionHelper extends AbstractCollisionHelper {
 	private void assignFloorTileSensors(Vehicle vehicle,
 			FloorTileSensor floorTileSensor)
 	{
-		//the assigned floor till is the hill
+		// the assigned floor till is the hill
 		if (floorTileSensor.assigned)
 		{
 			if (currentHillSide == null)

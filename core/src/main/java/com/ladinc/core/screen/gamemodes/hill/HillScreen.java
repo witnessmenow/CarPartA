@@ -1,6 +1,7 @@
 package com.ladinc.core.screen.gamemodes.hill;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
@@ -8,6 +9,8 @@ import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.assets.Font;
+import com.ladinc.core.objects.FloorTileSensor;
+import com.ladinc.core.player.PlayerInfo;
 import com.ladinc.core.screen.gamemodes.GenericKingScreen;
 import com.ladinc.core.screen.gamemodes.IGenericLayout;
 import com.ladinc.core.screen.gamemodes.king.KingScreen;
@@ -51,8 +54,9 @@ public class HillScreen extends GenericKingScreen {
 	@Override
 	public void preCarRender(float delta)
 	{
-		//this stops the hill change timer from counting while description is displayed. 
-		if(!this.showDescriptionScreen)
+		// this stops the hill change timer from counting while description is
+		// displayed.
+		if (!this.showDescriptionScreen)
 		{
 			hillLayout.timeLeft -= delta;
 		}
@@ -82,31 +86,35 @@ public class HillScreen extends GenericKingScreen {
 	public void calculateAiMovements(float delta)
 	{
 		Vector2 desiredCoOrd = null;
+		Vector2 hillCoOrdinates = null;
+		boolean isHumanOnTheHill = isHumanOnHill();
+		
+		for (FloorTileSensor floorTileSensor : hillLayout.floorSensors)
+		{
+			if (floorTileSensor.assigned)
+			{
+				hillCoOrdinates = floorTileSensor.body.getWorldCenter();
+				break;
+			}
+		}
 		
 		for (SimpleAi ai : this.game.controllerManager.getAi())
 		{
-			if (ai.getVehicle().player.team == Team.Home)
+			desiredCoOrd = hillCoOrdinates;
+			// Check if AI or Player is on the hill. Move one car away. Leave
+			// player there
+			if (isHumanOnTheHill
+					&& ai.getVehicle().player.team == colHelper.currentHillSide)
 			{
-				for (Vehicle v : getVehicles())
+				if (ai.getVehicle().player.team == Team.Home)
 				{
-					if (!v.player.controls.isAi()
-							&& (v.player.team == Team.Away))
-					{
-						desiredCoOrd = v.body.getWorldCenter();
-						break;
-					}
+					desiredCoOrd = attackRandomPlayer(getAwayVehicles(),
+							Team.Home);
 				}
-			}
-			else
-			{
-				for (Vehicle v : getVehicles())
+				else
 				{
-					if (!v.player.controls.isAi()
-							&& (v.player.team == Team.Home))
-					{
-						desiredCoOrd = v.body.getWorldCenter();
-						break;
-					}
+					desiredCoOrd = attackRandomPlayer(getHomeVehicles(),
+							Team.Away);
 				}
 			}
 			
@@ -116,6 +124,43 @@ public class HillScreen extends GenericKingScreen {
 				ai.calculateMove(delta);
 			}
 		}
+	}
+	
+	private boolean isHumanOnHill()
+	{
+		boolean humanFromCurrentHillSideIsOnHill = false;
+		ArrayList<PlayerInfo> humanPlayerInfo = this.game.controllerManager
+				.getPlayers();
+		for (PlayerInfo playerInfoOnHill : colHelper.carsOnHill)
+		{
+			if (playerInfoOnHill.team == colHelper.currentHillSide
+					&& humanPlayerInfo.contains(playerInfoOnHill))
+			{
+				humanFromCurrentHillSideIsOnHill = true;
+				break;
+			}
+		}
+		return humanFromCurrentHillSideIsOnHill;
+	}
+	
+	private Vector2 attackRandomPlayer(List<Vehicle> teamVehicles,
+			Team teamToAttack)
+	{
+		Vector2 desiredCoOrd = null;
+		for (Vehicle v : teamVehicles)
+		{
+			if ((v.player.team == teamToAttack))
+			{
+				desiredCoOrd = v.body.getWorldCenter();
+				if (!v.player.aiAttacking)
+				{
+					v.player.aiAttacking = true;
+					break;
+				}
+			}
+		}
+		
+		return desiredCoOrd;
 	}
 	
 	@Override

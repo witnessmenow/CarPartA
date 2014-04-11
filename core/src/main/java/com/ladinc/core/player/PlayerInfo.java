@@ -12,6 +12,7 @@ public class PlayerInfo {
 	public IControls controls;
 	public String playerName;
 	public int playerId;
+	public boolean aiAttacking;
 	
 	public Sprite identifier;
 	

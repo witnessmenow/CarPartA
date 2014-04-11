@@ -456,7 +456,7 @@ public class Vehicle {
 			return true;
 		}
 		
-		//Not spinning out
+		// Not spinning out
 		return false;
 	}
 	
@@ -502,7 +502,7 @@ public class Vehicle {
 		
 		if (checkForSpinout(deltaTime))
 		{
-			//car is still spinning out
+			// car is still spinning out
 			return;
 		}
 		
@@ -512,23 +512,18 @@ public class Vehicle {
 		// 2. SET WHEEL ANGLE
 		calculateWheelAngle(deltaTime);
 		
-		
 		// update revolving wheels
 		setAngleOfWheels();
-
 		
 		Vector2 baseVector = handleAcceleration();
-		
 		
 		// multiply by engine power, which gives us a force vector relative to
 		// the wheel
 		Vector2 forceVector = new Vector2(this.power * baseVector.x, this.power
 				* baseVector.y);
 		
-		
 		// apply force to each wheel
 		applyForceToWheels(forceVector);
-		
 		
 	}
 	
