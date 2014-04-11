@@ -16,6 +16,8 @@ import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
 public class PongBall 
 {
 	
+	private static final float STARTING_SPEED = 20f;
+	
 	public Sprite sprite;
 	public Body body;
 	public float ballSize = 4f;
@@ -85,11 +87,11 @@ public class PongBall
 	{
 		if(Math.random() >= 0.5f)
 		{
-			body.setLinearVelocity(15f, 15f);
+			body.setLinearVelocity(STARTING_SPEED, STARTING_SPEED);
 		}
 		else
 		{
-			body.setLinearVelocity(-15f, 15f);
+			body.setLinearVelocity(-STARTING_SPEED, STARTING_SPEED);
 		}
 	}
 	

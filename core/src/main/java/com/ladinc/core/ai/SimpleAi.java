@@ -201,11 +201,11 @@ public class SimpleAi implements IControls
 				
 				if(this.desiredPos.position.y > this.aiVehicle.body.getWorldCenter().y + 5f)
 				{
-					accelerate = -1;
+					accelerate = 1;
 				}
 				else if (this.desiredPos.position.y < this.aiVehicle.body.getWorldCenter().y - 5f)
 				{
-					accelerate = 1;
+					accelerate = -1;
 				}
 				else
 				{
