@@ -105,15 +105,16 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		
 		renderUpdates(delta);
 		
-		if(showDescriptionScreen && descriptionScreen != null)
+		if (showDescriptionScreen && descriptionScreen != null)
 		{
 			descriptionScreen.drawDescriptionScreen(spriteBatch, delta);
-			if(descriptionScreen.allowSkip && !previousSkipDescriptionValue)
+			if (descriptionScreen.allowSkip && !previousSkipDescriptionValue)
 			{
 				this.game.controllerManager.resetActiveStateOfControllers();
 			}
 			
-			if(this.game.controllerManager.checkForActiveControllers() && descriptionScreen.allowSkip)
+			if (this.game.controllerManager.checkForActiveControllers()
+					&& descriptionScreen.allowSkip)
 			{
 				skipDescriptionScreen();
 			}
@@ -133,7 +134,8 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	
 	public void enableDescriptionScreen()
 	{
-		//This is so we can detect a button press to skip the description screen
+		// This is so we can detect a button press to skip the description
+		// screen
 		this.game.controllerManager.resetActiveStateOfControllers();
 		previousSkipDescriptionValue = this.descriptionScreen.allowSkip;
 		showDescriptionScreen = true;
@@ -203,9 +205,10 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		this.touchOverlaySprite.setPosition(0, 0);
 		
 		DescriptionScreenInfo tempInfo = generateScreenInfo();
-		if(tempInfo != null)
+		if (tempInfo != null)
 		{
-			this.descriptionScreen = new DescriptionScreen(new Vector2(screenWidth/2, screenHeight/2), tempInfo);
+			this.descriptionScreen = new DescriptionScreen(new Vector2(
+					screenWidth / 2, screenHeight / 2), tempInfo);
 			enableDescriptionScreen();
 		}
 		
@@ -308,6 +311,32 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	public List<Vehicle> getVehicles()
 	{
 		return this.vehicles;
+	}
+	
+	public List<Vehicle> getHomeVehicles()
+	{
+		List<Vehicle> homeTeamVehicleList = new ArrayList<Vehicle>();
+		for (Vehicle vehicle : this.vehicles)
+		{
+			if (vehicle.player.team == Team.Home)
+			{
+				homeTeamVehicleList.add(vehicle);
+			}
+		}
+		return homeTeamVehicleList;
+	}
+	
+	public List<Vehicle> getAwayVehicles()
+	{
+		List<Vehicle> awayTeamVehicleList = new ArrayList<Vehicle>();
+		for (Vehicle vehicle : this.vehicles)
+		{
+			if (vehicle.player.team == Team.Away)
+			{
+				awayTeamVehicleList.add(vehicle);
+			}
+		}
+		return awayTeamVehicleList;
 	}
 	
 	public void resetCars()
