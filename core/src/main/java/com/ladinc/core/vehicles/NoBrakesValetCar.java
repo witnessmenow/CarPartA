@@ -9,6 +9,8 @@ import com.ladinc.core.player.PlayerInfo;
 
 public class NoBrakesValetCar extends Vehicle
 {
+	public float speed = 300f;
+	
 	public NoBrakesValetCar(PlayerInfo player, World world, StartingPosition position,
 			Sprite carSprite, Sprite wheelSprite) 
 	{
@@ -22,7 +24,7 @@ public class NoBrakesValetCar extends Vehicle
 		this.length = 10f;
 		
 		// Handling
-		this.maxSteerAngle = 20f;
+		this.maxSteerAngle = 5f;
 		this.maxSpeed = 500f;
 		this.power = 500f;
 		
@@ -52,7 +54,8 @@ public class NoBrakesValetCar extends Vehicle
 		
 		this.sprite = carSprite;
 		
-		startCar(-250f);
+		//startCar(-250f);
+		
 		
 		
 		this.body.setLinearDamping(0.2f);
@@ -62,12 +65,13 @@ public class NoBrakesValetCar extends Vehicle
 //		}
 
 	}
+	private Vector2 zeroV = new Vector2(0, 0);
 	
 	public void startCar(float speed)
 	{
 		Vector2 forceVector = new Vector2(0, this.power
 				* speed);
-		
+		applyLinearVelocityToWheels(zeroV);
 		
 		// apply force to each wheel
 		applyForceToWheels(forceVector);
@@ -77,7 +81,7 @@ public class NoBrakesValetCar extends Vehicle
 	public void update(float deltaTime)
 	{
 		// 1. KILL SIDEWAYS VELOCITY
-		killSideWaysVelocity();
+		//killSideWaysVelocity();
 				
 		// 2. SET WHEEL ANGLE
 		calculateWheelAngle(deltaTime);
@@ -85,18 +89,31 @@ public class NoBrakesValetCar extends Vehicle
 				
 		// update revolving wheels
 		setAngleOfWheels();
-	
-		float curSpeed = this.getSpeedKMH();
 		
-		if(Math.abs(steer) > 0)
+		if(speed > 0f)
 		{
-			Gdx.app.error("NBV Update","Steer: " + curSpeed);
-			applyForceToWheels(new Vector2(0, -curSpeed*(curSpeed/18f)));
+			//this.body.setLinearVelocity(0f, 0f);
+			startCar(-speed);
+			
+			if(Math.abs(steer) > 0)
+			{
+				this.speed = this.speed - 0.5f;
+			}
+			else
+			{
+				this.speed = this.speed - 0.2f;
+			}
+		}
+		else
+		{
+			speed = 0f;
 		}
 		
-		//applyForceToWheels(handleAcceleration());
+		killSideWaysVelocity();
 		
-		Gdx.app.error("NBV Update","Car Speed: " + curSpeed);
+		//applyForceToWheels(handleAcceleration());
+		float curSpeed = this.getSpeedKMH();
+		Gdx.app.error("NBV Update","carSpeed: " + speed + "KMpH: " + curSpeed);
 	}
 	
 	@Override

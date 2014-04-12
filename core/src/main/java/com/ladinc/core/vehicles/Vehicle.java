@@ -460,6 +460,14 @@ public class Vehicle {
 		return false;
 	}
 	
+	protected void applyLinearVelocityToWheels(Vector2 velocity)
+	{
+		for (Wheel wheel : this.wheels)
+		{
+			wheel.body.setLinearVelocity(velocity);
+		}
+	}
+	
 	protected void applyForceToWheels(Vector2 forceVector)
 	{
 		for (Wheel wheel : this.getPoweredWheels())
