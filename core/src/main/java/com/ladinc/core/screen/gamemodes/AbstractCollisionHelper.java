@@ -29,7 +29,7 @@ public abstract class AbstractCollisionHelper implements ContactListener {
 		return colInfo;
 	}
 	
-	protected boolean isTwoVehilesColliding(CollisionInfo bodyAInfo,
+	protected boolean isTwoVehiclesColliding(CollisionInfo bodyAInfo,
 			CollisionInfo bodyBInfo)
 	{
 		return bodyAInfo.type == CollisionObjectType.Vehicle

@@ -50,7 +50,7 @@ public class HillCollisionHelper extends AbstractCollisionHelper {
 		
 		if (bodyAInfo != null && bodyBInfo != null)
 		{
-			if (isTwoVehilesColliding(bodyAInfo, bodyBInfo))
+			if (isTwoVehiclesColliding(bodyAInfo, bodyBInfo))
 			{
 				// collideCars(bodyAInfo, bodyBInfo);
 			}

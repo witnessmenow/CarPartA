@@ -13,6 +13,7 @@ public class PlayerInfo {
 	public String playerName;
 	public int playerId;
 	public boolean aiAttacking;
+	public boolean hasOpponentsFlag;
 	
 	public Sprite identifier;
 	
