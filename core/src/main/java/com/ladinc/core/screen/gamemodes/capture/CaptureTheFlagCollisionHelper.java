@@ -69,17 +69,14 @@ public class CaptureTheFlagCollisionHelper extends AbstractCollisionHelper {
 						vehicle.player.hasOpponentsFlag = true;
 						flag.assigned = true;
 					}
+					else
+					{
+						scoreGoal(vehicle, flag);
+					}
 				}
 				else
 				{
-					if (vehicle.player.hasOpponentsFlag
-							&& vehicle.player.team != flag.team)
-					{
-						// It's a score
-						increaseScore(vehicle.player.team);
-						vehicle.player.hasOpponentsFlag = false;
-						flag.assigned = false;
-					}
+					scoreGoal(vehicle, flag);
 				}
 			}
 			else if (isBodyAVehicleAndBodyBFlag(bodyBInfo, bodyAInfo))
@@ -88,6 +85,7 @@ public class CaptureTheFlagCollisionHelper extends AbstractCollisionHelper {
 				Vehicle vehicle = (Vehicle) bodyBInfo.object;
 				if (!flag.assigned)
 				{
+					// TODO: SEE this section and scores
 					if (vehicle.player.team != flag.team)
 					{
 						if (vehicle.player.team == Team.Home)
@@ -102,19 +100,28 @@ public class CaptureTheFlagCollisionHelper extends AbstractCollisionHelper {
 						vehicle.player.hasOpponentsFlag = true;
 						flag.assigned = true;
 					}
+					else
+					{
+						scoreGoal(vehicle, flag);
+					}
 				}
 				else
 				{
-					if (vehicle.player.hasOpponentsFlag
-							&& vehicle.player.team != flag.team)
-					{
-						// It's a score
-						increaseScore(vehicle.player.team);
-						vehicle.player.hasOpponentsFlag = false;
-						flag.assigned = false;
-					}
+					scoreGoal(vehicle, flag);
 				}
 			}
+		}
+	}
+	
+	private void scoreGoal(Vehicle vehicle, FloorTileSensor flag)
+	{
+		if (vehicle.player.hasOpponentsFlag && vehicle.player.team == flag.team)
+		{
+			resetFlagVehicle(vehicle.player.team);
+			// It's a score
+			increaseScore(vehicle.player.team);
+			vehicle.player.hasOpponentsFlag = false;
+			flag.assigned = false;
 		}
 	}
 	
@@ -134,7 +141,6 @@ public class CaptureTheFlagCollisionHelper extends AbstractCollisionHelper {
 	{
 		if (team == Team.Home)
 		{
-			// Reset
 			vehicleWithHomeFlag = null;
 		}
 		else

@@ -231,7 +231,7 @@ public class CaptureTheFlagScreen extends GenericScreen {
 	
 	private void updateTimer(float delta)
 	{
-		bitmapFont.setColor(1f, 0f, 0f, 0f);
+		bitmapFont.setColor(1f, 0f, 0f, 1f);
 		
 		String timeLeft = calculateTimeLeft(delta);
 		
@@ -268,7 +268,7 @@ public class CaptureTheFlagScreen extends GenericScreen {
 	
 	private void updateScore()
 	{
-		bitmapFont.setColor(1.0f, 0f, 0f, 0f);
+		bitmapFont.setColor(1.0f, 0f, 0f, 1f);
 		bitmapFont.draw(
 				spriteBatch,
 				"" + colHelper.homeTeamScore,
@@ -278,7 +278,7 @@ public class CaptureTheFlagScreen extends GenericScreen {
 								.valueOf(colHelper.homeTeamScore)).width / 2,
 				screenHeight - 10);
 		
-		bitmapFont.setColor(0f, 1.0f, 0f, 0f);
+		bitmapFont.setColor(0f, 1.0f, 0f, 1f);
 		bitmapFont.draw(
 				spriteBatch,
 				"" + colHelper.awayTeamScore,
