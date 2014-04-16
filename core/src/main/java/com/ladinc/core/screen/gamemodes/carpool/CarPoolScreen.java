@@ -7,8 +7,10 @@ import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.objects.balls.PoolBall;
 import com.ladinc.core.objects.balls.PoolBall.ColourBall;
+import com.ladinc.core.screen.gamemodes.GameModeMetaInfo;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.IGenericLayout;
+import com.ladinc.core.screen.gamemodes.GameModeMetaInfo.GameMode;
 import com.ladinc.core.screen.gamemodes.soccer.SoccerScreen;
 import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.ux.DescriptionScreenInfo;
@@ -156,7 +158,12 @@ public class CarPoolScreen extends GenericScreen
 	}
 
 	@Override
-	public DescriptionScreenInfo generateScreenInfo() 
+	public DescriptionScreenInfo getScreenInfo() 
+	{
+		return CarPoolScreen.generateScreenInfo();
+	}
+	
+	public static DescriptionScreenInfo generateScreenInfo()
 	{
 		DescriptionScreenInfo info = new DescriptionScreenInfo();
 		
@@ -171,5 +178,10 @@ public class CarPoolScreen extends GenericScreen
 		info.howToWinText.add("Black ball is mysterious .... tbh it currently does nothing.");
 		// TODO Auto-generated method stub
 		return info;
+	}
+	
+	public static GameModeMetaInfo getMetaInfo()
+	{
+		return new GameModeMetaInfo("Car-Pool", CarPoolScreen.generateScreenInfo(), GameMode.CarPool, true);
 	}
 }

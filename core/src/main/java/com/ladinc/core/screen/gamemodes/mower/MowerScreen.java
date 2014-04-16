@@ -7,8 +7,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
+import com.ladinc.core.screen.gamemodes.GameModeMetaInfo;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.IGenericLayout;
+import com.ladinc.core.screen.gamemodes.GameModeMetaInfo.GameMode;
+import com.ladinc.core.screen.gamemodes.mazes.MazeScreen;
 import com.ladinc.core.screen.gamemodes.painter.PainterCollisionHelper;
 import com.ladinc.core.screen.gamemodes.pong.PongScreen;
 import com.ladinc.core.utilities.Enums.Team;
@@ -154,7 +157,12 @@ public class MowerScreen extends GenericScreen
 	}
 
 	@Override
-	public DescriptionScreenInfo generateScreenInfo() 
+	public DescriptionScreenInfo getScreenInfo() 
+	{
+		return MowerScreen.generateScreenInfo();
+	}
+	
+	public static DescriptionScreenInfo generateScreenInfo()
 	{
 		DescriptionScreenInfo info = new DescriptionScreenInfo();
 		
@@ -166,6 +174,11 @@ public class MowerScreen extends GenericScreen
 		info.howToWinText.add("The first team to cut all their grass wins.");
 		// TODO Auto-generated method stub
 		return info;
+	}
+	
+	public static GameModeMetaInfo getMetaInfo()
+	{
+		return new GameModeMetaInfo("Motor Mower", MowerScreen.generateScreenInfo(), GameMode.Mower, true);
 	}
 	
 }

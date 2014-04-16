@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
+import com.ladinc.core.screen.gamemodes.GameModeMetaInfo;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
+import com.ladinc.core.screen.gamemodes.GameModeMetaInfo.GameMode;
+import com.ladinc.core.screen.gamemodes.king.KingScreen;
 import com.ladinc.core.screen.gamemodes.painter.PainterScreen;
 import com.ladinc.core.ux.DescriptionScreenInfo;
 
@@ -101,7 +104,12 @@ public class MazeScreen extends GenericScreen
 	}
 
 	@Override
-	public DescriptionScreenInfo generateScreenInfo() 
+	public DescriptionScreenInfo getScreenInfo() 
+	{
+		return MazeScreen.generateScreenInfo();
+	}
+	
+	public static DescriptionScreenInfo generateScreenInfo()
 	{
 		DescriptionScreenInfo info = new DescriptionScreenInfo();
 		
@@ -112,5 +120,10 @@ public class MazeScreen extends GenericScreen
 		info.howToWinText.add("First team with a member to reache the center wins.");
 		// TODO Auto-generated method stub
 		return info;
+	}
+	
+	public static GameModeMetaInfo getMetaInfo()
+	{
+		return new GameModeMetaInfo("A-Maze-ing", MazeScreen.generateScreenInfo(), GameMode.Amazing, true);
 	}
 }

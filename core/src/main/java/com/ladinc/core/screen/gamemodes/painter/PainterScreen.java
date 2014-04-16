@@ -8,9 +8,12 @@ import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.assets.Font;
+import com.ladinc.core.screen.gamemodes.GameModeMetaInfo;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.IGenericLayout;
+import com.ladinc.core.screen.gamemodes.GameModeMetaInfo.GameMode;
 import com.ladinc.core.screen.gamemodes.carpool.CarPoolScreen;
+import com.ladinc.core.screen.gamemodes.mower.MowerScreen;
 import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.ux.DescriptionScreenInfo;
 import com.ladinc.core.vehicles.Vehicle;
@@ -228,7 +231,12 @@ public class PainterScreen extends GenericScreen
 	}
 
 	@Override
-	public DescriptionScreenInfo generateScreenInfo() 
+	public DescriptionScreenInfo getScreenInfo() 
+	{
+		return PainterScreen.generateScreenInfo();
+	}
+	
+	public static DescriptionScreenInfo generateScreenInfo()
 	{
 		DescriptionScreenInfo info = new DescriptionScreenInfo();
 		
@@ -241,6 +249,11 @@ public class PainterScreen extends GenericScreen
 		info.howToWinText.add("When the timer runs out, the team with the most painted tiles wins.");
 		// TODO Auto-generated method stub
 		return info;
+	}
+	
+	public static GameModeMetaInfo getMetaInfo()
+	{
+		return new GameModeMetaInfo("Pi-Car-So", PainterScreen.generateScreenInfo(), GameMode.Painter, true);
 	}
 	
 }

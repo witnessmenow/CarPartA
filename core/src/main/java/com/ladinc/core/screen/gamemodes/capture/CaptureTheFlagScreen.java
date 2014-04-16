@@ -10,8 +10,11 @@ import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.assets.Font;
 import com.ladinc.core.objects.FloorTileSensor;
+import com.ladinc.core.screen.gamemodes.GameModeMetaInfo;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.IGenericLayout;
+import com.ladinc.core.screen.gamemodes.GameModeMetaInfo.GameMode;
+import com.ladinc.core.screen.gamemodes.carpool.CarPoolScreen;
 import com.ladinc.core.screen.gamemodes.king.KingScreen;
 import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.ux.DescriptionScreenInfo;
@@ -315,7 +318,13 @@ public class CaptureTheFlagScreen extends GenericScreen {
 	}
 	
 	@Override
-	public DescriptionScreenInfo generateScreenInfo()
+	public DescriptionScreenInfo getScreenInfo()
+	{
+
+		return CaptureTheFlagScreen.generateScreenInfo();
+	}
+	
+	public static DescriptionScreenInfo generateScreenInfo()
 	{
 		DescriptionScreenInfo info = new DescriptionScreenInfo();
 		
@@ -327,6 +336,11 @@ public class CaptureTheFlagScreen extends GenericScreen {
 		info.howToWinText
 				.add("The team with the highest score at the end of the timer wins.");
 		return info;
+	}
+	
+	public static GameModeMetaInfo getMetaInfo()
+	{
+		return new GameModeMetaInfo("CARpture The Flag", CaptureTheFlagScreen.generateScreenInfo(), GameMode.Capture, true);
 	}
 	
 	protected void handleWin()

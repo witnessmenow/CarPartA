@@ -204,7 +204,7 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		
 		this.touchOverlaySprite.setPosition(0, 0);
 		
-		DescriptionScreenInfo tempInfo = generateScreenInfo();
+		DescriptionScreenInfo tempInfo = getScreenInfo();
 		if (tempInfo != null)
 		{
 			this.descriptionScreen = new DescriptionScreen(new Vector2(
@@ -360,6 +360,5 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		}
 	}
 	
-	public abstract DescriptionScreenInfo generateScreenInfo();
-	
+	public abstract DescriptionScreenInfo getScreenInfo();
 }

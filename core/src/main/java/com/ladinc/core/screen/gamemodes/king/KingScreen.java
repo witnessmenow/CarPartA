@@ -8,8 +8,11 @@ import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.assets.Font;
+import com.ladinc.core.screen.gamemodes.GameModeMetaInfo;
 import com.ladinc.core.screen.gamemodes.GenericKingScreen;
 import com.ladinc.core.screen.gamemodes.IGenericLayout;
+import com.ladinc.core.screen.gamemodes.GameModeMetaInfo.GameMode;
+import com.ladinc.core.screen.gamemodes.hill.HillScreen;
 import com.ladinc.core.screen.gamemodes.mower.MowerScreen;
 import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.ux.DescriptionScreenInfo;
@@ -79,7 +82,13 @@ public class KingScreen extends GenericKingScreen {
 	}
 	
 	@Override
-	public DescriptionScreenInfo generateScreenInfo()
+	public DescriptionScreenInfo getScreenInfo()
+	{
+
+		return KingScreen.generateScreenInfo();
+	}
+	
+	public static DescriptionScreenInfo generateScreenInfo()
 	{
 		DescriptionScreenInfo info = new DescriptionScreenInfo();
 		
@@ -94,6 +103,12 @@ public class KingScreen extends GenericKingScreen {
 		info.howToWinText.add("The first team who's timer reaches 0 wins.");
 		return info;
 	}
+	
+	public static GameModeMetaInfo getMetaInfo()
+	{
+		return new GameModeMetaInfo("Car King", KingScreen.generateScreenInfo(), GameMode.King, true);
+	}
+	
 	
 	@Override
 	public void calculateAiMovements(float delta)

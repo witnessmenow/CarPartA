@@ -11,8 +11,11 @@ import com.ladinc.core.assets.Art;
 import com.ladinc.core.assets.Font;
 import com.ladinc.core.objects.FloorTileSensor;
 import com.ladinc.core.player.PlayerInfo;
+import com.ladinc.core.screen.gamemodes.GameModeMetaInfo;
 import com.ladinc.core.screen.gamemodes.GenericKingScreen;
 import com.ladinc.core.screen.gamemodes.IGenericLayout;
+import com.ladinc.core.screen.gamemodes.GameModeMetaInfo.GameMode;
+import com.ladinc.core.screen.gamemodes.capture.CaptureTheFlagScreen;
 import com.ladinc.core.screen.gamemodes.king.KingScreen;
 import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.ux.DescriptionScreenInfo;
@@ -164,11 +167,16 @@ public class HillScreen extends GenericKingScreen {
 	}
 	
 	@Override
-	public DescriptionScreenInfo generateScreenInfo()
+	public DescriptionScreenInfo getScreenInfo()
+	{
+		return HillScreen.generateScreenInfo();
+	}
+	
+	public static DescriptionScreenInfo generateScreenInfo()
 	{
 		DescriptionScreenInfo info = new DescriptionScreenInfo();
 		
-		info.title = "CARrauntoohil";
+		info.title = "CAR-into-hill";
 		info.descriptionText = "Car of the Hill";
 		
 		info.howToWinText = new ArrayList<String>();
@@ -176,6 +184,11 @@ public class HillScreen extends GenericKingScreen {
 				.add("Decrease your team's timer by remaining in the hill!");
 		info.howToWinText.add("The first team who's timer reaches 0 wins.");
 		return info;
+	}
+	
+	public static GameModeMetaInfo getMetaInfo()
+	{
+		return new GameModeMetaInfo("CAR-into-hill", HillScreen.generateScreenInfo(), GameMode.Hill, true);
 	}
 	
 	@Override

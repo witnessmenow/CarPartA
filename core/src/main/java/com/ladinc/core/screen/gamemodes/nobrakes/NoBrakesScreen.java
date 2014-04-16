@@ -87,7 +87,7 @@ public class NoBrakesScreen extends GenericScreen
 	}
 
 	@Override
-	public DescriptionScreenInfo generateScreenInfo() 
+	public DescriptionScreenInfo getScreenInfo() 
 	{
 		// TODO Auto-generated method stub
 		return null;

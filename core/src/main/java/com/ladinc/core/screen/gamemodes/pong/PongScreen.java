@@ -8,9 +8,12 @@ import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.assets.Font;
 import com.ladinc.core.objects.balls.PongBall;
+import com.ladinc.core.screen.gamemodes.GameModeMetaInfo;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.IGenericLayout;
+import com.ladinc.core.screen.gamemodes.GameModeMetaInfo.GameMode;
 import com.ladinc.core.screen.gamemodes.mazes.MazeScreen;
+import com.ladinc.core.screen.gamemodes.painter.PainterScreen;
 import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.ux.DescriptionScreenInfo;
 import com.ladinc.core.vehicles.Vehicle;
@@ -289,7 +292,13 @@ public class PongScreen extends GenericScreen
 	}
 
 	@Override
-	public DescriptionScreenInfo generateScreenInfo() 
+	public DescriptionScreenInfo getScreenInfo() 
+	{
+
+		return PongScreen.generateScreenInfo();
+	}
+	
+	public static DescriptionScreenInfo generateScreenInfo()
 	{
 		DescriptionScreenInfo info = new DescriptionScreenInfo();
 		
@@ -301,6 +310,11 @@ public class PongScreen extends GenericScreen
 		info.howToWinText.add("Score more points than the oposition before the timer runs out to win");
 		// TODO Auto-generated method stub
 		return info;
+	}
+	
+	public static GameModeMetaInfo getMetaInfo()
+	{
+		return new GameModeMetaInfo("Pong-Cars", PongScreen.generateScreenInfo(), GameMode.Pong, true);
 	}
 	
 }

@@ -10,9 +10,12 @@ import com.ladinc.core.assets.Art;
 import com.ladinc.core.assets.Font;
 import com.ladinc.core.collision.CollisionHelper;
 import com.ladinc.core.objects.balls.Ball;
+import com.ladinc.core.screen.gamemodes.GameModeMetaInfo;
 import com.ladinc.core.screen.gamemodes.GenericLayout;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
+import com.ladinc.core.screen.gamemodes.GameModeMetaInfo.GameMode;
 import com.ladinc.core.screen.gamemodes.king.KingScreen;
+import com.ladinc.core.screen.gamemodes.pong.PongScreen;
 import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.ux.DescriptionScreenInfo;
 
@@ -270,7 +273,12 @@ public class SoccerScreen extends GenericScreen
 	}
 
 	@Override
-	public DescriptionScreenInfo generateScreenInfo() 
+	public DescriptionScreenInfo getScreenInfo() 
+	{
+		return SoccerScreen.generateScreenInfo();
+	}
+	
+	public static DescriptionScreenInfo generateScreenInfo()
 	{
 		DescriptionScreenInfo info = new DescriptionScreenInfo();
 		
@@ -281,6 +289,11 @@ public class SoccerScreen extends GenericScreen
 		info.howToWinText.add("Score more goals that opposition before the timer runs out to win.");
 		// TODO Auto-generated method stub
 		return info;
+	}
+	
+	public static GameModeMetaInfo getMetaInfo()
+	{
+		return new GameModeMetaInfo("Soc-Car", SoccerScreen.generateScreenInfo(), GameMode.Soccar, true);
 	}
 	
 }
