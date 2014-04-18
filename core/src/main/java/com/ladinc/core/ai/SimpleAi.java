@@ -358,4 +358,16 @@ public class SimpleAi implements IControls
 		return false;
 	}
 
+	@Override
+	public int getMenuXDireciton() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getMenuYDireciton() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

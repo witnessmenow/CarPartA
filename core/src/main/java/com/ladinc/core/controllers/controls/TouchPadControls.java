@@ -256,4 +256,16 @@ public class TouchPadControls implements IControls
 		this.extraButton2Pressed = extraButton2Pressed;
 	}
 
+	@Override
+	public int getMenuXDireciton() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getMenuYDireciton() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

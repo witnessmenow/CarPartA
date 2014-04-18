@@ -22,6 +22,9 @@ public interface IControls {
 	
 	public boolean getExtraButton2Status();
 	
+	public int getMenuXDireciton();
+	public int getMenuYDireciton();
+	
 	public void setMenuInterest(boolean set);
 	
 	public boolean isAi();

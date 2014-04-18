@@ -328,5 +328,35 @@ public class GamePadControls implements IControls {
 		
 		this.extraButton2Pressed = extraButton2Pressed;
 	}
+
+	@Override
+	public int getMenuXDireciton() 
+	{
+		if(leftMovement.x > 0)
+		{
+			return 1;
+		}
+		else if (leftMovement.x < 0)
+		{
+			return -1;
+		}
+
+		return 0;
+	}
+
+	@Override
+	public int getMenuYDireciton() 
+	{
+		if(leftMovement.y > 0)
+		{
+			return 1;
+		}
+		else if (leftMovement.y < 0)
+		{
+			return -1;
+		}
+		
+		return 0;
+	}
 	
 }

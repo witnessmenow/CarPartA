@@ -22,6 +22,7 @@ import com.ladinc.core.screen.gamemodes.mower.MowerScreen;
 import com.ladinc.core.screen.gamemodes.painter.PainterScreen;
 import com.ladinc.core.screen.gamemodes.pong.PongScreen;
 import com.ladinc.core.screen.gamemodes.soccer.SoccerScreen;
+import com.ladinc.core.screen.menus.GameModeSelectScreen;
 
 public class CarPartA extends Game {
 	
@@ -34,8 +35,10 @@ public class CarPartA extends Game {
 	{
 		Gdx.app.setLogLevel(Application.LOG_ERROR);
 		Assets.load();
+		initGameModes();
 		controllerManager = new MyControllerManager();
 		setScreen(new MainMenuScreen(this));
+		//setScreen(new GameModeSelectScreen(this));
 	}
 	
 	public void initGameModes()

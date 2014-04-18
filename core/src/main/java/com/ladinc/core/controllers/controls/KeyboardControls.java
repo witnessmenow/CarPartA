@@ -326,4 +326,26 @@ public class KeyboardControls implements IControls {
 		
 		this.extraButton2Pressed = extraButton2Pressed;
 	}
+
+	@Override
+	public int getMenuXDireciton() 
+	{
+		if(this.rightPressed)
+			return 1;
+		if(this.leftPressed)
+			return -1;
+		
+		return 0;
+	}
+
+	@Override
+	public int getMenuYDireciton() 
+	{
+		if(this.acceleratePressed)
+			return 1;
+		if(this.reversePressed)
+			return -1;
+		
+		return 0;
+	}
 }
