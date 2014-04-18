@@ -26,6 +26,30 @@ public class GameModeMetaInfo
 	
 	public static Sprite getSprite(GameMode gm)
 	{
+		switch (gm) 
+		{
+		case Amazing:
+			break;
+		case Capture:
+			break;
+		case CarPool:
+			break;
+		case Hill:
+			break;
+		case King:
+			break;
+		case Mower:
+			break;
+		case Painter:
+			break;
+		case Pong:
+			break;
+		case Soccar:
+			break;
+		default:
+			break;
+
+		}
 		return null;
 	}
 

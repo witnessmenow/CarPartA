@@ -14,6 +14,10 @@ public class CarsHelper
 	public static final String IRELAND_CAR_ID = "IRELAND";
 	public static final String SPAIN_CAR_ID = "SPAIN";
 	
+	public static final String BLUE_CAR_ID = "BLUE";
+	
+	public static final String RED_CAR_ID = "RED";
+	
 	public static HashMap<String, Sprite> carTable = new HashMap<String, Sprite>();
 	
 	public static Sprite getDefaultCar()
@@ -30,21 +34,21 @@ public class CarsHelper
 	{
 		if (side == Team.Home)
 		{
-			if(!carTable.containsKey(IRELAND_CAR_ID))
+			if(!carTable.containsKey(BLUE_CAR_ID))
 			{
-				carTable.put(IRELAND_CAR_ID, getCarAtLocation(0,3));
+				carTable.put(BLUE_CAR_ID, getCarAtLocation(1,0));
 			}
 			
-			return carTable.get(IRELAND_CAR_ID);
+			return carTable.get(BLUE_CAR_ID);
 		}
 		else
 		{
-			if(!carTable.containsKey(SPAIN_CAR_ID))
+			if(!carTable.containsKey(RED_CAR_ID))
 			{
-				carTable.put(SPAIN_CAR_ID, getCarAtLocation(3,6));
+				carTable.put(RED_CAR_ID, getCarAtLocation(0,0));
 			}
 			
-			return carTable.get(SPAIN_CAR_ID);
+			return carTable.get(RED_CAR_ID);
 		}
 		
 	}
