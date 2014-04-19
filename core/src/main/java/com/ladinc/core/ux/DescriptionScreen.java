@@ -13,6 +13,7 @@ public class DescriptionScreen
 	private static String HOW_TO_WIN = "How To Win";
 	private static String INSTRUCTIONS = "Instructions";
 	private static String PRESS_ANY_BUTTON_TO_START = "Press Any Button To Start";
+	private static String PRESS_ANY_BUTTON_TO_CLOSE = "Press Any Button To Close";
 	
 	private float skipCoolDown = 0.5f;
 	
@@ -24,7 +25,7 @@ public class DescriptionScreen
 	
 	private Vector2 center;
 	
-	private DescriptionScreenInfo info;
+	public DescriptionScreenInfo info;
 	
 	private float titleY;
 	private float descriptionY;
@@ -33,6 +34,8 @@ public class DescriptionScreen
 	private float skipTextY;
 	
 	public boolean allowSkip = false;
+	
+	public boolean menuMode = false;
 	
 	public DescriptionScreen(Vector2 center, DescriptionScreenInfo info)
 	{
@@ -89,7 +92,14 @@ public class DescriptionScreen
 		}
 		
 
-		headingFont.draw(spriteBatch, PRESS_ANY_BUTTON_TO_START, center.x - headingFont.getBounds(PRESS_ANY_BUTTON_TO_START).width/2, skipTextY);
+		if(!menuMode)
+		{
+			headingFont.draw(spriteBatch, PRESS_ANY_BUTTON_TO_START, center.x - headingFont.getBounds(PRESS_ANY_BUTTON_TO_START).width/2, skipTextY);
+		}
+		else
+		{
+			headingFont.draw(spriteBatch, PRESS_ANY_BUTTON_TO_CLOSE, center.x - headingFont.getBounds(PRESS_ANY_BUTTON_TO_CLOSE).width/2, skipTextY);
+		}
 		
 	}
 

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.ladinc.core.CarPartA;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.assets.Font;
@@ -16,6 +17,7 @@ import com.ladinc.core.player.PlayerInfo;
 import com.ladinc.core.screen.gamemodes.GameModeMetaInfo;
 import com.ladinc.core.screen.gamemodes.GameModeMetaInfo.GameMode;
 import com.ladinc.core.screen.gamemodes.teamselect.TeamSelectScreen;
+import com.ladinc.core.ux.DescriptionScreen;
 
 public class GameModeSelectScreen implements Screen
 {
@@ -33,6 +35,7 @@ public class GameModeSelectScreen implements Screen
 	private int screenHeight;
 	
 	private boolean confirmationScreenVisible = false;
+	protected boolean showDescriptionScreen = false;
 	
 	private Sprite confirmSprite;
 	
@@ -46,8 +49,8 @@ public class GameModeSelectScreen implements Screen
 	
 	private BitmapFont titleFont;
 	
-	private GameMode currentSelectedGameMode;
-	private String currentSelectedGameName;
+	private GameModeMetaInfo currentSelectedGame;
+	private DescriptionScreen descriptionScreen;
 	
 	public GameModeSelectScreen(CarPartA game) {
 		this.game = game;
@@ -79,8 +82,11 @@ public class GameModeSelectScreen implements Screen
 		drawGameTitleText(spriteBatch);
 		
 		this.overlaySprite.draw(spriteBatch);
-		
-		if(confirmationScreenVisible)
+		if(this.showDescriptionScreen)
+		{	
+			this.descriptionScreen.drawDescriptionScreen(spriteBatch, delta);
+		}
+		else if(confirmationScreenVisible)
 		{
 			confirmSprite.draw(spriteBatch);
 		}
@@ -103,7 +109,7 @@ public class GameModeSelectScreen implements Screen
 	private void drawGameTitleText(SpriteBatch sb)
 	{
 		titleFont.setColor(Color.WHITE);
-		titleFont.draw(spriteBatch, currentSelectedGameName, this.screenWidth/2 - titleFont.getBounds(currentSelectedGameName).width/2, (this.screenHeight/5)*4);
+		titleFont.draw(spriteBatch, this.currentSelectedGame.name, this.screenWidth/2 - titleFont.getBounds(this.currentSelectedGame.name).width/2, (this.screenHeight/6)*5);
 	}
 	
 	private void drawGameImages(SpriteBatch sb)
@@ -134,8 +140,7 @@ public class GameModeSelectScreen implements Screen
 				selectedIndicator.setPosition(tempX - 15f, tempY - 15f);
 				selectedIndicator.draw(sb);
 				
-				currentSelectedGameMode = gmmi.game;
-				currentSelectedGameName = gmmi.name;
+				this.currentSelectedGame = gmmi;
 			}
 			
 			populatedSlots[row][col] = true;
@@ -248,6 +253,14 @@ public class GameModeSelectScreen implements Screen
 					return;
 				}
 			}
+			else if(showDescriptionScreen)
+			{
+				if(tempCont.isActive())
+				{
+					showDescriptionScreen = false;
+					return;
+				}
+			}
 			else
 			{
 				int moveX = tempCont.getMenuXDireciton();
@@ -256,6 +269,30 @@ public class GameModeSelectScreen implements Screen
 				if(tempCont.getStartStatus())
 				{
 					confirmationScreenVisible = true;
+					return;
+				}
+				else if(tempCont.getConfirmStatus())
+				{
+					showDescriptionScreen = true;
+					this.game.controllerManager.resetActiveStateOfControllers();
+					
+					if(this.descriptionScreen == null)
+					{
+						this.descriptionScreen = new DescriptionScreen(new Vector2(screenWidth/2, screenHeight/2), this.currentSelectedGame.description);
+					}
+					else
+					{
+						this.descriptionScreen.info = this.currentSelectedGame.description;
+					}
+					
+					this.descriptionScreen.menuMode = true;
+					
+					return;
+				}
+				else if(tempCont.getBackStatus())
+				{
+					showDescriptionScreen = true;
+					this.game.controllerManager.resetActiveStateOfControllers();
 					return;
 				}
 				else if(moveX != 0)
@@ -280,7 +317,7 @@ public class GameModeSelectScreen implements Screen
 	
 	private void startNewScreen()
 	{
-		this.game.setGameMode(currentSelectedGameMode);
+		this.game.setGameMode(this.currentSelectedGame.game);
 		dispose();
 	}
 	

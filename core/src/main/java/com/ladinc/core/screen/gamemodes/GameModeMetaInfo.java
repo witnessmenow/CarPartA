@@ -43,20 +43,36 @@ public class GameModeMetaInfo
 			switch (gm) 
 			{
 				case Amazing:
+					x = 0;
+					y = 1;
 					break;
 				case Capture:
+					x = 1;
+					y = 0;
 					break;
 				case CarPool:
+					x = 2;
+					y = 0;
 					break;
 				case Hill:
+					x = 3;
+					y = 0;
 					break;
 				case King:
+					x = 4;
+					y = 0;
 					break;
 				case Mower:
+					x = 1;
+					y = 1;
 					break;
 				case Painter:
+					x = 2;
+					y = 1;
 					break;
 				case Pong:
+					x = 3;
+					y = 1;
 					break;
 				case Soccar:
 					x = 0;

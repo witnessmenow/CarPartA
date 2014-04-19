@@ -42,7 +42,7 @@ public class KeyboardMapper {
 	
 	public static boolean isBackButton(int keyCode)
 	{
-		return keyCode == Keys.BACKSPACE;
+		return keyCode == Keys.ESCAPE;
 	}
 	
 	public static boolean isExtraButton1(int keyCode)

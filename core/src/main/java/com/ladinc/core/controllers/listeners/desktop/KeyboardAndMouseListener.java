@@ -63,11 +63,13 @@ public class KeyboardAndMouseListener implements InputProcessor {
 		{
 			this.controls.setStartStatus(set);
 		}
-		else if (KeyboardMapper.isConfirmButton(buttonId))
+		
+		if (KeyboardMapper.isConfirmButton(buttonId))
 		{
 			this.controls.setConfirmStatus(set);
 		}
-		else if (KeyboardMapper.isBackButton(buttonId))
+		
+		if (KeyboardMapper.isBackButton(buttonId))
 		{
 			this.controls.setBackStatus(set);
 		}
