@@ -21,6 +21,13 @@ public class TouchScreenListener implements InputProcessor {
 	private void processTouch(int screenX, int screenY, int pointer,
 			boolean touched, boolean moveEvent)
 	{
+		if(controls.interestedInMenuPresses)
+		{
+			controls.currentlyTouched = touched;
+			controls.touchedX = screenX;
+			controls.touchedY = screenY;
+		}
+		
 		if (screenY > screenHeight / 2)
 		{
 			// Its an action touch

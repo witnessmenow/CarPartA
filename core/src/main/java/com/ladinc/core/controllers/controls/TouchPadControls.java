@@ -21,7 +21,11 @@ public class TouchPadControls implements IControls
 	
 	public boolean active;
 	
-	private boolean interestedInMenuPresses = false;
+	public boolean interestedInMenuPresses = false;
+	
+	public int touchedX = 0;
+	public int touchedY = 0;
+	public boolean currentlyTouched = false;
 	
 	private void checkForActive()
 	{

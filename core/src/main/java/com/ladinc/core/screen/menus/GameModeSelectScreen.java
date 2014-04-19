@@ -13,6 +13,7 @@ import com.ladinc.core.CarPartA;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.assets.Font;
 import com.ladinc.core.controllers.controls.IControls;
+import com.ladinc.core.controllers.controls.TouchPadControls;
 import com.ladinc.core.player.PlayerInfo;
 import com.ladinc.core.screen.gamemodes.GameModeMetaInfo;
 import com.ladinc.core.screen.gamemodes.GameModeMetaInfo.GameMode;
@@ -51,6 +52,10 @@ public class GameModeSelectScreen implements Screen
 	
 	private GameModeMetaInfo currentSelectedGame;
 	private DescriptionScreen descriptionScreen;
+	
+	private boolean touchScreenCurrentlyPressed = false;
+	float touchedX;
+	float touchedY;
 	
 	public GameModeSelectScreen(CarPartA game) {
 		this.game = game;
@@ -141,6 +146,18 @@ public class GameModeSelectScreen implements Screen
 				selectedIndicator.draw(sb);
 				
 				this.currentSelectedGame = gmmi;
+			}
+			
+			if(touchScreenCurrentlyPressed)
+			{
+				if(touchedY >= tempY && touchedY <= tempY + GameModeMetaInfo.IMAGE_HEIGHT)
+				{
+					if(touchedX >= tempX && touchedX <= tempX + GameModeMetaInfo.IMAGE_WIDTH)
+					{
+						this.selectedCol = col;
+						this.selectedRow = row;
+					}
+				}
 			}
 			
 			populatedSlots[row][col] = true;
@@ -263,47 +280,58 @@ public class GameModeSelectScreen implements Screen
 			}
 			else
 			{
-				int moveX = tempCont.getMenuXDireciton();
-				int moveY = tempCont.getMenuYDireciton();
+				touchScreenCurrentlyPressed = Gdx.input.isTouched();
+				touchedX = ((float)Gdx.input.getX()/(float)Gdx.graphics.getWidth())*(float)this.screenWidth;
+				touchedY = (float)this.screenHeight - ((float)Gdx.input.getY()/(float)Gdx.graphics.getHeight())*(float)this.screenHeight;
 				
-				if(tempCont.getStartStatus())
+				if(tempCont instanceof TouchPadControls)
 				{
-					confirmationScreenVisible = true;
-					return;
 				}
-				else if(tempCont.getConfirmStatus())
+				else
 				{
-					showDescriptionScreen = true;
-					this.game.controllerManager.resetActiveStateOfControllers();
+				
+					int moveX = tempCont.getMenuXDireciton();
+					int moveY = tempCont.getMenuYDireciton();
 					
-					if(this.descriptionScreen == null)
+					if(tempCont.getStartStatus())
 					{
-						this.descriptionScreen = new DescriptionScreen(new Vector2(screenWidth/2, screenHeight/2), this.currentSelectedGame.description);
+						confirmationScreenVisible = true;
+						return;
 					}
-					else
+					else if(tempCont.getConfirmStatus())
 					{
-						this.descriptionScreen.info = this.currentSelectedGame.description;
+						showDescriptionScreen = true;
+						this.game.controllerManager.resetActiveStateOfControllers();
+						
+						if(this.descriptionScreen == null)
+						{
+							this.descriptionScreen = new DescriptionScreen(new Vector2(screenWidth/2, screenHeight/2), this.currentSelectedGame.description);
+						}
+						else
+						{
+							this.descriptionScreen.info = this.currentSelectedGame.description;
+						}
+						
+						this.descriptionScreen.menuMode = true;
+						
+						return;
 					}
-					
-					this.descriptionScreen.menuMode = true;
-					
-					return;
-				}
-				else if(tempCont.getBackStatus())
-				{
-					showDescriptionScreen = true;
-					this.game.controllerManager.resetActiveStateOfControllers();
-					return;
-				}
-				else if(moveX != 0)
-				{
-					attemptToMoveX(moveX);
-					return;
-				}
-				else if(moveY != 0)
-				{
-					attemptToMoveY(moveY);
-					return;
+					else if(tempCont.getBackStatus())
+					{
+						showDescriptionScreen = true;
+						this.game.controllerManager.resetActiveStateOfControllers();
+						return;
+					}
+					else if(moveX != 0)
+					{
+						attemptToMoveX(moveX);
+						return;
+					}
+					else if(moveY != 0)
+					{
+						attemptToMoveY(moveY);
+						return;
+					}
 				}
 			}
 			
