@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ladinc.core.assets.Art;
 import com.ladinc.core.objects.BoxProp;
 import com.ladinc.core.objects.FloorTileSensor;
 import com.ladinc.core.objects.StartingPosition;
@@ -85,6 +86,15 @@ public class CaptureTheFlagLayout extends GenericLayout {
 	{
 		for (FloorTileSensor fts : floorSensors)
 		{
+			if (fts.flagPresent)
+			{
+				assaignFlagTile(fts);
+			}
+			else
+			{
+				unassaignFlagTile(fts);
+			}
+			
 			if (fts.getTeam() == Team.Home)
 			{
 				fts.updateSprite(homeTile, sp, pixPerMeter);
@@ -116,12 +126,32 @@ public class CaptureTheFlagLayout extends GenericLayout {
 		FloorTileSensor homeFlagTile = new FloorTileSensor(world, TILE_SIZE,
 				TILE_SIZE, new Vector2(homeFloorTileXCoOrdinates,
 						homeAndAwayFloorTileYCoOrdinates));
+		assaignFlagTile(homeFlagTile);
+		
 		FloorTileSensor awayFlagTile = new FloorTileSensor(world, TILE_SIZE,
 				TILE_SIZE, new Vector2(awayFloorTileXCoOrdinates,
 						homeAndAwayFloorTileYCoOrdinates));
+		assaignFlagTile(awayFlagTile);
+		
 		homeFlagTile.setTeam(Team.Home);
 		awayFlagTile.setTeam(Team.Away);
 		floorSensors.add(homeFlagTile);
 		floorSensors.add(awayFlagTile);
+	}
+	
+	private void assaignFlagTile(FloorTileSensor fts)
+	{
+		fts.flagPresent = true;
+		if (fts.flagSprite == null)
+		{
+			fts.flagSprite = Art.getSprite(Art.CROWN);
+			fts.flagSprite.setScale(1.5f);
+		}
+	}
+	
+	private void unassaignFlagTile(FloorTileSensor fts)
+	{
+		fts.flagPresent = false;
+		fts.flagSprite = null;
 	}
 }

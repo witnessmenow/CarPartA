@@ -23,6 +23,8 @@ public class FloorTileSensor {
 	public Body body;
 	
 	public boolean assigned = false;
+	public boolean flagPresent = false;
+	public Sprite flagSprite;
 	public Team team;
 	
 	public FloorTileSensor(World world, float width, float height,

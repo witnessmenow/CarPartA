@@ -4,6 +4,7 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.ladinc.core.collision.CollisionInfo;
 import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
 import com.ladinc.core.objects.FloorTileSensor;
+import com.ladinc.core.player.PlayerInfo;
 import com.ladinc.core.screen.gamemodes.AbstractCollisionHelper;
 import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.vehicles.Vehicle;
@@ -11,6 +12,8 @@ import com.ladinc.core.vehicles.Vehicle;
 public class CaptureTheFlagCollisionHelper extends AbstractCollisionHelper {
 	public Vehicle vehicleWithHomeFlag;
 	public Vehicle vehicleWithAwayFlag;
+	public FloorTileSensor homeFlag;
+	public FloorTileSensor awayFlag;
 	
 	public int homeTeamScore = 0;
 	public int awayTeamScore = 0;
@@ -27,107 +30,107 @@ public class CaptureTheFlagCollisionHelper extends AbstractCollisionHelper {
 		{
 			if (isTwoVehiclesColliding(bodyAInfo, bodyBInfo))
 			{
-				// Reset Flag if Vehicle has it
-				// collideCars(bodyAInfo, bodyBInfo);
-				Vehicle vehicleA = (Vehicle) bodyAInfo.object;
-				Vehicle vehicleB = (Vehicle) bodyBInfo.object;
-				if (vehicleA.player.hasOpponentsFlag
-						|| vehicleB.player.hasOpponentsFlag)
-				{
-					if (vehicleA.team != vehicleB.team)
-					{
-						if (vehicleA.player.hasOpponentsFlag)
-						{
-							resetFlagVehicle(vehicleA.team);
-						}
-						else
-						{
-							resetFlagVehicle(vehicleB.team);
-						}
-					}
-					vehicleA.player.hasOpponentsFlag = false;
-					vehicleB.player.hasOpponentsFlag = false;
-				}
+				resetVehicles((Vehicle) bodyAInfo.object,
+						(Vehicle) bodyBInfo.object);
 			}
-			else if (isBodyAVehicleAndBodyBFlag(bodyAInfo, bodyBInfo))
+			else if (isVehicleAndFlag(bodyAInfo, bodyBInfo))
 			{
-				Vehicle vehicle = (Vehicle) bodyAInfo.object;
-				FloorTileSensor flag = (FloorTileSensor) bodyBInfo.object;
-				if (!flag.assigned)
-				{
-					if (vehicle.player.team != flag.team)
-					{
-						if (vehicle.player.team == Team.Home)
-						{
-							vehicleWithAwayFlag = vehicle;
-						}
-						else
-						{
-							vehicleWithHomeFlag = vehicle;
-						}
-						// Let Car Pick it up if someone doesn't have it
-						vehicle.player.hasOpponentsFlag = true;
-						flag.assigned = true;
-					}
-					else
-					{
-						scoreGoal(vehicle, flag);
-					}
-				}
-				else
-				{
-					scoreGoal(vehicle, flag);
-				}
+				assignVehicleAndFlag((Vehicle) bodyAInfo.object,
+						(FloorTileSensor) bodyBInfo.object);
 			}
-			else if (isBodyAVehicleAndBodyBFlag(bodyBInfo, bodyAInfo))
+			else if (isVehicleAndFlag(bodyBInfo, bodyAInfo))
 			{
-				FloorTileSensor flag = (FloorTileSensor) bodyAInfo.object;
-				Vehicle vehicle = (Vehicle) bodyBInfo.object;
-				if (!flag.assigned)
-				{
-					// TODO: SEE this section and scores
-					if (vehicle.player.team != flag.team)
-					{
-						if (vehicle.player.team == Team.Home)
-						{
-							vehicleWithAwayFlag = vehicle;
-						}
-						else
-						{
-							vehicleWithHomeFlag = vehicle;
-						}
-						// Let Car Pick it up if someone doesn't have it
-						vehicle.player.hasOpponentsFlag = true;
-						flag.assigned = true;
-					}
-					else
-					{
-						scoreGoal(vehicle, flag);
-					}
-				}
-				else
-				{
-					scoreGoal(vehicle, flag);
-				}
+				assignVehicleAndFlag((Vehicle) bodyBInfo.object,
+						(FloorTileSensor) bodyAInfo.object);
 			}
+		}
+	}
+	
+	private void assignVehicleAndFlag(Vehicle vehicle, FloorTileSensor flag)
+	{
+		if (flag.flagPresent)
+		{
+			// TODO: SEE this section and scores
+			if (vehicle.player.team != flag.team)
+			{
+				if (isHomeTeam(vehicle.player.team))
+				{
+					vehicleWithAwayFlag = vehicle;
+				}
+				{
+					vehicleWithHomeFlag = vehicle;
+				}
+				// Let Car Pick it up if someone doesn't have it
+				vehicle.player.hasOpponentsFlag = true;
+				vehicle.king = true;
+				flag.flagPresent = false;
+			}
+			else
+			{
+				scoreGoal(vehicle, flag);
+			}
+		}
+		else
+		{
+			scoreGoal(vehicle, flag);
+		}
+	}
+	
+	private void resetVehicles(Vehicle vehicleA, Vehicle vehicleB)
+	{
+		// collideCars(bodyAInfo, bodyBInfo);
+		resetPlayerInfo(vehicleA.player, vehicleB.player);
+		if (vehicleA.player.team != vehicleB.player.team)
+		{
+			vehicleA.king = false;
+			vehicleB.king = false;
+		}
+	}
+	
+	private void resetPlayerInfo(PlayerInfo playerInfoA, PlayerInfo playerInfoB)
+	{
+		if (playerInfoA.hasOpponentsFlag || playerInfoB.hasOpponentsFlag)
+		{
+			if (playerInfoA.team != playerInfoB.team)
+			{
+				resetPlayerInfoAfterTwoOpposingPlayerCollide(playerInfoA);
+				resetPlayerInfoAfterTwoOpposingPlayerCollide(playerInfoB);
+			}
+		}
+	}
+	
+	private void resetPlayerInfoAfterTwoOpposingPlayerCollide(
+			PlayerInfo playerInfo)
+	{
+		if (playerInfo.hasOpponentsFlag)
+		{
+			resetFlagVehicle(playerInfo.team);
+			playerInfo.hasOpponentsFlag = false;
 		}
 	}
 	
 	private void scoreGoal(Vehicle vehicle, FloorTileSensor flag)
 	{
+		boolean isHomeFlagVehicleAssigned = (isAwayTeam(flag.team) && vehicleWithHomeFlag == null);
+		boolean isAwayFlagVehicleAssigned = (isHomeTeam(flag.team) && vehicleWithAwayFlag == null);
 		if (vehicle.player.hasOpponentsFlag && vehicle.player.team == flag.team)
 		{
 			resetFlagVehicle(vehicle.player.team);
 			// It's a score
 			increaseScore(vehicle.player.team);
 			vehicle.player.hasOpponentsFlag = false;
-			flag.assigned = false;
+			vehicle.king = false;
+			flag.flagPresent = true;
+		}
+		else if (isHomeFlagVehicleAssigned || isAwayFlagVehicleAssigned)
+		{
+			flag.flagPresent = true;
 		}
 	}
 	
 	private void increaseScore(Team team)
 	{
-		if (team == Team.Home)
+		if (isHomeTeam(team))
 		{
 			homeTeamScore++;
 		}
@@ -139,27 +142,39 @@ public class CaptureTheFlagCollisionHelper extends AbstractCollisionHelper {
 	
 	private void resetFlagVehicle(Team team)
 	{
-		if (team == Team.Home)
+		if (isHomeTeam(team))
 		{
-			vehicleWithHomeFlag = null;
+			vehicleWithAwayFlag = null;
+			awayFlag.flagPresent = true;
 		}
 		else
 		{
-			vehicleWithAwayFlag = null;
+			vehicleWithHomeFlag = null;
+			homeFlag.flagPresent = true;
 		}
 	}
 	
-	private boolean isBodyAVehicleAndBodyBFlag(CollisionInfo bodyAInfo,
+	private boolean isVehicleAndFlag(CollisionInfo bodyAInfo,
 			CollisionInfo bodyBInfo)
 	{
-		return isTheTwoBodyInfoAVehiclesAndFlag(bodyAInfo.type, bodyBInfo.type);
+		return isBodyAVehiclesAndBodyBFlag(bodyAInfo.type, bodyBInfo.type);
 	}
 	
-	private boolean isTheTwoBodyInfoAVehiclesAndFlag(
-			CollisionObjectType bodyAType, CollisionObjectType bodyBType)
+	private boolean isBodyAVehiclesAndBodyBFlag(CollisionObjectType bodyAType,
+			CollisionObjectType bodyBType)
 	{
 		return bodyAType == CollisionObjectType.Vehicle
 				&& bodyBType == CollisionObjectType.FloorSensor;
+	}
+	
+	private boolean isHomeTeam(Team team)
+	{
+		return team == Team.Home;
+	}
+	
+	private boolean isAwayTeam(Team team)
+	{
+		return team == Team.Away;
 	}
 	
 	private void collideCars(CollisionInfo bodyAInfo, CollisionInfo bodyBInfo)

@@ -10,11 +10,11 @@ import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.assets.Font;
 import com.ladinc.core.objects.FloorTileSensor;
+import com.ladinc.core.player.PlayerInfo;
 import com.ladinc.core.screen.gamemodes.GameModeMetaInfo;
+import com.ladinc.core.screen.gamemodes.GameModeMetaInfo.GameMode;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.IGenericLayout;
-import com.ladinc.core.screen.gamemodes.GameModeMetaInfo.GameMode;
-import com.ladinc.core.screen.gamemodes.carpool.CarPoolScreen;
 import com.ladinc.core.screen.gamemodes.king.KingScreen;
 import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.ux.DescriptionScreenInfo;
@@ -32,8 +32,10 @@ public class CaptureTheFlagScreen extends GenericScreen {
 	}
 	
 	/*
-	 * TODO: - Add timer and score and get them to work - Add AI to do something
-	 * - Add Capture the flag stuff
+	 * TODO: - Add better AI - the attack random player is attacking random
+	 * players all the time I think. The current AI isn't brilliant. Fix it up
+	 * later to include one AI on a team to go get the flag and better ways to
+	 * attack players - Add something to show who has the flag
 	 */
 	
 	@Override
@@ -62,18 +64,18 @@ public class CaptureTheFlagScreen extends GenericScreen {
 		Vector2 desiredCoOrd = null;
 		for (SimpleAi ai : this.game.controllerManager.getAi())
 		{
-			if (ai.getVehicle().player.hasOpponentsFlag)
+			PlayerInfo aiInfo = ai.getVehicle().player;
+			if (isOpponentsFlagWithPlayer(aiInfo))
 			{
-				desiredCoOrd = getFlagLocation(ai.getVehicle().player.team);
+				desiredCoOrd = getFlagLocation(aiInfo.team);
 			}
-			else if (isTheFlagWithTheOpponents(ai.getVehicle().player.team))
+			else if (isTheFlagWithTheOpponents(aiInfo.team))
 			{
-				Vehicle vehicleWithTheFlag = vehicleWithFlag(ai.getVehicle().player.team);
-				desiredCoOrd = vehicleWithTheFlag.position;
+				desiredCoOrd = getVehicleWithFlagLocation(aiInfo.team);
 			}
-			else if (isTheFlagWithYourTeam(ai.getVehicle().player.team))
+			else if (isTheFlagWithYourTeam(aiInfo.team))
 			{
-				if (ai.getVehicle().player.team == Team.Home)
+				if (aiInfo.team == Team.Home)
 				{
 					desiredCoOrd = attackRandomPlayer(getAwayVehicles(),
 							Team.Home);
@@ -86,12 +88,17 @@ public class CaptureTheFlagScreen extends GenericScreen {
 			}
 			else
 			{
-				desiredCoOrd = getOtherTeamsFlagLocation(ai.getVehicle().player.team);
+				desiredCoOrd = getOtherTeamsFlagLocation(aiInfo.team);
 			}
 			
 			ai.setDesiredCoOrd(desiredCoOrd);
 			ai.calculateMove(delta);
 		}
+	}
+	
+	private boolean isOpponentsFlagWithPlayer(PlayerInfo playerInfo)
+	{
+		return playerInfo.hasOpponentsFlag;
 	}
 	
 	private Vector2 getOtherTeamsFlagLocation(Team team)
@@ -147,7 +154,7 @@ public class CaptureTheFlagScreen extends GenericScreen {
 		return desiredCoOrd;
 	}
 	
-	private Vehicle vehicleWithFlag(Team team)
+	private Vector2 getVehicleWithFlagLocation(Team team)
 	{
 		Vehicle vehicleWithTheFlag;
 		if (team == Team.Home)
@@ -158,7 +165,7 @@ public class CaptureTheFlagScreen extends GenericScreen {
 		{
 			vehicleWithTheFlag = colHelper.vehicleWithAwayFlag;
 		}
-		return vehicleWithTheFlag;
+		return vehicleWithTheFlag.position;
 	}
 	
 	private boolean isTheFlagWithYourTeam(Team team)
@@ -219,6 +226,14 @@ public class CaptureTheFlagScreen extends GenericScreen {
 	@Override
 	public void customRender(float delta)
 	{
+		if (colHelper.homeFlag == null)
+		{
+			colHelper.homeFlag = captureTheFlagLayout.floorSensors.get(0);
+		}
+		if (colHelper.awayFlag == null)
+		{
+			colHelper.awayFlag = captureTheFlagLayout.floorSensors.get(1);
+		}
 		if (this.proccessingGameOver)
 		{
 			if (processGameOverTimer(delta))
@@ -309,18 +324,18 @@ public class CaptureTheFlagScreen extends GenericScreen {
 	{
 		if (colHelper.vehicleWithAwayFlag == null)
 		{
-			retrieveTeamFlag(Team.Away).assigned = false;
+			retrieveTeamFlag(Team.Away).flagPresent = true;
 		}
 		else if (colHelper.vehicleWithHomeFlag == null)
 		{
-			retrieveTeamFlag(Team.Home).assigned = false;
+			retrieveTeamFlag(Team.Home).flagPresent = true;
 		}
 	}
 	
 	@Override
 	public DescriptionScreenInfo getScreenInfo()
 	{
-
+		
 		return CaptureTheFlagScreen.generateScreenInfo();
 	}
 	
@@ -340,7 +355,9 @@ public class CaptureTheFlagScreen extends GenericScreen {
 	
 	public static GameModeMetaInfo getMetaInfo()
 	{
-		return new GameModeMetaInfo("CARpture The Flag", CaptureTheFlagScreen.generateScreenInfo(), GameMode.Capture, true);
+		return new GameModeMetaInfo("CARpture The Flag",
+				CaptureTheFlagScreen.generateScreenInfo(), GameMode.Capture,
+				true);
 	}
 	
 	protected void handleWin()
