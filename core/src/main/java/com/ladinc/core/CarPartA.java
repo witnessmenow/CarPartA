@@ -30,6 +30,10 @@ public class CarPartA extends Game {
 	
 	public List<GameModeMetaInfo> gameModes;
 	
+	public int homeTeamScore = 0;
+	public int awayTeamScore = 0;
+	public int gameNumber = 0;
+	
 	@Override
 	public void create()
 	{
