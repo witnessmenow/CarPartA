@@ -69,6 +69,8 @@ public class PainterScreen extends GenericScreen
 	@Override
 	public void initGame()
 	{
+		gameMode = GameMode.Painter;
+		
 		assignTeamSpritesToCars();
 		
 		bitmapFont = Font.fontTable.get(Font.CONST_50);

@@ -34,6 +34,8 @@ public class CarPartA extends Game {
 	public int awayTeamScore = 0;
 	public int gameNumber = 0;
 	
+	public boolean showEndGameMenu = true;
+	
 	@Override
 	public void create()
 	{

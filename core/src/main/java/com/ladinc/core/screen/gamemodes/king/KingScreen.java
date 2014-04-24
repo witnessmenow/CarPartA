@@ -56,6 +56,8 @@ public class KingScreen extends GenericKingScreen {
 	@Override
 	public void initGame()
 	{
+		gameMode = GameMode.King;
+		
 		assignTeamSpritesToCars();
 		
 		this.backgroundSprite = Art.getSprite(Art.PAINTER_BACKGROUND);
@@ -214,7 +216,8 @@ public class KingScreen extends GenericKingScreen {
 	
 	private void handleGameOver()
 	{
-		this.game.setScreen(new MowerScreen(game));
+		enableEndGameOverlay();
+		//this.game.setScreen(new MowerScreen(game));
 		dispose();
 	}
 	

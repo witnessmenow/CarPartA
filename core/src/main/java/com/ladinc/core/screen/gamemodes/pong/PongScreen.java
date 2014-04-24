@@ -185,6 +185,8 @@ public class PongScreen extends GenericScreen
 	@Override
 	public void initGame()
 	{
+		gameMode = GameMode.Pong;
+		
 		assignTeamSpritesToCars();
 		bitmapFont = Font.fontTable.get(Font.CONST_50);
 		

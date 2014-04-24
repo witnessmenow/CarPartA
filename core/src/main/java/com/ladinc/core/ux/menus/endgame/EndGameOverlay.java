@@ -2,6 +2,7 @@ package com.ladinc.core.ux.menus.endgame;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.assets.Font;
@@ -21,5 +22,10 @@ public class EndGameOverlay extends GenericOverlay
 		optionsList.add(PLAY_AGAIN);
 		optionsList.add(SELECT_ANOTHER);
 		optionsList.add(EXIT);
+	}
+	
+	public void displayEndGameOverlay(SpriteBatch sb, float delta)
+	{
+		this.drawOverlay(sb, delta);
 	}
 }

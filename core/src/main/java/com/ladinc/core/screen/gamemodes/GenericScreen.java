@@ -17,12 +17,19 @@ import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.assets.CarsHelper;
+import com.ladinc.core.controllers.controls.IControls;
+import com.ladinc.core.controllers.controls.TouchPadControls;
 import com.ladinc.core.objects.StartingPosition;
 import com.ladinc.core.player.PlayerInfo;
 import com.ladinc.core.screen.GameScreen;
+import com.ladinc.core.screen.MainMenuScreen;
+import com.ladinc.core.screen.gamemodes.GameModeMetaInfo.GameMode;
+import com.ladinc.core.screen.menus.GameModeSelectScreen;
 import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.ux.DescriptionScreen;
 import com.ladinc.core.ux.DescriptionScreenInfo;
+import com.ladinc.core.ux.MenuOptions.Options;
+import com.ladinc.core.ux.menus.endgame.EndGameOverlay;
 import com.ladinc.core.vehicles.Car;
 import com.ladinc.core.vehicles.Vehicle;
 
@@ -41,6 +48,14 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	
 	protected DescriptionScreen descriptionScreen = null;
 	protected boolean showDescriptionScreen = false;
+	
+	protected boolean showEndGameOverlay = false;
+	
+	private float menuMovementCoolDown = 0.3f;
+	
+	protected GameMode gameMode;
+	
+	protected EndGameOverlay endGameOverlay;
 	
 	public GenericScreen(CarPartA game) {
 		this.game = game;
@@ -120,6 +135,19 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 			}
 			
 			previousSkipDescriptionValue = this.descriptionScreen.allowSkip;
+		}
+		
+		if(this.showEndGameOverlay && endGameOverlay != null)
+		{
+			if(menuMovementCoolDown <= 0)
+			{
+				checkForInputs();
+			}
+			else
+			{
+				this.menuMovementCoolDown = this.menuMovementCoolDown - delta;
+			}
+			endGameOverlay.displayEndGameOverlay(spriteBatch, delta);
 		}
 		
 		if (this.game.controllerManager.hasTouchControls)
@@ -277,6 +305,92 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 				ai.setVehicle(tempCar);
 			}
 		}
+	}
+	
+	protected void enableEndGameOverlay()
+	{
+		if(!this.showEndGameOverlay)
+		{
+			this.allowVehicleControl = false;
+			this.showEndGameOverlay = true;
+			
+			this.game.controllerManager.resetActiveStateOfControllers();
+			this.game.controllerManager.setMenuInterest(true);
+			
+			if(this.endGameOverlay == null)
+				this.endGameOverlay = new EndGameOverlay(new Vector2(this.screenWidth/2, this.screenHeight/2));
+			
+		}
+	}
+	
+	private void checkForInputs()
+	{
+		//lets assume its going to return early and we need to set the cool down
+		this.menuMovementCoolDown = 0.3f;
+		
+		IControls tempCont;
+		for (PlayerInfo player : this.game.controllerManager.getPlayers())
+		{
+			tempCont = player.controls;
+			boolean confirmationScreenVisible = false;
+			if(confirmationScreenVisible)
+			{
+//				if (tempCont.getConfirmStatus())
+//				{
+//					startNewScreen();
+//					return;
+//				}
+//				else if (tempCont.getBackStatus())
+//				{
+//					confirmationScreenVisible = false;
+//					return;
+//				}
+			}
+			else
+			{
+				endGameOverlay.getTouched();
+
+				
+				int moveX = tempCont.getMenuXDireciton();
+				int moveY = tempCont.getMenuYDireciton();
+				
+				if(tempCont.getStartStatus() || tempCont.getConfirmStatus())
+				{
+					handleAction();
+					return;
+				}
+				else if(moveY != 0)
+				{
+					endGameOverlay.handleMovement(moveY);
+					return;
+				}
+			}
+			
+
+		}
+		
+		//it didnt return early, so lets remove the cool down
+		this.menuMovementCoolDown = 0.0f;
+	}
+	
+	private void handleAction()
+	{
+		Options opt = endGameOverlay.optionsList.get(endGameOverlay.selectedIndex).option;
+		
+		switch(opt)
+		{
+			case newGame:
+				this.game.setScreen(new GameModeSelectScreen(game));
+				break;
+			case restart:
+				this.game.setGameMode(gameMode);
+				break;
+			case quit:
+				this.game.setScreen(new MainMenuScreen(game));
+				break;
+		}
+		
+		dispose();
 	}
 	
 	@Override

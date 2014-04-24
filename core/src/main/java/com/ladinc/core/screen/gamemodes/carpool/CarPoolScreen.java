@@ -69,6 +69,8 @@ public class CarPoolScreen extends GenericScreen
 	@Override
 	public void initGame()
 	{
+		gameMode = GameMode.CarPool;
+		
 		this.colHelper = new CarPoolColisionHelper();
 		world.setContactListener(this.colHelper);
 		

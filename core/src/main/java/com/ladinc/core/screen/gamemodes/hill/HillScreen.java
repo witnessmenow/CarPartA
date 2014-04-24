@@ -35,6 +35,8 @@ public class HillScreen extends GenericKingScreen {
 	@Override
 	public void initGame()
 	{
+		gameMode = GameMode.Hill;
+		
 		assignTeamSpritesToCars();
 		
 		bitmapFont = Font.fontTable.get(Font.CONST_50);

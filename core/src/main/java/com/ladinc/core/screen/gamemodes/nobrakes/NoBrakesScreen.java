@@ -70,6 +70,8 @@ public class NoBrakesScreen extends GenericScreen
 	@Override
 	public void initGame() 
 	{
+		
+		
 		populateTeamArrays();
 		
 		this.parkedVehicles = new ArrayList<Vehicle>();

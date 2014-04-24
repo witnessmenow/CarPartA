@@ -127,6 +127,8 @@ public class SoccerScreen extends GenericScreen
 	@Override
 	public void initGame()
 	{
+		gameMode = GameMode.Soccar;
+		
 		bitmapFont = Font.fontTable.get(Font.CONST_50);
 		
 		this.colHelper = new CollisionHelper();

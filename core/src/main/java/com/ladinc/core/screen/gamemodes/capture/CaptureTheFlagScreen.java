@@ -41,6 +41,8 @@ public class CaptureTheFlagScreen extends GenericScreen {
 	@Override
 	public void initGame()
 	{
+		gameMode = GameMode.Capture;
+		
 		assignTeamSpritesToCars();
 		
 		bitmapFont = Font.fontTable.get(Font.CONST_50);

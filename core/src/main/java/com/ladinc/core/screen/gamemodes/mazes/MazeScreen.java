@@ -40,6 +40,8 @@ public class MazeScreen extends GenericScreen
 	@Override
 	public void initGame()
 	{
+		gameMode = GameMode.Amazing;
+		
 		assignTeamSpritesToCars();
 		
 		this.backgroundSprite = Art.getSprite(Art.RACE_BACKGROUND_1);

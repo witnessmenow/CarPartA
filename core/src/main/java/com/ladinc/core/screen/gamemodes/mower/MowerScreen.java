@@ -62,6 +62,8 @@ public class MowerScreen extends GenericScreen
 	@Override
 	public void initGame()
 	{
+		gameMode = GameMode.Mower;
+		
 		assignTeamSpritesToCars();
 		// Should be assigning mower sprites
 		
