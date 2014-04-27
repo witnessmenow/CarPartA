@@ -1,19 +1,23 @@
 package com.ladinc.core.screen.gamemodes.teamselect;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.assets.CarsHelper;
 import com.ladinc.core.assets.Font;
 import com.ladinc.core.controllers.controls.IControls;
+import com.ladinc.core.controllers.controls.TouchPadControls;
 import com.ladinc.core.player.PlayerInfo;
 import com.ladinc.core.screen.gamemodes.GenericLayout;
 import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.capture.CaptureTheFlagScreen;
 import com.ladinc.core.screen.menus.GameModeSelectScreen;
 import com.ladinc.core.utilities.Enums.Team;
+import com.ladinc.core.ux.AddAiOverlay;
 import com.ladinc.core.ux.DescriptionScreenInfo;
 import com.ladinc.core.vehicles.Car;
 import com.ladinc.core.vehicles.Vehicle;
@@ -25,6 +29,9 @@ public class TeamSelectScreen extends GenericScreen {
 	
 	public int aIHomeTeam = 0;
 	public int aIAwayTeam = 0;
+	
+	protected boolean showAiOverlay = false;
+	protected AddAiOverlay aiOverlay;
 	
 	public TeamSelectScreen(CarPartA game) {
 		super(game);
@@ -63,6 +70,8 @@ public class TeamSelectScreen extends GenericScreen {
 	{
 		font = Font.fontTable.get(Font.CONST_50);
 		
+		aiOverlay = new AddAiOverlay(new Vector2(this.screenWidth/2, this.screenHeight/2));
+		
 		this.game.controllerManager.resetControllers();
 		
 		this.backgroundSprite = this.teamSelectLayout.getTeamAreaSprite();
@@ -96,9 +105,75 @@ public class TeamSelectScreen extends GenericScreen {
 		
 		if (menuMode)
 		{
-			this.confirmSprite.draw(spriteBatch);
+			this.aiOverlay.drawOverlay(spriteBatch, delta);
+			//this.confirmSprite.draw(spriteBatch);
 		}
 		
+	}
+	
+	private void checkForInputsForAI()
+	{
+		//lets assume its going to return early and we need to set the cool down
+		this.menuMovementCoolDown = 0.3f;
+		
+		touchedX = ((float)Gdx.input.getX()/(float)Gdx.graphics.getWidth())*(float)this.screenWidth;
+		touchedY = (float)this.screenHeight - ((float)Gdx.input.getY()/(float)Gdx.graphics.getHeight())*(float)this.screenHeight;
+		
+		aiOverlay.handleTouched(Gdx.input.justTouched(), touchedX, touchedY);
+		
+		if(aiOverlay.startGame)
+		{
+			handleStartNextScreen();
+		}
+		
+		IControls tempCont;
+		for (PlayerInfo player : this.game.controllerManager.getPlayers())
+		{
+			tempCont = player.controls;
+				
+			if(tempCont instanceof TouchPadControls)
+			{
+
+			}
+			else
+			{
+			
+				int moveX = tempCont.getMenuXDireciton();
+				int moveY = tempCont.getMenuYDireciton();
+				
+				if(tempCont.getStartStatus() || tempCont.getConfirmStatus())
+				{
+					if(aiOverlay.selectedRowIndex == 0)
+					{
+						handleStartNextScreen();
+					}
+					else
+					{
+						aiOverlay.handleControllerPress();
+					}
+					return;
+				}
+				else if (tempCont.getBackStatus())
+				{
+					handleQuitToLastScreen();
+				}
+				else if(moveY != 0)
+				{
+					aiOverlay.handleMoveY(moveY);
+					return;
+				}
+				else if(moveX != 0)
+				{
+					aiOverlay.handleMoveX(moveX);
+					return;
+				}
+			}
+			
+
+		}
+		
+		//it didnt return early, so lets remove the cool down
+		this.menuMovementCoolDown = 0.0f;
 	}
 	
 	private PlayerInfo tempPlayer = null;
@@ -133,29 +208,38 @@ public class TeamSelectScreen extends GenericScreen {
 			assignPlayerToCar(tempPlayer);
 		}
 		
-		aiCreationLoop(delta);
+		//aiCreationLoop(delta);
 		
 		this.teamSelectLayout.teamSelectArea.checkTeams(getVehicles());
 		
 		tempPlayer = this.game.controllerManager.checkPlayersForStartPress();
-		if (tempPlayer != null)
+		if (tempPlayer != null && !menuMode)
 		{
 			setMenuMode(!menuMode);
 		}
 		
 		if (menuMode)
 		{
-			for (IControls cont : this.game.controllerManager.allControls)
+			if(menuMovementCoolDown <= 0)
 			{
-				if (cont.getConfirmStatus())
-				{
-					handleStartNextScreen();
-				}
-				else if (cont.getBackStatus())
-				{
-					handleQuitToLastScreen();
-				}
+				checkForInputsForAI();
 			}
+			else
+			{
+				this.menuMovementCoolDown = this.menuMovementCoolDown - delta;
+			}
+			
+//			for (IControls cont : this.game.controllerManager.allControls)
+//			{
+//				if (cont.getConfirmStatus())
+//				{
+//					handleStartNextScreen();
+//				}
+//				else if (cont.getBackStatus())
+//				{
+//					handleQuitToLastScreen();
+//				}
+//			}
 		}
 		
 	}
@@ -163,6 +247,16 @@ public class TeamSelectScreen extends GenericScreen {
 	private void handleStartNextScreen()
 	{
 		// Remove players who are not active, assign active ones to right team
+		
+		for(int i =0; i < this.aiOverlay.homeAi; i++)
+		{
+			createAIPlayer(Team.Home);
+		}
+		
+		for(int i =0; i < this.aiOverlay.awayAi; i++)
+		{
+			createAIPlayer(Team.Away);
+		}
 		
 		for (Vehicle v : this.getVehicles())
 		{
@@ -189,6 +283,7 @@ public class TeamSelectScreen extends GenericScreen {
 		}
 		// game.setScreen(new NoBrakesScreen(game));
 		//game.setScreen(new CaptureTheFlagScreen(game));
+		this.game.resetCounters();
 		game.setScreen(new GameModeSelectScreen(game));
 		// game.setScreen(new HillScreen(game));
 		// game.setScreen(new KingScreen(game));

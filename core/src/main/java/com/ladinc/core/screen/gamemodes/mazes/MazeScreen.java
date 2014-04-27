@@ -10,7 +10,9 @@ import com.ladinc.core.screen.gamemodes.GenericScreen;
 import com.ladinc.core.screen.gamemodes.GameModeMetaInfo.GameMode;
 import com.ladinc.core.screen.gamemodes.king.KingScreen;
 import com.ladinc.core.screen.gamemodes.painter.PainterScreen;
+import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.ux.DescriptionScreenInfo;
+import com.ladinc.core.vehicles.Vehicle;
 
 public class MazeScreen extends GenericScreen 
 {
@@ -56,6 +58,8 @@ public class MazeScreen extends GenericScreen
 	
 	private void handleWin()
 	{
+		this.incrementGameCount();
+		
 		this.gameOverCoolOffTimer = 5.0f;
 		this.proccessingGameOver = true;
 	}
@@ -77,8 +81,10 @@ public class MazeScreen extends GenericScreen
 	{
 		if (!this.proccessingGameOver)
 		{
-			if (this.mazeLayout.checkForWinForAllCars(getVehicles()) != null)
+			Vehicle v = this.mazeLayout.checkForWinForAllCars(getVehicles());
+			if (v != null)
 			{
+				this.teamWhoWon = v.player.team;
 				handleWin();
 			}
 		}
@@ -90,12 +96,6 @@ public class MazeScreen extends GenericScreen
 			}
 		}
 		
-	}
-	
-	private void handleGameOver()
-	{
-		this.game.setScreen(new PainterScreen(game));
-		dispose();
 	}
 	
 	@Override

@@ -51,11 +51,17 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	
 	protected boolean showEndGameOverlay = false;
 	
-	private float menuMovementCoolDown = 0.3f;
+	protected float menuMovementCoolDown = 0.3f;
 	
 	protected GameMode gameMode;
 	
 	protected EndGameOverlay endGameOverlay;
+	
+	protected Team teamWhoWon;
+	
+	protected boolean touchScreenCurrentlyPressed = false;
+	protected float touchedX;
+	protected float touchedY;
 	
 	public GenericScreen(CarPartA game) {
 		this.game = game;
@@ -243,6 +249,23 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 		resetGame();
 	}
 	
+	protected void incrementGameCount()
+	{
+		this.game.gameNumber++;
+		
+		if(this.teamWhoWon != null)
+		{
+			if(this.teamWhoWon == Team.Home)
+			{
+				this.game.homeTeamScore++;
+			}
+			else if(this.teamWhoWon == Team.Away)
+			{
+				this.game.awayTeamScore++;
+			}
+		}
+	}
+	
 	protected boolean processGameOverTimer(float delta)
 	{
 		
@@ -320,13 +343,54 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 			if(this.endGameOverlay == null)
 				this.endGameOverlay = new EndGameOverlay(new Vector2(this.screenWidth/2, this.screenHeight/2));
 			
+			this.endGameOverlay.homeWins = this.game.homeTeamScore;
+			this.endGameOverlay.awayWins = this.game.awayTeamScore;
+			this.endGameOverlay.totalGames = this.game.gameNumber;
+			
 		}
 	}
+	
+	protected void handleGameOver()
+	{
+		if(this.game.showEndGameMenu)
+		{
+			enableEndGameOverlay();
+		}
+	}
+	
+	protected boolean alredyGotJustTouched = false;
 	
 	private void checkForInputs()
 	{
 		//lets assume its going to return early and we need to set the cool down
 		this.menuMovementCoolDown = 0.3f;
+		
+		//We dont want the player still touching the screen from the game to be considered an action
+		if(!alredyGotJustTouched)
+		{
+			if(Gdx.input.justTouched())
+			{
+				touchScreenCurrentlyPressed = true;
+				alredyGotJustTouched = true;
+			}
+		}
+		else
+		{
+			if(Gdx.input.isTouched())
+			{
+				touchScreenCurrentlyPressed = true;
+			}
+			else
+			{
+				alredyGotJustTouched = false;
+			}
+		}
+		touchedX = ((float)Gdx.input.getX()/(float)Gdx.graphics.getWidth())*(float)this.screenWidth;
+		touchedY = (float)this.screenHeight - ((float)Gdx.input.getY()/(float)Gdx.graphics.getHeight())*(float)this.screenHeight;
+		
+		boolean startTouchPressed = (touchedY <=  200f) && touchScreenCurrentlyPressed;
+		
+		endGameOverlay.getTouched(touchScreenCurrentlyPressed, touchedX, touchedY);
 		
 		IControls tempCont;
 		for (PlayerInfo player : this.game.controllerManager.getPlayers())
@@ -348,21 +412,31 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 			}
 			else
 			{
-				endGameOverlay.getTouched();
-
 				
-				int moveX = tempCont.getMenuXDireciton();
-				int moveY = tempCont.getMenuYDireciton();
-				
-				if(tempCont.getStartStatus() || tempCont.getConfirmStatus())
+				if(tempCont instanceof TouchPadControls)
 				{
-					handleAction();
-					return;
+					if(startTouchPressed)
+					{
+						handleAction();
+						return;
+					}
 				}
-				else if(moveY != 0)
+				else
 				{
-					endGameOverlay.handleMovement(moveY);
-					return;
+				
+					int moveX = tempCont.getMenuXDireciton();
+					int moveY = tempCont.getMenuYDireciton();
+					
+					if(tempCont.getStartStatus() || tempCont.getConfirmStatus() || startTouchPressed)
+					{
+						handleAction();
+						return;
+					}
+					else if(moveY != 0)
+					{
+						endGameOverlay.handleMovement(moveY);
+						return;
+					}
 				}
 			}
 			

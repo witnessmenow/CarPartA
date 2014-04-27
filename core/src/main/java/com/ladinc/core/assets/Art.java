@@ -31,6 +31,7 @@ public class Art {
 	public static final String GAME_MODE_IMAGES= "GAME_MODE_IMAGES";
 	public static final String SELECTED_GAME_MODE_INDICATOR= "SELECTED_GAME_MODE_INDICATOR";
 	public static final String GAME_MODE_OVERLAY= "GAME_MODE_OVERLAY";
+	public static final String GAME_MODE_OVERLAY_TOUCH= "GAME_MODE_OVERLAY_TOUCH";
 	
 	//Team Select
 	public static final String TEAM_SELECT_AREA = "TEAM_SELECT_AREA";
@@ -76,6 +77,7 @@ public class Art {
 		textureTable.put(GAME_MODE_IMAGES, new Texture(Gdx.files.internal("Menus/GameModeImages.png")));
 		textureTable.put(SELECTED_GAME_MODE_INDICATOR, new Texture(Gdx.files.internal("Menus/SelectedGameModeIndicator.png")));
 		textureTable.put(GAME_MODE_OVERLAY, new Texture(Gdx.files.internal("Menus/GameModeOverlay.png")));
+		textureTable.put(GAME_MODE_OVERLAY_TOUCH, new Texture(Gdx.files.internal("Menus/GameModeOverlayTouch.png")));
 		
 		textureTable.put(CROWN, new Texture(Gdx.files.internal("Vehicles/Crown.png")));
 	

@@ -214,16 +214,12 @@ public class KingScreen extends GenericKingScreen {
 		}
 	}
 	
-	private void handleGameOver()
-	{
-		enableEndGameOverlay();
-		//this.game.setScreen(new MowerScreen(game));
-		dispose();
-	}
 	
 	@Override
 	protected void handleWin()
 	{
+		this.incrementGameCount();
+		
 		this.gameOverCoolOffTimer = 5.0f;
 		this.proccessingGameOver = true;
 		this.colHelper.enableChange = false;

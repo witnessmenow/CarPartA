@@ -96,6 +96,17 @@ public class SoccerScreen extends GenericScreen
 	{
 		this.gameOverCoolOffTimer = 5.0f;
 		this.proccessingGameOver = true;
+		
+		if(this.homeScore > this.awayScore)
+		{
+			this.teamWhoWon = Team.Home;
+		}
+		else if(this.awayScore > this.homeScore)
+		{
+			this.teamWhoWon = Team.Away;
+		}
+		
+		this.incrementGameCount();
 	}
 	
 	private String calculateTimeLeft(float secondsPast)
@@ -221,12 +232,6 @@ public class SoccerScreen extends GenericScreen
 			}
 		}
 		
-	}
-	
-	private void handleGameOver()
-	{
-		this.game.setScreen(new KingScreen(game));
-		dispose();
 	}
 	
 	private void resetPlayersAndBall()

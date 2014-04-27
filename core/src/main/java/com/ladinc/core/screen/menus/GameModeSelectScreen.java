@@ -253,6 +253,12 @@ public class GameModeSelectScreen implements Screen
 		//lets assume its going to return early and we need to set the cool down
 		this.menuMovementCoolDown = 0.3f;
 		
+		touchScreenCurrentlyPressed = Gdx.input.isTouched();
+		touchedX = ((float)Gdx.input.getX()/(float)Gdx.graphics.getWidth())*(float)this.screenWidth;
+		touchedY = (float)this.screenHeight - ((float)Gdx.input.getY()/(float)Gdx.graphics.getHeight())*(float)this.screenHeight;
+		
+		boolean startTouchPressed = (touchedY <=  200f) && touchScreenCurrentlyPressed;
+		
 		IControls tempCont;
 		for (PlayerInfo player : this.game.controllerManager.getPlayers())
 		{
@@ -280,12 +286,14 @@ public class GameModeSelectScreen implements Screen
 			}
 			else
 			{
-				touchScreenCurrentlyPressed = Gdx.input.isTouched();
-				touchedX = ((float)Gdx.input.getX()/(float)Gdx.graphics.getWidth())*(float)this.screenWidth;
-				touchedY = (float)this.screenHeight - ((float)Gdx.input.getY()/(float)Gdx.graphics.getHeight())*(float)this.screenHeight;
 				
 				if(tempCont instanceof TouchPadControls)
 				{
+					if(startTouchPressed)
+					{
+						confirmationScreenVisible = true;
+						return;
+					}
 				}
 				else
 				{
@@ -293,29 +301,29 @@ public class GameModeSelectScreen implements Screen
 					int moveX = tempCont.getMenuXDireciton();
 					int moveY = tempCont.getMenuYDireciton();
 					
-					if(tempCont.getStartStatus())
+					if(tempCont.getStartStatus() || tempCont.getConfirmStatus() || startTouchPressed)
 					{
 						confirmationScreenVisible = true;
 						return;
 					}
-					else if(tempCont.getConfirmStatus())
-					{
-						showDescriptionScreen = true;
-						this.game.controllerManager.resetActiveStateOfControllers();
-						
-						if(this.descriptionScreen == null)
-						{
-							this.descriptionScreen = new DescriptionScreen(new Vector2(screenWidth/2, screenHeight/2), this.currentSelectedGame.description);
-						}
-						else
-						{
-							this.descriptionScreen.info = this.currentSelectedGame.description;
-						}
-						
-						this.descriptionScreen.menuMode = true;
-						
-						return;
-					}
+//					else if(tempCont.getConfirmStatus())
+//					{
+//						showDescriptionScreen = true;
+//						this.game.controllerManager.resetActiveStateOfControllers();
+//						
+//						if(this.descriptionScreen == null)
+//						{
+//							this.descriptionScreen = new DescriptionScreen(new Vector2(screenWidth/2, screenHeight/2), this.currentSelectedGame.description);
+//						}
+//						else
+//						{
+//							this.descriptionScreen.info = this.currentSelectedGame.description;
+//						}
+//						
+//						this.descriptionScreen.menuMode = true;
+//						
+//						return;
+//					}
 					else if(tempCont.getBackStatus())
 					{
 						showDescriptionScreen = true;
@@ -372,8 +380,15 @@ public class GameModeSelectScreen implements Screen
 		
 		this.confirmSprite.setPosition(0.0f, 0.0f);
 		
-		this.overlaySprite = Art.getSprite(Art.GAME_MODE_OVERLAY);
-
+		if (this.game.controllerManager.hasTouchControls)
+		{
+			this.overlaySprite = Art.getSprite(Art.GAME_MODE_OVERLAY_TOUCH);
+		}
+		else
+		{
+			this.overlaySprite = Art.getSprite(Art.GAME_MODE_OVERLAY);
+		}
+		
 		this.overlaySprite.setPosition(0.0f, 0.0f);
 		
 		titleFont = Font.fontTable.get(Font.PLAYBILL_75_BOLD);

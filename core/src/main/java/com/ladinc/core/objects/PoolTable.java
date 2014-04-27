@@ -44,6 +44,8 @@ public class PoolTable
 	public int pottedYellowBallsCount = 0;
 	public int pottedRedBallsCount  = 0;
 	
+	public Team winningTeam;
+	
 	private World world;
 	
 	public PoolTable(World world, float worldHeight, float worldWidth, Vector2 center)
@@ -127,8 +129,6 @@ public class PoolTable
 			this.activeBalls.remove(pb);
 		}
 	}
-	
-	public Team winningTeam;
 	
 	public Boolean checkForWin()
 	{

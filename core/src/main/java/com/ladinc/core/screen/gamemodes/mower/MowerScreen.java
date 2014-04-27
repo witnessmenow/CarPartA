@@ -46,12 +46,6 @@ public class MowerScreen extends GenericScreen
 		
 	}
 	
-	private void handleGameOver()
-	{
-		this.game.setScreen(new PongScreen(game));
-		dispose();
-	}
-	
 	@Override
 	public IGenericLayout resetLayout()
 	{
@@ -144,10 +138,12 @@ public class MowerScreen extends GenericScreen
 		{
 			if (mowerLayout.homeScore >= MowerLayout.TARGET_SCORE)
 			{
+				this.teamWhoWon = Team.Home;
 				handleWin();
 			}
 			else if (mowerLayout.awayScore >= MowerLayout.TARGET_SCORE)
 			{
+				this.teamWhoWon = Team.Away;
 				handleWin();
 			}
 		}

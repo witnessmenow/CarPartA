@@ -363,15 +363,24 @@ public class CaptureTheFlagScreen extends GenericScreen {
 	}
 	
 	protected void handleWin()
-	{
+	{		
+		if(colHelper.homeTeamScore > colHelper.awayTeamScore)
+		{
+			this.teamWhoWon = Team.Home;
+		}
+		else if(colHelper.homeTeamScore < colHelper.awayTeamScore)
+		{
+			this.teamWhoWon = Team.Away;
+		}
+		else
+		{
+			this.teamWhoWon = Team.Neutral;
+		}
+		
+		incrementGameCount();
+		
 		this.gameOverCoolOffTimer = 5.0f;
 		this.proccessingGameOver = true;
-	}
-	
-	private void handleGameOver()
-	{
-		this.game.setScreen(new KingScreen(game));
-		dispose();
 	}
 	/* Skip here */
 }

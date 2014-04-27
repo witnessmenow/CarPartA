@@ -103,11 +103,11 @@ public class GenericOverlay
 		
 	}
 	
-	public void getTouched()
+	public void getTouched(boolean touched, float x, float y)
 	{
 		touchScreenCurrentlyPressed = Gdx.input.isTouched();
-		touchedX = ((float)Gdx.input.getX()/(float)Gdx.graphics.getWidth())*(float)this.screenWidth;
-		touchedY = (float)this.screenHeight - ((float)Gdx.input.getY()/(float)Gdx.graphics.getHeight())*(float)this.screenHeight;
+		touchedX = x;
+		touchedY = y;
 	}
 	
 	public void handleMovement(int movement)

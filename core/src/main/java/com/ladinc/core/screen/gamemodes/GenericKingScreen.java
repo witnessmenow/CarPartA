@@ -51,6 +51,7 @@ public abstract class GenericKingScreen extends GenericScreen {
 			if (homeSecondsLeft < 0)
 			{
 				homeSecondsLeft = 0;
+				this.teamWhoWon = Team.Home;
 				handleWin();
 			}
 		}
@@ -71,6 +72,7 @@ public abstract class GenericKingScreen extends GenericScreen {
 			if (awaySecondsLeft < 0)
 			{
 				awaySecondsLeft = 0;
+				this.teamWhoWon = Team.Away;
 				handleWin();
 			}
 		}

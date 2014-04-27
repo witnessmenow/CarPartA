@@ -52,12 +52,6 @@ public class PainterScreen extends GenericScreen
 		
 	}
 	
-	private void handleGameOver()
-	{
-		this.game.setScreen(new CarPoolScreen(game));
-		dispose();
-	}
-	
 	@Override
 	public IGenericLayout resetLayout()
 	{
@@ -177,6 +171,17 @@ public class PainterScreen extends GenericScreen
 		
 		this.homeScore = this.painterLayout.homeScore;
 		this.awayScore = this.painterLayout.awayScore;
+		
+		if(this.homeScore > this.awayScore)
+		{
+			this.teamWhoWon = Team.Home;
+		}
+		else if(this.awayScore > this.homeScore)
+		{
+			this.teamWhoWon = Team.Away;
+		}
+		
+		this.incrementGameCount();
 		
 	}
 	

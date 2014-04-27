@@ -117,6 +117,15 @@ public class MyControllerManager {
 					controller.addListener(ouyaListener);
 					addNewController(ouyaListener.controls);
 				}
+				else
+				{
+					Gdx.app.debug("ControllerManager",
+							"Added Listener for Ouya Controller");
+					
+					OuyaListener ouyaListener = new OuyaListener();
+					controller.addListener(ouyaListener);
+					addNewController(ouyaListener.controls);
+				}
 				break;
 			case WebGL:
 				Gdx.app.debug("ControllerManager",

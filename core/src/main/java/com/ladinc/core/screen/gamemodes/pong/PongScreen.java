@@ -148,12 +148,6 @@ public class PongScreen extends GenericScreen
 		return center.y;
 	}
 	
-	private void handleGameOver()
-	{
-		this.game.setScreen(new MazeScreen(game));
-		dispose();
-	}
-	
 	private float goalCoolOffTimer = 0f;
 	private boolean processingGoal = false;
 	
@@ -290,6 +284,17 @@ public class PongScreen extends GenericScreen
 	{
 		this.gameOverCoolOffTimer = 5.0f;
 		this.proccessingGameOver = true;
+		
+		if(this.homeScore > this.awayScore)
+		{
+			this.teamWhoWon = Team.Home;
+		}
+		else if(this.awayScore > this.homeScore)
+		{
+			this.teamWhoWon = Team.Away;
+		}
+		
+		this.incrementGameCount();
 		
 	}
 

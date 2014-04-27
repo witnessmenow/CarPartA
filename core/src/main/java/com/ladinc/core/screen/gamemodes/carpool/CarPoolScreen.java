@@ -149,14 +149,12 @@ public class CarPoolScreen extends GenericScreen
 	
 	private void handleWin()
 	{
+		this.teamWhoWon = this.carPoolLayout.poolTable.winningTeam;
+		
+		incrementGameCount();
+		
 		this.gameOverCoolOffTimer = 5.0f;
 		this.proccessingGameOver = true;
-	}
-	
-	private void handleGameOver()
-	{
-		this.game.setScreen(new SoccerScreen(game));
-		dispose();
 	}
 
 	@Override

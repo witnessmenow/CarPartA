@@ -207,13 +207,9 @@ public class HillScreen extends GenericKingScreen {
 	@Override
 	protected void handleWin()
 	{
+		this.incrementGameCount();
+		
 		this.gameOverCoolOffTimer = 5.0f;
 		this.proccessingGameOver = true;
-	}
-	
-	private void handleGameOver()
-	{
-		this.game.setScreen(new KingScreen(game));
-		dispose();
 	}
 }

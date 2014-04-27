@@ -116,4 +116,11 @@ public class CarPartA extends Game {
 
 		}
 	}
+	
+	public void resetCounters()
+	{
+		this.homeTeamScore = 0;
+		this.awayTeamScore = 0;
+		this.gameNumber = 0;
+	}
 }
