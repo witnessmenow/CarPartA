@@ -11,12 +11,17 @@ import com.ladinc.core.collision.CollisionHelper;
 import com.ladinc.core.collision.CollisionInfo;
 import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
 import com.ladinc.core.objects.balls.PoolBall;
+import com.ladinc.core.objects.balls.PoolBall.ColourBall;
+import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.vehicles.Vehicle;
 
 public class CarPoolColisionHelper implements ContactListener
 {
 	public static final float RESPAWN_TIME = 5.0f;
 
+	public boolean blackPotted = false;
+	public Team lastTeamToTouchBlack = Team.Neutral;
+	
 	@Override
 	public void beginContact(Contact contact) 
 	{
@@ -34,17 +39,25 @@ public class CarPoolColisionHelper implements ContactListener
         	
         	if(CollisionHelper.checkIfCollisionIsOfCertainBodies(bodyAInfo, bodyBInfo, CollisionObjectType.Pocket, CollisionObjectType.BallSensor))
         	{
-        		
+        		PoolBall pb;
         		if(bodyAInfo.type == CollisionObjectType.BallSensor)
         		{
-        			PoolBall pb = (PoolBall)bodyAInfo.object;
+        			pb = (PoolBall)bodyAInfo.object;
+        			pb.isActive = false;
+        		}
+        		else
+        		{
+        			pb = (PoolBall)bodyBInfo.object;
         			pb.isActive = false;
         		}
         		
-        		if(bodyBInfo.type == CollisionObjectType.BallSensor)
+        		if(pb.colour == ColourBall.Black)
         		{
-        			PoolBall pb = (PoolBall)bodyBInfo.object;
-        			pb.isActive = false;
+        			if(pb.lastPlayerToHit != null)
+        			{
+        				this.blackPotted = true;
+        				this.lastTeamToTouchBlack = pb.lastPlayerToHit.team;
+        			}
         		}
 
         		
@@ -68,7 +81,25 @@ public class CarPoolColisionHelper implements ContactListener
         	if(bodyAInfo.type == CollisionObjectType.Vehicle && bodyBInfo.type == CollisionObjectType.Vehicle)
         	{
         		//vehicleCollideIsDetected(bodyAInfo, bodyBInfo);
-        	}	   	
+        	}
+        	
+        	if(bodyAInfo.type == CollisionObjectType.Vehicle && bodyBInfo.type == CollisionObjectType.Ball)
+        	{
+        		PoolBall pb;
+        		Vehicle v;
+        		if(bodyAInfo.type == CollisionObjectType.Ball)
+        		{
+        			pb = (PoolBall)bodyAInfo.object;
+        			v = (Vehicle)bodyBInfo.object;
+        		}
+        		else
+        		{
+        			pb = (PoolBall)bodyBInfo.object;
+        			v = (Vehicle)bodyAInfo.object;
+        		}
+        		
+        		pb.lastPlayerToHit = v.player;
+        	}	 
         }
 		
 	}

@@ -12,6 +12,8 @@ import com.badlogic.gdx.physics.box2d.joints.PrismaticJointDef;
 import com.ladinc.core.assets.Art;
 import com.ladinc.core.collision.CollisionInfo;
 import com.ladinc.core.collision.CollisionInfo.CollisionObjectType;
+import com.ladinc.core.player.PlayerInfo;
+import com.ladinc.core.utilities.Enums.Team;
 
 public class PoolBall extends Ball
 {
@@ -25,12 +27,16 @@ public class PoolBall extends Ball
 	public static final String YELLOW_BALL = "YELLOW_BALL";
 	public static final String BLACK_BALL = "BLACK_BALL";
 	
+	public PlayerInfo lastPlayerToHit = null;
+	
 	public PoolBall(World world, float x, float y, float ballSize, float density, float linDamp, ColourBall colour) 
 	{
 		super(world, x, y, getSpriteFromColour(colour), ballSize, density, linDamp);
 		this.colour = colour;
 		
 		createSensorBody(world, x, y);
+		
+		this.body.setUserData(new CollisionInfo("Ball", CollisionObjectType.Ball, this));
 		
 	}
 	

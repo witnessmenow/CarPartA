@@ -2,9 +2,13 @@ package com.ladinc.core.screen.gamemodes.carpool;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.ladinc.core.CarPartA;
 import com.ladinc.core.ai.SimpleAi;
+import com.ladinc.core.assets.CarsHelper;
 import com.ladinc.core.objects.balls.PoolBall;
 import com.ladinc.core.objects.balls.PoolBall.ColourBall;
 import com.ladinc.core.screen.gamemodes.GameModeMetaInfo;
@@ -14,12 +18,22 @@ import com.ladinc.core.screen.gamemodes.GameModeMetaInfo.GameMode;
 import com.ladinc.core.screen.gamemodes.soccer.SoccerScreen;
 import com.ladinc.core.utilities.Enums.Team;
 import com.ladinc.core.ux.DescriptionScreenInfo;
+import com.ladinc.core.vehicles.Vehicle;
 
 public class CarPoolScreen extends GenericScreen 
 {
 	private CarPoolLayout carPoolLayout;
 	private ColourBall colourIntertedIn;
 	private float shortestDistanceBetweenAiAndBall = 0.0f;
+	
+	private Sprite homeTeamCarSprite;
+	private Sprite homeTeamBallSprite;
+	
+	private Sprite awayTeamCarSprite;
+	private Sprite awayTeamBallSprite;
+
+	
+	CarPoolColisionHelper poolColHelper;
 	
 	public CarPoolScreen(CarPartA game) {
 		super(game);
@@ -33,9 +47,35 @@ public class CarPoolScreen extends GenericScreen
 		
 	}
 	
+	private void handleBlackPotted(Team team)
+	{
+		if(team == Team.Home)
+		{
+			for(Vehicle v : this.getHomeVehicles())
+			{
+				v.respawnTimeRemaining = 5f;
+			}
+		}
+		else if(team == Team.Away)
+		{
+			for(Vehicle v : this.getAwayVehicles())
+			{
+				v.respawnTimeRemaining = 5f;
+			}
+		}
+		
+	}
+	
 	@Override
 	public void customRender(float delta)
 	{
+		if(this.poolColHelper.blackPotted)
+		{
+			this.poolColHelper.blackPotted = false;
+			handleBlackPotted(this.poolColHelper.lastTeamToTouchBlack);
+			
+		}
+		
 		if (this.carPoolLayout.poolTable.checkForWin()
 				&& !this.proccessingGameOver)
 		{
@@ -71,7 +111,8 @@ public class CarPoolScreen extends GenericScreen
 	{
 		gameMode = GameMode.CarPool;
 		
-		this.colHelper = new CarPoolColisionHelper();
+		poolColHelper = new CarPoolColisionHelper();
+		this.colHelper = poolColHelper;
 		world.setContactListener(this.colHelper);
 		
 		this.backgroundSprite = this.carPoolLayout.poolTable
@@ -87,6 +128,22 @@ public class CarPoolScreen extends GenericScreen
 		{
 			ai.resetAiBetweenLevels();
 		}
+		
+		homeTeamCarSprite = new Sprite(CarsHelper.getTeamCar(Team.Home));
+		awayTeamCarSprite = new Sprite(CarsHelper.getTeamCar(Team.Away));
+		
+		homeTeamCarSprite.setRotation(MathUtils.radiansToDegrees * ((float) Math.PI/2));
+		homeTeamCarSprite.setPosition(this.screenWidth/4 - 130f, screenHeight - 110f);
+		
+		awayTeamCarSprite.setRotation(MathUtils.radiansToDegrees * ((float) Math.PI/2) * 3);
+		awayTeamCarSprite.setPosition(this.screenWidth/4 + 210f, screenHeight - 110f);
+		
+		homeTeamBallSprite = new Sprite(PoolBall.getYellowBallSprite());
+		awayTeamBallSprite = new Sprite(PoolBall.getRedBallSprite());
+		
+		awayTeamBallSprite.setPosition(this.screenWidth/4 + 100f, screenHeight - 85f);
+		
+		homeTeamBallSprite.setPosition(this.screenWidth/4 - 20f, screenHeight - 85f);
 		
 	}
 	
@@ -141,6 +198,9 @@ public class CarPoolScreen extends GenericScreen
 	{
 		this.carPoolLayout.poolTable.updateBallSprites(spriteBatch,
 				PIXELS_PER_METER);
+		
+		drawInfo(spriteBatch);
+		
 		if (this.proccessingGameOver)
 		{
 			this.finishMessage.draw(spriteBatch);
@@ -155,6 +215,16 @@ public class CarPoolScreen extends GenericScreen
 		
 		this.gameOverCoolOffTimer = 5.0f;
 		this.proccessingGameOver = true;
+	}
+	
+	public void drawInfo(SpriteBatch sb)
+	{
+		
+		homeTeamCarSprite.draw(sb);
+		awayTeamCarSprite.draw(sb);
+		
+		homeTeamBallSprite.draw(sb);
+		awayTeamBallSprite.draw(sb);
 	}
 
 	@Override
@@ -175,7 +245,7 @@ public class CarPoolScreen extends GenericScreen
 		info.howToWinText.add("The first team to pot all their balls wins.");
 		info.howToWinText.add("Cars that are potted will respawn.");
 		info.howToWinText.add("");
-		info.howToWinText.add("Black ball is mysterious .... tbh it currently does nothing.");
+		info.howToWinText.add("Potting the black ball will pot your entire team.");
 		// TODO Auto-generated method stub
 		return info;
 	}
