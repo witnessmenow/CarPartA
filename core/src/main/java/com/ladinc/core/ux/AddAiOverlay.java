@@ -16,6 +16,9 @@ public class AddAiOverlay
 {
 	private static final int MAX_AI = 4;
 	
+	private static Sprite MINUS_SYMBOL = null;
+	private static Sprite PLUS_SYMBOL = null;
+	
 	private static final String AI_TITLE = "Add AI Players?";
 	private static final String HOME = "Home";
 	private static final String AWAY = "Away";
@@ -60,6 +63,16 @@ public class AddAiOverlay
 	
 	public AddAiOverlay(Vector2 c)
 	{
+		if(PLUS_SYMBOL == null)
+		{
+			PLUS_SYMBOL = new Sprite(Art.textureTable.get(Art.PLUS_MINUS_SYMBOLS), 70, 0, 70, 70);
+		}
+		
+		if(MINUS_SYMBOL == null)
+		{
+			MINUS_SYMBOL = new Sprite(Art.textureTable.get(Art.PLUS_MINUS_SYMBOLS), 0, 0, 70, 70);
+		}
+		
 		center = c;
 		screenWidth = (int) c.x *2;
 		screenHeight = (int) c.y *2;
@@ -97,14 +110,14 @@ public class AddAiOverlay
 		largeFont.draw(spriteBatch, AI_TITLE, center.x - largeFont.getBounds(AI_TITLE).width/2, titleY);
 		
 		
-		largeFont.draw(spriteBatch, HOME, textX - largeFont.getBounds(HOME).width/2, optionsY1 - largeFont.getBounds(HOME).height/2);
-		largeFont.draw(spriteBatch, AWAY, textX - largeFont.getBounds(AWAY).width/2, optionsY2 - largeFont.getBounds(AWAY).height/2);
+		largeFont.draw(spriteBatch, HOME, textX - largeFont.getBounds(HOME).width/2, optionsY1);
+		largeFont.draw(spriteBatch, AWAY, textX - largeFont.getBounds(AWAY).width/2, optionsY2);
 		
 		String tmp = String.valueOf(homeAi);
-		largeFont.draw(spriteBatch, tmp, numberX - largeFont.getBounds(tmp).width/2, optionsY1 - largeFont.getBounds(tmp).height/2);
+		largeFont.draw(spriteBatch, tmp, numberX - largeFont.getBounds(tmp).width/2, optionsY1);
 		
 		tmp = String.valueOf(awayAi);
-		largeFont.draw(spriteBatch, tmp, numberX - largeFont.getBounds(tmp).width/2, optionsY2  - largeFont.getBounds(tmp).height/2);
+		largeFont.draw(spriteBatch, tmp, numberX - largeFont.getBounds(tmp).width/2, optionsY2  );
 		
 		if(selectedRowIndex == 0)
 		{
@@ -114,47 +127,53 @@ public class AddAiOverlay
 		{
 			largeFont.setColor(Color.BLUE);
 		}
-		largeFont.draw(spriteBatch, START_GAME, center.x - largeFont.getBounds(START_GAME).width/2, optionsY - largeFont.getBounds(START_GAME).height/2);
+		largeFont.draw(spriteBatch, START_GAME, center.x - largeFont.getBounds(START_GAME).width/2, optionsY);
 		
 		if(selectedRowIndex == 1 && selectedColIndex == 0)
 		{
-			largerFont.setColor(Color.RED);
+			MINUS_SYMBOL.setColor(Color.RED);
 		}
 		else
 		{
-			largerFont.setColor(Color.BLUE);
+			MINUS_SYMBOL.setColor(Color.BLUE);
 		}
-		largerFont.draw(spriteBatch, "-", numberX - largerFont.getBounds("-").width/2 - 50f, optionsY1 - largerFont.getBounds("-").height/2);
+		MINUS_SYMBOL.setPosition((numberX - 100f) - 35f, optionsY1 - 70f);
+		MINUS_SYMBOL.draw(spriteBatch);
+		
 		
 		if(selectedRowIndex == 1 && selectedColIndex == 1)
 		{
-			largerFont.setColor(Color.RED);
+			PLUS_SYMBOL.setColor(Color.RED);
 		}
 		else
 		{
-			largerFont.setColor(Color.BLUE);
+			PLUS_SYMBOL.setColor(Color.BLUE);
 		}
-		largerFont.draw(spriteBatch, "+", numberX - largerFont.getBounds("+").width/2 + 50f, optionsY1 - largerFont.getBounds("+").height/2);
+		PLUS_SYMBOL.setPosition((numberX + 100f) - 35f, optionsY1 - 70f);
+		PLUS_SYMBOL.draw(spriteBatch);
+
 		
 		if(selectedRowIndex == 2 && selectedColIndex == 0)
 		{
-			largerFont.setColor(Color.RED);
+			MINUS_SYMBOL.setColor(Color.RED);
 		}
 		else
 		{
-			largerFont.setColor(Color.BLUE);
+			MINUS_SYMBOL.setColor(Color.BLUE);
 		}
-		largerFont.draw(spriteBatch, "-", numberX - largerFont.getBounds("-").width/2 - 50f, optionsY2 - largerFont.getBounds("-").height/2);
+		MINUS_SYMBOL.setPosition((numberX - 100f) - 35f, optionsY2 - 70f);
+		MINUS_SYMBOL.draw(spriteBatch);
 		
 		if(selectedRowIndex == 2 && selectedColIndex == 1)
 		{
-			largerFont.setColor(Color.RED);
+			PLUS_SYMBOL.setColor(Color.RED);
 		}
 		else
 		{
-			largerFont.setColor(Color.BLUE);
+			PLUS_SYMBOL.setColor(Color.BLUE);
 		}
-		largerFont.draw(spriteBatch, "+", numberX - largerFont.getBounds("+").width/2 + 50f, optionsY2 - largerFont.getBounds("+").height/2);
+		PLUS_SYMBOL.setPosition((numberX + 100f) - 35f, optionsY2 - 70f);
+		PLUS_SYMBOL.draw(spriteBatch);
 		
 			
 			
@@ -175,21 +194,21 @@ public class AddAiOverlay
 			if(y <= tempY && y >= (optionsY - largeFont.getBounds("A").height))
 			{
 				//Row 0
-				if(x >= center.x && x <= (center.x + largeFont.getBounds(START_GAME).width))
+				if(x >= (center.x - largeFont.getBounds(START_GAME).width/2) && x <= (center.x + largeFont.getBounds(START_GAME).width/2))
 				{
 					startGame = true;
 					return;
 				}
 			}
 			
-			tempY = optionsY1 - largerFont.getBounds("A").height/2;
-			if(y <= tempY && y >= (tempY - largerFont.getBounds("A").height))
+			tempY = optionsY1 - 70f;
+			if(y >= tempY && y <= (optionsY1))
 			{
-				float tempx = numberX - 50f;
+				float tempx = numberX - 100f - 35f;
 				//Row 1
 				
 				
-				if(x >= tempx && x <= (tempx + largerFont.getBounds("-").width))
+				if(x >= tempx && x <= (tempx + 70f))
 				{
 					if(homeAi > 0)
 					{
@@ -198,9 +217,9 @@ public class AddAiOverlay
 					}
 				}
 				
-				tempx = numberX + 50f;
+				tempx =  numberX + 100f - 35f;
 				
-				if(x >= tempx && x <= (tempx + largerFont.getBounds("+").width))
+				if(x >= tempx && x <= (tempx + 70f))
 				{
 					if(homeAi < MAX_AI)
 					{
@@ -211,14 +230,14 @@ public class AddAiOverlay
 				
 			}
 			
-			tempY = optionsY2 - largerFont.getBounds("A").height/2;
-			if(y <= tempY && y >= (tempY - largerFont.getBounds("A").height))
+			tempY = optionsY2 - 70f;
+			if(y >= tempY && y <= (optionsY2))
 			{
-				float tempx = numberX - 50f;
+				float tempx = numberX - 100f - 35f;
 				//Row 1
 				
 				
-				if(x >= tempx && x <= (tempx + largerFont.getBounds("-").width))
+				if(x >= tempx && x <= (tempx + 70f))
 				{
 					if(awayAi > 0)
 					{
@@ -227,9 +246,9 @@ public class AddAiOverlay
 					}
 				}
 				
-				tempx = numberX + 50f;
+				tempx =  numberX + 100f - 35f;
 				
-				if(x >= tempx && x <= (tempx + largerFont.getBounds("+").width))
+				if(x >= tempx && x <= (tempx + 70f))
 				{
 					if(awayAi < MAX_AI)
 					{
