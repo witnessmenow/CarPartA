@@ -129,6 +129,8 @@ public class MowerScreen extends GenericScreen
 		
 		this.colHelper.enableTileChange = false;
 		
+		this.incrementGameCount();
+		
 	}
 	
 	@Override
