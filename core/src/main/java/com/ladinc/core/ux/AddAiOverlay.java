@@ -46,7 +46,7 @@ public class AddAiOverlay
 	
 	protected float howToWinHeadingY;
 	
-	public int selectedRowIndex = 0;
+	public int selectedRowIndex = -1;
 	public int selectedColIndex = 1;
 	
 	private int screenHeight;
@@ -191,7 +191,7 @@ public class AddAiOverlay
 		{
 			float tempY = optionsY - largeFont.getBounds(START_GAME).height/2;
 			
-			if(y <= tempY && y >= (optionsY - largeFont.getBounds("A").height))
+			if(y <= optionsY && y >= (optionsY - largeFont.getBounds("A").height))
 			{
 				//Row 0
 				if(x >= (center.x - largeFont.getBounds(START_GAME).width/2) && x <= (center.x + largeFont.getBounds(START_GAME).width/2))

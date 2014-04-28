@@ -63,6 +63,8 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	protected float touchedX;
 	protected float touchedY;
 	
+	protected boolean showTouchScreenOverlayIfApplicaple = true;
+	
 	public GenericScreen(CarPartA game) {
 		this.game = game;
 		spriteBatch = new SpriteBatch();
@@ -156,7 +158,7 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 			endGameOverlay.displayEndGameOverlay(spriteBatch, delta);
 		}
 		
-		if (this.game.controllerManager.hasTouchControls)
+		if (this.game.controllerManager.hasTouchControls && showTouchScreenOverlayIfApplicaple)
 		{
 			this.touchOverlaySprite.draw(spriteBatch);
 		}
@@ -332,6 +334,8 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 	
 	protected void enableEndGameOverlay()
 	{
+		showTouchScreenOverlayIfApplicaple = false;
+		
 		if(!this.showEndGameOverlay)
 		{
 			this.allowVehicleControl = false;
@@ -415,7 +419,7 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 				
 				if(tempCont instanceof TouchPadControls)
 				{
-					if(startTouchPressed)
+					if(endGameOverlay.optionPressed)
 					{
 						handleAction();
 						return;
@@ -427,7 +431,7 @@ public abstract class GenericScreen extends GameScreen implements Screen {
 					int moveX = tempCont.getMenuXDireciton();
 					int moveY = tempCont.getMenuYDireciton();
 					
-					if(tempCont.getStartStatus() || tempCont.getConfirmStatus() || startTouchPressed)
+					if(tempCont.getStartStatus() || tempCont.getConfirmStatus() || endGameOverlay.optionPressed)
 					{
 						handleAction();
 						return;

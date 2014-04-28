@@ -28,7 +28,7 @@ public class GenericOverlay
 
 	public List<MenuOptions> optionsList;
 	
-	public int selectedIndex = 0;
+	public int selectedIndex = -1;
 	
 	private int screenHeight;
 	private int screenWidth;
@@ -36,6 +36,8 @@ public class GenericOverlay
 	protected boolean touchScreenCurrentlyPressed;
 	protected float touchedX;
 	protected float touchedY;
+	
+	public boolean optionPressed = false;
 	
 	public GenericOverlay(Vector2 c)
 	{
@@ -83,6 +85,7 @@ public class GenericOverlay
 						if(touchedY <= tempY && touchedY >= (tempY - largeFont.getBounds("A").height))
 						{
 							selectedIndex = i;
+							optionPressed = true;
 						}
 					}
 				}
@@ -93,11 +96,14 @@ public class GenericOverlay
 			
 			smallerFont.setColor(Color.DARK_GRAY);
 			
-			for(int j = 0; j < optionsList.get(selectedIndex).descriptionText.size(); j++)
+			if(this.selectedIndex >= 0 && this.selectedIndex < optionsList.size())
 			{
-				String tmp = optionsList.get(selectedIndex).descriptionText.get(j);
-				float tempY = descriptionTextY - (50f*(j));
-				smallerFont.draw(spriteBatch, tmp, center.x - smallerFont.getBounds(tmp).width/2, tempY);
+				for(int j = 0; j < optionsList.get(selectedIndex).descriptionText.size(); j++)
+				{
+					String tmp = optionsList.get(selectedIndex).descriptionText.get(j);
+					float tempY = descriptionTextY - (50f*(j));
+					smallerFont.draw(spriteBatch, tmp, center.x - smallerFont.getBounds(tmp).width/2, tempY);
+				}
 			}
 		}
 		
